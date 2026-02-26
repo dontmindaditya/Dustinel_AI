@@ -45,7 +45,7 @@ export function Sidebar({ organizationName = "Organization" }: SidebarProps) {
       <div className="flex items-center gap-2 px-4 h-14 border-b">
         <Shield className="h-5 w-5 shrink-0" />
         <div className="min-w-0">
-          <p className="font-semibold text-sm truncate">SafeGuard AI</p>
+          <p className="font-semibold text-sm truncate">Dustinel AI</p>
           <p className="text-xs text-muted-foreground truncate">{organizationName}</p>
         </div>
       </div>

@@ -5,7 +5,7 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SafeGuard AI — Worker Safety Monitoring",
+  title: "Dustinel AI — Worker Safety Monitoring",
   description:
     "AI-powered worker safety and health monitoring system built on Microsoft Azure.",
   manifest: "/manifest.json",

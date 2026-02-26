@@ -42,7 +42,7 @@ export default function LoginPage() {
           <div className="flex justify-center mb-2">
             <Shield className="h-8 w-8" />
           </div>
-          <CardTitle>SafeGuard AI</CardTitle>
+          <CardTitle>Dustinel AI</CardTitle>
           <CardDescription>Sign in to your account</CardDescription>
         </CardHeader>
         <CardContent>

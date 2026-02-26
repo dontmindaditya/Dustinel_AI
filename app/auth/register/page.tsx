@@ -37,7 +37,7 @@ export default function RegisterPage() {
             <Shield className="h-8 w-8" />
           </div>
           <CardTitle>Worker Registration</CardTitle>
-          <CardDescription>Create your SafeGuard AI account</CardDescription>
+          <CardDescription>Create your Dustinel AI account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

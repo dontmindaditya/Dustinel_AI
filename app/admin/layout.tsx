@@ -18,7 +18,7 @@ export default function AdminLayout({
           <div className="flex h-14 items-center gap-4 px-4 lg:px-6">
             <div className="flex items-center gap-2 lg:hidden">
               <Shield className="h-5 w-5" />
-              <span className="font-semibold text-sm">SafeGuard AI</span>
+              <span className="font-semibold text-sm">Dustinel AI</span>
             </div>
             <div className="flex-1" />
             <button className="h-8 w-8 flex items-center justify-center rounded-md hover:bg-secondary transition-colors">

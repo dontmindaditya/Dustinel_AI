@@ -35,7 +35,7 @@ export function Navbar({ role = "worker", workerName, unreadAlerts = 0 }: Navbar
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <Shield className="h-5 w-5" />
-          <span className="font-semibold tracking-tight">SafeGuard AI</span>
+          <span className="font-semibold tracking-tight">Dustinel AI</span>
         </Link>
 
         {/* Desktop nav */}

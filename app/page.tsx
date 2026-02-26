@@ -33,7 +33,7 @@ export default function HomePage() {
         <div className="container flex h-14 items-center justify-between">
           <div className="flex items-center gap-2">
             <Shield className="h-5 w-5" />
-            <span className="font-semibold">SafeGuard AI</span>
+            <span className="font-semibold">Dustinel AI</span>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" asChild>
@@ -61,7 +61,7 @@ export default function HomePage() {
           </h1>
 
           <p className="text-lg text-muted-foreground max-w-xl">
-            SafeGuard AI uses computer vision and machine learning to detect
+            Dustinel AI uses computer vision and machine learning to detect
             safety risks, score worker health in real time, and alert teams
             before incidents happen.
           </p>
@@ -101,7 +101,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t py-6">
         <div className="container text-center text-xs text-muted-foreground">
-          SafeGuard AI — Protecting Workers, Powered by Azure
+          Dustinel AI — Protecting Workers, Powered by Azure
         </div>
       </footer>
     </div>
