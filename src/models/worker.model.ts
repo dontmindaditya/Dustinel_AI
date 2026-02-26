@@ -38,7 +38,13 @@ export interface WorkerSummary {
   healthScore: number | null;
 }
 
-export type CreateWorkerInput = Omit<Worker, "id" | "workerId" | "createdAt" | "updatedAt" | "healthProfile"> & {
+export type CreateWorkerInput = Partial<Worker> & {
+  name: string;
+  email: string;
+  organizationId: string;
+  department: string;
+  site: string;
+  shift: ShiftType;
   healthProfile?: Partial<HealthProfile>;
 };
 

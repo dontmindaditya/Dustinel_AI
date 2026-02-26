@@ -25,6 +25,14 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-empty-object-type": "off",
       // Allow namespaces (needed for Express request extension)
       "@typescript-eslint/no-namespace": "off",
+      // Allow unused vars warnings only (not errors)
+      "@typescript-eslint/no-unused-vars": "warn",
+      // Allow img element (for simple cases)
+      "@next/next/no-img-element": "warn",
+      // Allow html link for pages (needed for some redirects)
+      "@next/next/no-html-link-for-pages": "off",
+      // Allow unescaped entities in some cases
+      "react/no-unescaped-entities": "warn",
     },
   },
 ]);

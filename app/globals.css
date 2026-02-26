@@ -1,29 +1,29 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0f0c08;
+  --foreground: #f4eee4;
   
-  --card: #ffffff;
-  --card-foreground: #171717;
-  --popover: #ffffff;
-  --popover-foreground: #171717;
+  --card: #15110d;
+  --card-foreground: #f4eee4;
+  --popover: #15110d;
+  --popover-foreground: #f4eee4;
   
-  --primary: #0a0a0a;
-  --primary-foreground: #fafafa;
-  --secondary: #f5f5f5;
-  --secondary-foreground: #0a0a0a;
-  --muted: #f5f5f5;
-  --muted-foreground: #737373;
-  --accent: #f5f5f5;
-  --accent-foreground: #0a0a0a;
+  --primary: #f4eee4;
+  --primary-foreground: #0f0c08;
+  --secondary: #221a12;
+  --secondary-foreground: #f4eee4;
+  --muted: #1b140e;
+  --muted-foreground: #b8aa96;
+  --accent: #221a12;
+  --accent-foreground: #f4eee4;
   
-  --destructive: #ef4444;
-  --destructive-foreground: #fafafa;
+  --destructive: #dc2626;
+  --destructive-foreground: #fff1f1;
   
-  --border: #e5e5e5;
-  --input: #e5e5e5;
-  --ring: #0a0a0a;
+  --border: #2e241a;
+  --input: #2e241a;
+  --ring: #e6d5be;
   
   --radius: 0.5rem;
 }
@@ -56,34 +56,6 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    
-    --card: #0a0a0a;
-    --card-foreground: #ededed;
-    --popover: #0a0a0a;
-    --popover-foreground: #ededed;
-    
-    --primary: #ededed;
-    --primary-foreground: #0a0a0a;
-    --secondary: #262626;
-    --secondary-foreground: #ededed;
-    --muted: #262626;
-    --muted-foreground: #a3a3a3;
-    --accent: #262626;
-    --accent-foreground: #ededed;
-    
-    --destructive: #7f1d1d;
-    --destructive-foreground: #fef2f2;
-    
-    --border: #262626;
-    --input: #262626;
-    --ring: #ededed;
-  }
 }
 
 body {

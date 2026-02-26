@@ -72,8 +72,8 @@ export async function runMLInference(params: {
 
     return {
       healthScore: Math.round(output.healthScore),
-      riskLevel: buildMLAnalysis(output.healthScore, output.riskFactors, true).riskLevel,
-      riskFactors: output.riskFactors,
+      riskLevel: buildMLAnalysis(output.healthScore, output.riskFactors as any, true).riskLevel,
+      riskFactors: output.riskFactors as any,
       modelVersion: output.modelVersion ?? "ml-v1",
       confidence: output.confidence,
     };

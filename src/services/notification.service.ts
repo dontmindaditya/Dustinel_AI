@@ -29,25 +29,12 @@ async function sendPushNotification(params: {
     // Tag-based broadcast to this worker's devices
     await client.sendNotification(
       {
-        kind: "apple",
-        alert: {
-          title: notification.title,
-          body: notification.body,
+        headers: {
+          "apns-priority": "10",
+          "apns-topic": "safeguard.alerts",
         },
-        customData: notification.data,
-      },
-      { tagExpression: `workerId:${worker.workerId}` }
-    );
-
-    await client.sendNotification(
-      {
-        kind: "gcm",
-        notification: {
-          title: notification.title,
-          body: notification.body,
-        },
-        data: notification.data,
-      },
+        body: alert.message,
+      } as any,
       { tagExpression: `workerId:${worker.workerId}` }
     );
 

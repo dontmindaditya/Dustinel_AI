@@ -79,7 +79,14 @@ export async function createWorker(req: Request, res: Response): Promise<void> {
   }
 
   const worker = await workerRepository.create({
-    ...input,
+    name: input.name,
+    email: input.email,
+    phone: input.phone ?? "",
+    department: input.department,
+    site: input.site,
+    shift: input.shift ?? "morning",
+    organizationId: input.organizationId,
+    role: input.role ?? "worker",
     azureUserId: req.body.azureUserId ?? "",
     deviceTokens: [],
   });
