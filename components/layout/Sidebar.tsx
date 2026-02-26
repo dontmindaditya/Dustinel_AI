@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
   Bell,
   BarChart3,
-  Shield,
   Settings,
   ChevronRight,
 } from "lucide-react";
@@ -43,7 +43,7 @@ export function Sidebar({ organizationName = "Organization" }: SidebarProps) {
     <aside className="hidden lg:flex h-screen w-60 flex-col border-r border-border bg-background fixed left-0 top-0">
       {/* Logo */}
       <div className="flex items-center gap-2 px-4 h-14 border-b border-border">
-        <Shield className="h-5 w-5 shrink-0" />
+        <Image src="/logo.png" alt="Dustinel AI" width={20} height={20} className="h-5 w-5 shrink-0 object-contain" />
         <div className="min-w-0">
           <p className="font-semibold text-sm truncate">Dustinel AI</p>
           <p className="text-xs text-muted-foreground truncate">{organizationName}</p>

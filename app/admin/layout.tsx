@@ -1,6 +1,7 @@
 import { Sidebar, MobileSidebarNav } from "@/components/layout/Sidebar";
 import { Footer } from "@/components/layout/Footer";
-import { Shield, Bell, Sun, Moon } from "lucide-react";
+import Image from "next/image";
+import { Bell } from "lucide-react";
 
 export default function AdminLayout({
   children,
@@ -17,7 +18,7 @@ export default function AdminLayout({
         <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
           <div className="flex h-14 items-center gap-4 px-4 lg:px-6">
             <div className="flex items-center gap-2 lg:hidden">
-              <Shield className="h-5 w-5" />
+              <Image src="/logo.png" alt="Dustinel AI" width={20} height={20} className="h-5 w-5 object-contain" />
               <span className="font-semibold text-sm">Dustinel AI</span>
             </div>
             <div className="flex-1" />

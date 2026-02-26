@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { Shield, Bell, LogOut, Menu, X, Sun, Moon } from "lucide-react";
+import { Bell, LogOut, Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -97,7 +98,7 @@ export function Navbar({ role = "worker", workerName, unreadAlerts = 0 }: Navbar
       <div className="container flex h-14 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <Shield className="h-5 w-5" />
+          <Image src="/logo.png" alt="Dustinel AI" width={20} height={20} className="h-5 w-5 object-contain" />
           <span className="font-semibold tracking-tight">Dustinel AI</span>
         </Link>
 
@@ -149,28 +150,32 @@ export function Navbar({ role = "worker", workerName, unreadAlerts = 0 }: Navbar
             </Button>
           )}
 
-          {/* Theme toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleThemeToggle}
-          >
-            <Sun className="h-4 w-4 rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-100" />
-            <span className="sr-only">Toggle theme</span>
-          </Button>
+          {/* Theme toggle (admin only) */}
+          {role === "admin" && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleThemeToggle}
+            >
+              <Sun className="h-4 w-4 rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-100" />
+              <span className="sr-only">Toggle theme</span>
+            </Button>
+          )}
 
-          {/* Worker name */}
-          {workerName && (
+          {/* Worker name (admin only) */}
+          {role === "admin" && workerName && (
             <span className="hidden md:block text-sm text-muted-foreground">
               {workerName}
             </span>
           )}
 
-          {/* Logout */}
-          <Button variant="ghost" size="icon" onClick={handleSignOut}>
-            <LogOut className="h-4 w-4" />
-          </Button>
+          {/* Logout (admin only) */}
+          {role === "admin" && (
+            <Button variant="ghost" size="icon" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4" />
+            </Button>
+          )}
 
           {/* Mobile menu toggle */}
           <Button

@@ -24,8 +24,19 @@ export default function WorkerSettingsPage() {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    setSettings(loadWorkerSettings());
+    const loaded = loadWorkerSettings();
+    setSettings(loaded);
+    setTheme(loaded.preferredTheme);
   }, []);
+
+  const setPreferredTheme = (preferredTheme: WorkerSettings["preferredTheme"]) => {
+    setSettings((prev) => {
+      const updated = { ...prev, preferredTheme };
+      saveWorkerSettings(updated);
+      return updated;
+    });
+    setTheme(preferredTheme);
+  };
 
   const handleSave = () => {
     saveWorkerSettings(settings);
@@ -55,13 +66,13 @@ export default function WorkerSettingsPage() {
           <div className="flex gap-2">
             <Button
               variant={settings.preferredTheme === "dark" ? "default" : "outline"}
-              onClick={() => setSettings((prev) => ({ ...prev, preferredTheme: "dark" }))}
+              onClick={() => setPreferredTheme("dark")}
             >
               Dark
             </Button>
             <Button
               variant={settings.preferredTheme === "light" ? "default" : "outline"}
-              onClick={() => setSettings((prev) => ({ ...prev, preferredTheme: "light" }))}
+              onClick={() => setPreferredTheme("light")}
             >
               Light
             </Button>
