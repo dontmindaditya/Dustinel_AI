@@ -152,13 +152,13 @@ export default function AdminDashboardPage() {
           <CardContent>
             <ResponsiveContainer width="100%" height={180}>
               <LineChart data={demoTrend} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                <XAxis dataKey="date" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
-                <YAxis domain={[50, 90]} tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                <XAxis dataKey="date" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
+                <YAxis domain={[50, 90]} tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
                 <Tooltip
-                  contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: "6px", fontSize: 12 }}
+                  contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: "6px", fontSize: 12 }}
                 />
-                <Line type="monotone" dataKey="avgScore" stroke="hsl(var(--foreground))" strokeWidth={2} dot={{ r: 3, strokeWidth: 0, fill: "hsl(var(--foreground))" }} activeDot={{ r: 4 }} />
+                <Line type="monotone" dataKey="avgScore" stroke="#38bdf8" strokeWidth={2.5} dot={{ r: 3, strokeWidth: 0, fill: "#38bdf8" }} activeDot={{ r: 5, fill: "#22d3ee", strokeWidth: 0 }} />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>

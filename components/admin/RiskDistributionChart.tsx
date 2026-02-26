@@ -30,10 +30,10 @@ interface RiskDistributionChartProps {
 
 // Use different opacities of foreground for b&w theme
 const RISK_COLORS: Record<RiskLevel, string> = {
-  LOW: "hsl(var(--foreground) / 0.2)",
-  MEDIUM: "hsl(var(--foreground) / 0.45)",
-  HIGH: "hsl(var(--foreground) / 0.7)",
-  CRITICAL: "hsl(var(--foreground))",
+  LOW: "#22c55e",
+  MEDIUM: "#eab308",
+  HIGH: "#f97316",
+  CRITICAL: "#ef4444",
 };
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -116,15 +116,15 @@ export function RiskDistributionChart({ data, loading = false }: RiskDistributio
           <TabsContent value="bar">
             <ResponsiveContainer width="100%" height={160}>
               <BarChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                 <XAxis
                   dataKey="level"
-                  tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
+                  tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
                   axisLine={false}
                   tickLine={false}
                 />
                 <YAxis
-                  tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
+                  tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
                   axisLine={false}
                   tickLine={false}
                 />

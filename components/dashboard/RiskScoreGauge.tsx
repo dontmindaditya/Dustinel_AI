@@ -56,6 +56,13 @@ export function RiskScoreGauge({
     A ${radius} ${radius} 0 1 1 ${end.x} ${end.y}
   `;
 
+  const riskColorMap: Record<RiskLevel, string> = {
+    LOW: "hsl(142, 60%, 40%)",
+    MEDIUM: "hsl(48, 90%, 50%)",
+    HIGH: "hsl(24, 90%, 50%)",
+    CRITICAL: "hsl(0, 70% / 50%)",
+  };
+
   const badgeVariantMap: Record<RiskLevel, "default" | "secondary" | "outline" | "destructive"> = {
     LOW: "outline",
     MEDIUM: "secondary",
@@ -79,7 +86,7 @@ export function RiskScoreGauge({
           <path
             d={arcPath}
             fill="none"
-            stroke="hsl(var(--foreground))"
+            stroke={riskColorMap[level]}
             strokeWidth={strokeWidth}
             strokeLinecap="round"
             strokeDasharray={`${fillLength} ${circumference}`}

@@ -30,25 +30,11 @@ export function CameraCapture({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string>("");
 
-  const startCamera = useCallback(async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } },
-      });
-      streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-      }
-      setState("streaming");
-      if (autoCapture) {
-        triggerCountdown();
-      }
-    } catch (err) {
-      setErrorMsg("Camera access denied. Please allow camera permissions.");
-      setState("error");
-    }
-  }, [autoCapture]);
+  // Declare triggerCountdown first so it can be used in startCamera
+  const triggerCountdown = useCallback(() => {
+    setState("countdown");
+    setCountdown(CAMERA_COUNTDOWN_SECONDS);
+  }, []);
 
   const stopCamera = useCallback(() => {
     if (streamRef.current) {
@@ -80,10 +66,25 @@ export function CameraCapture({
     );
   }, [onCapture, stopCamera]);
 
-  const triggerCountdown = useCallback(() => {
-    setState("countdown");
-    setCountdown(CAMERA_COUNTDOWN_SECONDS);
-  }, []);
+  const startCamera = useCallback(async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } },
+      });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play();
+      }
+      setState("streaming");
+      if (autoCapture) {
+        triggerCountdown();
+      }
+    } catch (err) {
+      setErrorMsg("Camera access denied. Please allow camera permissions.");
+      setState("error");
+    }
+  }, [autoCapture, triggerCountdown]);
 
   useEffect(() => {
     if (state !== "countdown") return;
