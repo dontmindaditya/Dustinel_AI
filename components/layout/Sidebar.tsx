@@ -40,9 +40,9 @@ export function Sidebar({ organizationName = "Organization" }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden lg:flex h-screen w-60 flex-col border-r bg-background fixed left-0 top-0">
+    <aside className="hidden lg:flex h-screen w-60 flex-col border-r border-border bg-background fixed left-0 top-0">
       {/* Logo */}
-      <div className="flex items-center gap-2 px-4 h-14 border-b">
+      <div className="flex items-center gap-2 px-4 h-14 border-b border-border">
         <Shield className="h-5 w-5 shrink-0" />
         <div className="min-w-0">
           <p className="font-semibold text-sm truncate">Dustinel AI</p>
@@ -78,7 +78,7 @@ export function Sidebar({ organizationName = "Organization" }: SidebarProps) {
       </nav>
 
       {/* Bottom */}
-      <div className="px-2 py-4 border-t">
+      <div className="px-2 py-4 border-t border-border">
         <Link
           href="/admin/settings"
           className="flex items-center gap-3 px-2 py-2 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"

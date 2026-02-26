@@ -14,7 +14,7 @@ export default function AdminLayout({
       {/* Main content area — offset by sidebar width on large screens */}
       <div className="lg:pl-60">
         {/* Top bar */}
-        <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
+        <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
           <div className="flex h-14 items-center gap-4 px-4 lg:px-6">
             <div className="flex items-center gap-2 lg:hidden">
               <Shield className="h-5 w-5" />

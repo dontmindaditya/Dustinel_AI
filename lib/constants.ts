@@ -26,6 +26,7 @@ export const ROUTES = {
   WORKER_CHECKIN: "/worker/checkin",
   WORKER_DASHBOARD: "/worker/dashboard",
   WORKER_HISTORY: "/worker/history",
+  WORKER_SETTINGS: "/worker/settings",
   ADMIN_DASHBOARD: "/admin/dashboard",
   ADMIN_WORKERS: "/admin/workers",
   ADMIN_ALERTS: "/admin/alerts",
