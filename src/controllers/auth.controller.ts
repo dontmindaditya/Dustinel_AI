@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
-import { asyncHandler } from "../utils/asyncHandler";
 import { UnauthorizedError } from "../utils/asyncHandler";
 
 /**
  * POST /api/v1/auth/login
  * Authenticates user and returns tokens
  */
-export const login = asyncHandler(async (req: Request, res: Response) => {
+export async function login(req: Request, res: Response): Promise<void> {
   const { email, password } = req.body;
 
   // TODO: Implement actual authentication with database
@@ -27,13 +26,13 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
     accessToken: "placeholder-token",
     refreshToken: "placeholder-refresh-token",
   });
-});
+}
 
 /**
  * GET /api/v1/auth/me
  * Returns current user info
  */
-export const getMe = asyncHandler(async (req: Request, res: Response) => {
+export async function getMe(req: Request, res: Response): Promise<void> {
   // TODO: Get user from database using token
   res.json({
     id: "1",
@@ -42,12 +41,12 @@ export const getMe = asyncHandler(async (req: Request, res: Response) => {
     role: "worker",
     organizationId: "org-1",
   });
-});
+}
 
 /**
  * POST /api/v1/auth/logout
  * Logs out user
  */
-export const logout = asyncHandler(async (req: Request, res: Response) => {
+export async function logout(req: Request, res: Response): Promise<void> {
   res.json({ message: "Logged out successfully" });
-});
+}

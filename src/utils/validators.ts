@@ -16,8 +16,8 @@ export const checkinSchema = z.object({
       lng: z.number().min(-180).max(180),
     })
     .optional(),
-  shiftType: z.enum(["morning", "afternoon", "night"]).default("morning"),
-});
+  shiftType: z.enum(["morning", "afternoon", "night"]).optional(),
+}).passthrough();
 
 export type CheckinInput = z.infer<typeof checkinSchema>;
 
@@ -36,7 +36,7 @@ export const createWorkerSchema = z.object({
   site: z.string().min(1).max(100),
   shift: z.enum(["morning", "afternoon", "night"]),
   organizationId: z.string().min(1),
-  role: z.enum(["worker", "supervisor", "admin"]).default("worker"),
+  role: z.enum(["worker", "supervisor", "admin"]).optional(),
 });
 
 export const updateWorkerSchema = z.object({
@@ -56,14 +56,33 @@ export const paginationSchema = z.object({
 });
 
 // ─── Alert filters ────────────────────────────────────────────────────────────
-export const alertFiltersSchema = paginationSchema.extend({
+export const alertFiltersSchema = z.object({
+  page: z.coerce.number().int().positive().default(1),
+  pageSize: z.coerce.number().int().positive().max(100).default(20),
   severity: z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL"]).optional(),
   status: z.enum(["OPEN", "RESOLVED"]).optional(),
   workerId: z.string().optional(),
   site: z.string().optional(),
 });
 
-// ─── Validate helper ──────────────────────────────────────────────────────────
+// ─── Org stats query ─────────────────────────────────────────────────────────
+export const orgStatsQuerySchema = z.object({
+  days: z.coerce.number().int().min(1).max(90).default(30),
+});
+
+// ─── High risk query ────────────────────────────────────────────────────────
+export const highRiskQuerySchema = z.object({
+  page: z.coerce.number().int().positive().default(1),
+  pageSize: z.coerce.number().int().positive().max(100).default(20),
+  minLevel: z.enum(["HIGH", "CRITICAL"]).default("HIGH"),
+});
+
+// ─── Risk trend query ───────────────────────────────────────────────────────
+export const riskTrendQuerySchema = z.object({
+  days: z.coerce.number().int().min(1).max(90).default(7),
+});
+
+// ─── Validate helper ─────────────────────────────────────────────────────────
 import { ValidationError } from "./asyncHandler";
 
 export function validate<T>(schema: z.ZodSchema<T>, data: unknown): T {

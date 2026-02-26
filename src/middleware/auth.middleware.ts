@@ -56,6 +56,18 @@ export async function authMiddleware(
   _res: Response,
   next: NextFunction
 ): Promise<void> {
+  if (env.AUTH_PROVIDER === "mock") {
+    req.user = {
+      sub: "dev-user-001",
+      email: req.headers["x-dev-email"]?.toString() || "dev@safeguard.local",
+      name: req.headers["x-dev-name"]?.toString() || "Dev User",
+      role: req.headers["x-dev-role"]?.toString() || "admin",
+      organizationId: req.headers["x-dev-org"]?.toString() || "org_minecorp",
+      workerId: req.headers["x-dev-worker-id"]?.toString() || "worker_001",
+    };
+    return next();
+  }
+
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith("Bearer ")) {
     return next(new UnauthorizedError("Missing or invalid Authorization header"));
@@ -103,24 +115,4 @@ export async function authMiddleware(
   }
 }
 
-/**
- * Development-only bypass — lets you pass a demo user header.
- * NEVER use in production.
- */
-export function devAuthMiddleware(
-  req: Request,
-  _res: Response,
-  next: NextFunction
-): void {
-  if (env.NODE_ENV !== "development") return next(new UnauthorizedError());
 
-  req.user = {
-    sub: "dev-user-001",
-    email: "dev@safeguard.local",
-    name: "Dev User",
-    role: req.headers["x-dev-role"]?.toString() || "worker",
-    organizationId: "org_minecorp",
-    workerId: "worker_001",
-  };
-  next();
-}

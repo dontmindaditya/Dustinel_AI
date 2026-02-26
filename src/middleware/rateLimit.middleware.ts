@@ -1,6 +1,6 @@
 import rateLimit from "express-rate-limit";
+import { Request, Response } from "express";
 import { env } from "../config/env";
-import { AppError } from "../utils/asyncHandler";
 
 // General API rate limiter — 100 req/min per IP
 export const apiRateLimit = rateLimit({
@@ -8,7 +8,7 @@ export const apiRateLimit = rateLimit({
   max: env.RATE_LIMIT_MAX_REQUESTS,
   standardHeaders: true,
   legacyHeaders: false,
-  message: (_req, _res) => ({
+  message: (_req: Request, _res: Response) => ({
     code: "RATE_LIMIT_EXCEEDED",
     message: "Too many requests. Please try again later.",
   }),

@@ -3,42 +3,54 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const runtimeNodeEnv = (process.env.NODE_ENV as "development" | "staging" | "production" | undefined) ?? "development";
+const isProdLike = runtimeNodeEnv === "staging" || runtimeNodeEnv === "production";
+
+const requiredString = (fallback: string) =>
+  isProdLike ? z.string().min(1) : z.string().default(fallback);
+
+const requiredUrl = (fallback: string) =>
+  isProdLike ? z.string().url() : z.string().url().default(fallback);
+
 const envSchema = z.object({
   // Server
   PORT: z.string().default("5000").transform(Number),
   NODE_ENV: z.enum(["development", "staging", "production"]).default("development"),
+  AUTH_PROVIDER: z.enum(["mock", "azure"]).default(runtimeNodeEnv === "development" ? "mock" : "azure"),
 
   // Azure AD B2C
-  AZURE_AD_B2C_TENANT: z.string(),
-  AZURE_AD_B2C_TENANT_ID: z.string(),
-  AZURE_AD_B2C_CLIENT_ID: z.string(),
+  AZURE_AD_B2C_TENANT: requiredString("example.b2clogin.com"),
+  AZURE_AD_B2C_TENANT_ID: requiredString("example.onmicrosoft.com"),
+  AZURE_AD_B2C_CLIENT_ID: requiredString("dev-client-id"),
   AZURE_AD_B2C_USER_FLOW: z.string().default("B2C_1_signupsignin"),
 
   // Azure AI Vision
-  AZURE_VISION_ENDPOINT: z.string().url(),
-  AZURE_VISION_KEY: z.string(),
+  AZURE_VISION_ENDPOINT: requiredUrl("https://example.cognitiveservices.azure.com"),
+  AZURE_VISION_KEY: requiredString("dev-vision-key"),
 
   // Azure Blob Storage
-  AZURE_STORAGE_ACCOUNT_NAME: z.string(),
-  AZURE_STORAGE_CONNECTION_STRING: z.string(),
+  AZURE_STORAGE_ACCOUNT_NAME: requiredString("devstorageaccount1"),
+  AZURE_STORAGE_CONNECTION_STRING: requiredString("UseDevelopmentStorage=true"),
   AZURE_STORAGE_CONTAINER_NAME: z.string().default("safeguard-images"),
 
   // Azure Cosmos DB
-  COSMOS_ENDPOINT: z.string().url(),
-  COSMOS_KEY: z.string(),
+  COSMOS_ENDPOINT: requiredUrl("https://localhost:8081"),
+  COSMOS_KEY: requiredString("dev-cosmos-key"),
   COSMOS_DATABASE_NAME: z.string().default("safeguardai"),
 
   // Azure ML
-  AZURE_ML_ENDPOINT: z.string().url(),
-  AZURE_ML_API_KEY: z.string(),
+  AZURE_ML_ENDPOINT: requiredUrl("https://example.inference.ml.azure.com/score"),
+  AZURE_ML_API_KEY: requiredString("dev-ml-key"),
 
   // Azure Notification Hubs
-  NOTIFICATION_HUB_CONNECTION_STRING: z.string(),
-  NOTIFICATION_HUB_NAME: z.string(),
+  NOTIFICATION_HUB_CONNECTION_STRING: requiredString("Endpoint=sb://example/"),
+  NOTIFICATION_HUB_NAME: requiredString("safeguard-notifications"),
 
   // Azure Communication Services
-  AZURE_COMMUNICATION_CONNECTION_STRING: z.string(),
-  AZURE_COMMUNICATION_SENDER_EMAIL: z.string().email(),
+  AZURE_COMMUNICATION_CONNECTION_STRING: requiredString("endpoint=https://example.communication.azure.com/;accesskey=dev"),
+  AZURE_COMMUNICATION_SENDER_EMAIL: isProdLike
+    ? z.string().email()
+    : z.string().email().default("noreply@safeguard.local"),
   AZURE_COMMUNICATION_SENDER_PHONE: z.string().optional(),
 
   // Redis
