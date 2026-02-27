@@ -1,6 +1,6 @@
 "use client";
 
-import { Cpu, Bell, BarChart3, Eye } from "lucide-react";
+import { Cpu, Bell, BarChart3, Eye, ExternalLink, FileText, Download, Database } from "lucide-react";
 
 const ROUTES = {
   LOGIN: "/login",
@@ -66,6 +66,83 @@ const riskLevels = [
   { label: "MEDIUM", range: "60–79", color: "#c9933a", bg: "rgba(201,147,58,0.1)", border: "rgba(201,147,58,0.25)", action: "In-app notification sent to the worker." },
   { label: "HIGH", range: "40–59", color: "#c96b3a", bg: "rgba(201,107,58,0.1)", border: "rgba(201,107,58,0.25)", action: "Push alert to worker + email to supervisor." },
   { label: "CRITICAL", range: "0–39", color: "#b84040", bg: "rgba(184,64,64,0.1)", border: "rgba(184,64,64,0.25)", action: "Immediate push + SMS + site access restriction." },
+];
+
+const papers = [
+  {
+    num: "01",
+    title: "Fatigue Monitoring Using Wearables and AI",
+    subtitle: "Trends, Challenges, and Future Opportunities",
+    authors: "Kakhi, Jagatheesaperumal, Khosravi et al.",
+    venue: "arXiv (cs.HC) · Submitted to Elsevier",
+    date: "December 2024",
+    usedIn: "Multi-modal fatigue scoring engine",
+    usedInDetail: "Multi-modal fusion — combining shift schedule, health trend, chronic conditions, and visual signals into a single weighted fatigue score inside ml.service.ts.",
+    tag: "FATIGUE DETECTION",
+    tagColor: "#7a9ec9",
+    tagBg: "rgba(122,158,201,0.12)",
+    tagBorder: "rgba(122,158,201,0.25)",
+    links: [
+      { label: "Read Paper", icon: "read", href: "https://arxiv.org/abs/2412.16847" },
+      { label: "PDF", icon: "pdf", href: "https://arxiv.org/pdf/2412.16847" },
+      { label: "PubMed", icon: "pubmed", href: "https://pubmed.ncbi.nlm.nih.gov/40580618/" },
+    ],
+  },
+  {
+    num: "02",
+    title: "SH17: A Dataset for Human Safety and PPE Detection",
+    subtitle: "In Manufacturing Industry",
+    authors: "Ahmad & Rahimi · University of Windsor",
+    venue: "Journal of Safety Science and Resilience · KeAi / Elsevier",
+    date: "July 2024",
+    usedIn: "Hybrid vision provider architecture",
+    usedInDetail: "Exposed the gap in general-purpose vision models. We built a pluggable hybrid vision architecture (VISION_PROVIDER=hybrid) ready for domain-specific industrial deployment.",
+    tag: "PPE DETECTION",
+    tagColor: "#9ec97a",
+    tagBg: "rgba(158,201,122,0.12)",
+    tagBorder: "rgba(158,201,122,0.25)",
+    links: [
+      { label: "Read Paper", icon: "read", href: "https://arxiv.org/abs/2407.04590" },
+      { label: "PDF", icon: "pdf", href: "https://arxiv.org/pdf/2407.04590" },
+      { label: "Journal", icon: "journal", href: "https://www.sciencedirect.com/science/article/pii/S266644962400077X" },
+      { label: "Dataset", icon: "dataset", href: "https://github.com/ahmadmughees/SH17dataset" },
+    ],
+  },
+  {
+    num: "03",
+    title: "Occupational Risk Prediction for Miners",
+    subtitle: "Based on Stacking Health Data Fusion",
+    authors: "Zhang, Yang, Yang, Huang et al.",
+    venue: "Applied Sciences · MDPI · Vol. 15, Issue 6",
+    date: "March 2025",
+    usedIn: "Stacking ensemble risk scorer",
+    usedInDetail: "Directly implemented as computeStackedScore() — 6 weak classifiers combined by a weighted meta-learner. Every check-in response includes scoringMethod: \"stacking-ensemble-v1.0\".",
+    tag: "RISK SCORING",
+    tagColor: "#c9933a",
+    tagBg: "rgba(201,147,58,0.12)",
+    tagBorder: "rgba(201,147,58,0.25)",
+    links: [
+      { label: "Read Paper", icon: "read", href: "https://www.mdpi.com/2076-3417/15/6/3129" },
+      { label: "PDF", icon: "pdf", href: "https://www.mdpi.com/2076-3417/15/6/3129/pdf" },
+    ],
+  },
+  {
+    num: "04",
+    title: "Deep Learning for Visible Dust Detection",
+    subtitle: "Prevention Measures on Construction Sites",
+    authors: "Developments in the Built Environment",
+    venue: "Developments in the Built Environment · Elsevier",
+    date: "October 2023",
+    usedIn: "Image clarity dust escalation heuristic",
+    usedInDetail: "Image clarity degrades in dusty environments — using Azure Vision's caption confidence as a clarity proxy. When confidence drops below threshold, analyzeEnvironmentImage() escalates the dustLevel automatically.",
+    tag: "ENVIRONMENT",
+    tagColor: "#c97a9e",
+    tagBg: "rgba(201,122,158,0.12)",
+    tagBorder: "rgba(201,122,158,0.25)",
+    links: [
+      { label: "Read Paper", icon: "read", href: "https://www.sciencedirect.com/science/article/pii/S2666165923001278" },
+    ],
+  },
 ];
 
 export default function HomePage() {
@@ -145,7 +222,6 @@ export default function HomePage() {
           letter-spacing: -0.01em;
           color: var(--text);
         }
-        /* logo-mark removed — using logo.png */
         .nav { display: flex; align-items: center; gap: 4px; }
         .nav-link {
           padding: 7px 14px;
@@ -211,7 +287,6 @@ export default function HomePage() {
           gap: 56px;
           align-items: center;
         }
-        /* left col: never overflow into right */
         .hero-left { min-width: 0; }
 
         .eyebrow {
@@ -274,7 +349,7 @@ export default function HomePage() {
           letter-spacing: 0.09em;
         }
 
-        /* PHOTO STACK — fully self-contained in its 440px column */
+        /* PHOTO STACK */
         .photo-stack {
           position: relative;
           width: 440px;
@@ -290,17 +365,12 @@ export default function HomePage() {
           box-shadow: 0 20px 56px rgba(0,0,0,0.6);
         }
         .pc img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-        /* main card: top-right area, stays within column */
         .pc-main { width: 310px; height: 270px; top: 10px; right: 0; left: auto; }
-
-        /* bottom-left card */
         .pc-b1 {
           width: 200px; height: 175px;
           bottom: 10px; left: 0;
           animation: bob1 7s ease-in-out infinite;
         }
-        /* mid overlap card */
         .pc-b2 {
           width: 170px; height: 150px;
           top: 200px; left: 110px;
@@ -310,29 +380,6 @@ export default function HomePage() {
 
         @keyframes bob1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
         @keyframes bob2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
-
-        .score-chip {
-          position: absolute;
-          bottom: 12px; left: 12px;
-          display: flex;
-          align-items: center;
-          gap: 9px;
-          background: rgba(15,13,11,0.9);
-          backdrop-filter: blur(12px);
-          border: 1px solid var(--border2);
-          border-radius: 9px;
-          padding: 9px 13px;
-          z-index: 4;
-        }
-        .score-dot {
-          width: 7px; height: 7px;
-          border-radius: 50%;
-          background: #5a9e6f;
-          box-shadow: 0 0 8px rgba(90,158,111,0.65);
-          flex-shrink: 0;
-        }
-        .sc-lbl { font-size: 10px; font-weight: 600; color: #5a9e6f; letter-spacing: 0.07em; text-transform: uppercase; }
-        .sc-val { font-size: 11.5px; color: var(--muted2); margin-top: 1px; }
 
         /* STRIP */
         .strip { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
@@ -418,6 +465,197 @@ export default function HomePage() {
         .risk-rng { font-family: var(--ff-serif); font-size: 30px; font-weight: 400; margin-bottom: 12px; line-height: 1; }
         .risk-act { font-size: 12.5px; color: var(--muted2); line-height: 1.55; font-weight: 300; }
 
+        /* ─── RESEARCH PAPERS ─── */
+        .research-bg {
+          background: var(--surface);
+          border-top: 1px solid var(--border);
+          border-bottom: 1px solid var(--border);
+          position: relative;
+          overflow: hidden;
+        }
+        .research-bg::before {
+          content: '';
+          position: absolute;
+          top: -80px; right: -80px;
+          width: 480px; height: 480px;
+          background: radial-gradient(ellipse at center, rgba(201,147,58,0.03) 0%, transparent 65%);
+          pointer-events: none;
+        }
+        .research-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          flex-wrap: wrap;
+          gap: 24px;
+          margin-bottom: 48px;
+        }
+        .papers-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1px;
+          background: var(--border);
+          border-radius: 16px;
+          overflow: hidden;
+        }
+        .paper-card {
+          background: var(--bg);
+          padding: 36px 32px;
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+          transition: background 0.25s;
+          position: relative;
+        }
+        .paper-card:hover { background: #111009; }
+        .paper-top {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 12px;
+          margin-bottom: 20px;
+        }
+        .paper-num {
+          font-family: var(--ff-serif);
+          font-size: 38px;
+          font-weight: 400;
+          color: rgba(255,235,200,0.05);
+          line-height: 1;
+          flex-shrink: 0;
+        }
+        .paper-tag {
+          display: inline-flex;
+          align-items: center;
+          padding: 4px 10px;
+          border-radius: 6px;
+          font-size: 9.5px;
+          font-weight: 600;
+          letter-spacing: 0.1em;
+          border: 1px solid;
+          white-space: nowrap;
+        }
+        .paper-title {
+          font-family: var(--ff-serif);
+          font-size: 19px;
+          font-weight: 400;
+          line-height: 1.3;
+          color: var(--text);
+          margin-bottom: 4px;
+          letter-spacing: -0.01em;
+        }
+        .paper-subtitle {
+          font-family: var(--ff-serif);
+          font-style: italic;
+          font-size: 15px;
+          color: var(--muted2);
+          margin-bottom: 16px;
+          line-height: 1.3;
+        }
+        .paper-meta {
+          display: flex;
+          flex-direction: column;
+          gap: 3px;
+          margin-bottom: 20px;
+        }
+        .paper-authors {
+          font-size: 12px;
+          color: var(--muted2);
+          font-weight: 400;
+        }
+        .paper-venue {
+          font-size: 11.5px;
+          color: var(--muted);
+          font-weight: 300;
+        }
+        .paper-date {
+          font-size: 11px;
+          color: var(--muted);
+          letter-spacing: 0.04em;
+        }
+        .paper-divider {
+          height: 1px;
+          background: var(--border);
+          margin-bottom: 20px;
+        }
+        .paper-used-label {
+          font-size: 9.5px;
+          font-weight: 600;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: var(--muted);
+          margin-bottom: 6px;
+        }
+        .paper-used-in {
+          font-size: 11.5px;
+          font-weight: 600;
+          color: var(--accent);
+          margin-bottom: 8px;
+          letter-spacing: -0.01em;
+        }
+        .paper-used-detail {
+          font-size: 12px;
+          color: var(--muted2);
+          line-height: 1.6;
+          font-weight: 300;
+          flex: 1;
+          margin-bottom: 24px;
+        }
+        .paper-links {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 7px;
+          margin-top: auto;
+        }
+        .paper-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          padding: 6px 11px;
+          border-radius: 6px;
+          border: 1px solid var(--border2);
+          background: transparent;
+          font-size: 11.5px;
+          color: var(--muted2);
+          transition: all 0.18s;
+          text-decoration: none;
+        }
+        .paper-link:hover {
+          border-color: var(--accent);
+          color: var(--accent);
+          background: var(--accent-glow);
+        }
+        .paper-link svg { flex-shrink: 0; opacity: 0.7; }
+
+        /* research footer note */
+        .research-note {
+          margin-top: 36px;
+          padding: 20px 24px;
+          border-radius: 10px;
+          border: 1px solid var(--border);
+          background: var(--bg);
+          display: flex;
+          align-items: flex-start;
+          gap: 14px;
+        }
+        .research-note-icon {
+          flex-shrink: 0;
+          width: 32px; height: 32px;
+          border-radius: 8px;
+          border: 1px solid var(--border2);
+          display: grid; place-items: center;
+          color: var(--accent);
+          margin-top: 1px;
+        }
+        .research-note-text {
+          font-size: 12.5px;
+          color: var(--muted2);
+          line-height: 1.65;
+          font-weight: 300;
+        }
+        .research-note-text strong {
+          color: var(--text);
+          font-weight: 500;
+        }
+
         /* CTA */
         .cta-wrap { position: relative; overflow: hidden; }
         .cta-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.12) saturate(0.4); }
@@ -458,12 +696,14 @@ export default function HomePage() {
           .risk-row { grid-template-columns: 1fr 1fr; }
           .strip-row { grid-template-columns: 1fr; }
           .strip-cell:not(:last-child) { border-right: none; border-bottom: 1px solid var(--border); }
+          .papers-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 560px) {
           .steps-grid { grid-template-columns: 1fr; }
           .risk-row { grid-template-columns: 1fr; }
           .ftr-in { flex-direction: column; align-items: flex-start; }
           .nav .nav-link { display: none; }
+          .papers-grid { grid-template-columns: 1fr; }
         }
       `}</style>
 
@@ -479,6 +719,7 @@ export default function HomePage() {
             <nav className="nav">
               <a href="#how-it-works" className="nav-link">How it works</a>
               <a href="#risk-levels" className="nav-link">Risk scoring</a>
+              <a href="#research" className="nav-link">Research</a>
               <a href={ROUTES.LOGIN} className="nav-link">Log in</a>
               <a href={ROUTES.LOGIN} className="btn btn-sm btn-solid" style={{ marginLeft: 8 }}>
                 Get started
@@ -534,7 +775,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Photo collage — sits fully in its 440px column */}
             <div className="photo-stack">
               <div className="pc pc-main">
                 <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=640&q=80" alt="Workers with safety helmets on site" />
@@ -634,6 +874,92 @@ export default function HomePage() {
                     <p className="risk-act">{r.action}</p>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ─── RESEARCH PAPERS ─── */}
+        <div id="research" className="research-bg">
+          <div className="wrap">
+            <div className="sec">
+              <div className="research-header">
+                <div>
+                  <div className="sec-tag">Research foundation</div>
+                  <h2 className="sec-h" style={{ marginBottom: 10 }}>
+                    Built on peer-reviewed<br />science
+                  </h2>
+                  <p className="sec-sub">
+                    Every module in Dustinel is grounded in published research.
+                    Four papers. Four systems. All production.
+                  </p>
+                </div>
+                <div style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  padding: "10px 18px",
+                  border: "1px solid var(--border2)",
+                  borderRadius: 10,
+                  background: "var(--bg)",
+                  flexShrink: 0,
+                  alignSelf: "flex-end",
+                }}>
+                  <FileText size={14} color="var(--accent)" />
+                  <span style={{ fontSize: 12, color: "var(--muted2)", fontWeight: 300 }}>
+                    4 papers · 3 journals · 2024–2025
+                  </span>
+                </div>
+              </div>
+
+              <div className="papers-grid">
+                {papers.map(p => (
+                  <div key={p.num} className="paper-card">
+                    <div className="paper-top">
+                      <div className="paper-num">{p.num}</div>
+                      <div className="paper-tag" style={{
+                        color: p.tagColor,
+                        background: p.tagBg,
+                        borderColor: p.tagBorder,
+                      }}>
+                        {p.tag}
+                      </div>
+                    </div>
+
+                    <div className="paper-title">{p.title}</div>
+                    <div className="paper-subtitle">{p.subtitle}</div>
+
+                    <div className="paper-meta">
+                      <div className="paper-authors">{p.authors}</div>
+                      <div className="paper-venue">{p.venue}</div>
+                      <div className="paper-date">{p.date}</div>
+                    </div>
+
+                    <div className="paper-divider" />
+
+                    <div className="paper-used-label">Used in Dustinel</div>
+                    <div className="paper-used-in">{p.usedIn}</div>
+                    <p className="paper-used-detail">{p.usedInDetail}</p>
+
+                    <div className="paper-links">
+                      {p.links.map(l => (
+                        <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className="paper-link">
+                          {l.icon === "pdf" && <Download size={11} />}
+                          {l.icon === "dataset" && <Database size={11} />}
+                          {(l.icon === "read" || l.icon === "journal" || l.icon === "pubmed") && <ExternalLink size={11} />}
+                          {l.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="research-note">
+                <div className="research-note-icon">
+                  <FileText size={15} />
+                </div>
+                <p className="research-note-text">
+                  <strong>Open access commitment.</strong> All four papers are published under open access licenses (CC BY 4.0, CC BY-NC-SA 4.0, or MDPI Open Access). 
+                </p>
               </div>
             </div>
           </div>

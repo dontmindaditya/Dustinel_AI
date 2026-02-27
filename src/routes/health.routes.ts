@@ -21,6 +21,7 @@ import { requireRole, ownDataOrAdmin } from "../middleware/role.middleware";
 import { asyncHandler, ForbiddenError, NotFoundError } from "../utils/asyncHandler";
 import { validate, paginationSchema } from "../utils/validators";
 import * as healthController from "../controllers/health.controller";
+import { getModelDebugPredictions } from "../services/vision.service";
 
 const router = Router();
 
@@ -44,6 +45,15 @@ const trendQuerySchema = z.object({
 const orgStatsQuerySchema = z.object({
   days: z.coerce.number().int().min(1).max(90).default(30),
 });
+
+const modelDebugQuerySchema = z
+  .object({
+    faceImageUrl: z.string().url().optional(),
+    envImageUrl: z.string().url().optional(),
+  })
+  .refine((v) => Boolean(v.faceImageUrl || v.envImageUrl), {
+    message: "At least one of faceImageUrl or envImageUrl is required.",
+  });
 
 // ─── Validation middleware ────────────────────────────────────────────────────
 
@@ -189,6 +199,26 @@ router.get(
         siteBreakdown,
       },
     });
+  })
+);
+
+/**
+ * GET /api/v1/health/model-debug?faceImageUrl=...&envImageUrl=...
+ * Returns normalized raw predictions from configured PPE and dust research endpoints.
+ * Supervisor+ only. Intended for model calibration and threshold tuning.
+ */
+router.get(
+  "/model-debug",
+  requireRole("supervisor"),
+  validateQuery(modelDebugQuerySchema),
+  asyncHandler(async (req: Request, res: Response) => {
+    const { faceImageUrl, envImageUrl } = validate(modelDebugQuerySchema, req.query);
+    const data = await getModelDebugPredictions({
+      faceImageUrl,
+      envImageUrl,
+    });
+
+    res.status(200).json({ data });
   })
 );
 

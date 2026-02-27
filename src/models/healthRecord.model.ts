@@ -3,9 +3,11 @@ import { RiskLevel, ShiftType } from "./worker.model";
 export interface VisionFaceAnalysis {
   hasMask: boolean;
   hasHelmet: boolean;
-  fatigueScore: number; // 0–1
+  // Raw, weak fatigue signal from visual inference only.
+  fatigueScore: number; // 0-1
   estimatedAge: number;
   confidence: number;
+  modelSource?: "azure_vision" | "research_model";
 }
 
 export interface VisionEnvAnalysis {
@@ -13,6 +15,8 @@ export interface VisionEnvAnalysis {
   lightingLevel: "LOW" | "OK" | "GOOD";
   detectedHazards: string[];
   safetyEquipmentVisible: boolean;
+  imageClarity: number; // 0-1, derived from Azure Vision caption confidence
+  modelSource?: "azure_vision" | "research_model";
 }
 
 export interface VisionAnalysis {
@@ -26,14 +30,21 @@ export interface RiskFactor {
   confidence?: number;
   weight?: number;
   impact?: number;
+  modelSource?:
+    | "rule_engine"
+    | "stacking_ensemble"
+    | "azure_ml"
+    | "azure_vision"
+    | "research_model";
 }
 
 export interface MLAnalysis {
-  healthScore: number; // 0–100
+  healthScore: number; // 0-100
   riskLevel: RiskLevel;
   riskFactors: RiskFactor[];
   modelVersion: string;
   confidence?: number;
+  scoringMethod?: "stacking_ensemble" | "azure_ml" | "rule_engine";
 }
 
 export interface HealthRecord {

@@ -27,6 +27,13 @@ const envSchema = z.object({
   // Azure AI Vision
   AZURE_VISION_ENDPOINT: requiredUrl("https://example.cognitiveservices.azure.com"),
   AZURE_VISION_KEY: requiredString("dev-vision-key"),
+  VISION_PROVIDER: z.enum(["azure_vision", "hybrid", "research_only"]).default("hybrid"),
+
+  // Optional research model endpoints (Azure ML / managed inference)
+  AZURE_PPE_MODEL_ENDPOINT: z.string().url().optional(),
+  AZURE_PPE_MODEL_API_KEY: z.string().optional(),
+  AZURE_DUST_MODEL_ENDPOINT: z.string().url().optional(),
+  AZURE_DUST_MODEL_API_KEY: z.string().optional(),
 
   // Azure Blob Storage
   AZURE_STORAGE_ACCOUNT_NAME: requiredString("devstorageaccount1"),

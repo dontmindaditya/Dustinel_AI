@@ -163,6 +163,7 @@ export async function submitCheckin(req: Request, res: Response): Promise<void> 
     checkinId: record.id,
     healthScore: mlAnalysis.healthScore,
     riskLevel: mlAnalysis.riskLevel,
+    scoringMethod: mlAnalysis.scoringMethod ?? "rule_engine",
     riskFactors: mlAnalysis.riskFactors,
     recommendations,
     alertTriggered: alertId !== null,

@@ -65,6 +65,11 @@ export function getNotificationHubsClient(): NotificationHubsClient {
 export const visionConfig = {
   endpoint: env.AZURE_VISION_ENDPOINT,
   key: env.AZURE_VISION_KEY,
+  provider: env.VISION_PROVIDER,
+  ppeModelEndpoint: env.AZURE_PPE_MODEL_ENDPOINT,
+  ppeModelApiKey: env.AZURE_PPE_MODEL_API_KEY,
+  dustModelEndpoint: env.AZURE_DUST_MODEL_ENDPOINT,
+  dustModelApiKey: env.AZURE_DUST_MODEL_API_KEY,
 };
 
 // ─── Azure ML config ──────────────────────────────────────────────────────────
