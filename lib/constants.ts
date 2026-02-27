@@ -30,6 +30,7 @@ export const ROUTES = {
   ADMIN_DASHBOARD: "/admin/dashboard",
   ADMIN_WORKERS: "/admin/workers",
   ADMIN_ALERTS: "/admin/alerts",
+  ADMIN_SETTINGS: "/admin/settings",
 } as const;
 
 export const RISK_SCORE_DEDUCTIONS = {
