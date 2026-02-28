@@ -1,6 +1,7 @@
 "use client";
 
 import { Cpu, Bell, BarChart3, Eye, ExternalLink, FileText, Download, Database } from "lucide-react";
+import { motion } from "framer-motion";
 
 const ROUTES = {
   LOGIN: "/login",
@@ -144,6 +145,24 @@ const papers = [
     ],
   },
 ];
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const stagger = {
+  hidden: { opacity: 1 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+const sectionViewport = { once: true, amount: 0.2 };
 
 export default function HomePage() {
   return (
@@ -707,7 +726,12 @@ export default function HomePage() {
         }
       `}</style>
 
-      <div style={{ background: "var(--bg)", minHeight: "100vh" }}>
+      <motion.div
+        style={{ background: "var(--bg)", minHeight: "100vh" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.45, ease: "easeOut" }}
+      >
 
         {/* HEADER */}
         <header className="hdr">
@@ -731,24 +755,29 @@ export default function HomePage() {
         {/* HERO */}
         <section className="hero">
           <div className="hero-in">
-            <div className="hero-left">
-              <div className="eyebrow">
+            <motion.div
+              className="hero-left"
+              initial="hidden"
+              animate="visible"
+              variants={stagger}
+            >
+              <motion.div className="eyebrow" variants={fadeUp} transition={{ duration: 0.45 }}>
                 <span className="live-dot" />
                 Worker health monitoring, in real time
-              </div>
+              </motion.div>
 
-              <h1 className="hero-h1">
+              <motion.h1 className="hero-h1" variants={fadeUp} transition={{ duration: 0.55, delay: 0.05 }}>
                 Keep your workers<br />
                 <em>safe</em> — before<br />
                 anything goes wrong
-              </h1>
+              </motion.h1>
 
-              <p className="hero-p">
+              <motion.p className="hero-p" variants={fadeUp} transition={{ duration: 0.55, delay: 0.1 }}>
                 A single phone camera. Computer vision that spots missing PPE, fatigue,
                 and site hazards. Alerts sent in under five seconds.
-              </p>
+              </motion.p>
 
-              <div className="hero-ctas">
+              <motion.div className="hero-ctas" variants={fadeUp} transition={{ duration: 0.5, delay: 0.16 }}>
                 <a href={ROUTES.LOGIN} className="btn btn-md btn-solid">
                   Worker check-in
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
@@ -759,9 +788,9 @@ export default function HomePage() {
                 <a href={ROUTES.ADMIN_DASHBOARD} className="btn btn-md btn-border">
                   Admin dashboard
                 </a>
-              </div>
+              </motion.div>
 
-              <div className="hero-rule">
+              <motion.div className="hero-rule" variants={fadeUp} transition={{ duration: 0.55, delay: 0.2 }}>
                 {[
                   { n: "99.2%", l: "PPE detection" },
                   { n: "<5s",   l: "Alert delivery" },
@@ -772,10 +801,15 @@ export default function HomePage() {
                     <div className="st-l">{s.l}</div>
                   </div>
                 ))}
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-            <div className="photo-stack">
+            <motion.div
+              className="photo-stack"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.65, ease: "easeOut", delay: 0.12 }}
+            >
               <div className="pc pc-main">
                 <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=640&q=80" alt="Workers with safety helmets on site" />
               </div>
@@ -785,7 +819,7 @@ export default function HomePage() {
               <div className="pc pc-b2">
                 <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80" alt="Worker in protective gear" />
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -817,20 +851,26 @@ export default function HomePage() {
                 Built on an enterprise AI stack — reliable, scalable, and privacy-compliant from the start.
               </p>
             </div>
-            <div className="feat-grid">
+            <motion.div
+              className="feat-grid"
+              variants={stagger}
+              initial="hidden"
+              whileInView="visible"
+              viewport={sectionViewport}
+            >
               {features.map(f => {
                 const Ico = f.icon;
                 return (
-                  <div key={f.title} className="feat-cell">
+                  <motion.div key={f.title} className="feat-cell" variants={fadeUp} transition={{ duration: 0.45 }}>
                     <div className="feat-ico"><Ico size={20} /></div>
                     <div className="feat-n">{f.stat}</div>
                     <div className="feat-nl">{f.statLabel}</div>
                     <div className="feat-t">{f.title}</div>
                     <p className="feat-d">{f.description}</p>
-                  </div>
+                  </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
           </div>
         </div>
 
@@ -841,19 +881,25 @@ export default function HomePage() {
               <div className="sec-tag">Process</div>
               <h2 className="sec-h">From photo to insight<br />in under 8 seconds</h2>
               <p className="sec-sub">No wearables, no hardware. Just the camera that's already in everyone's pocket.</p>
-              <div className="steps-grid">
+              <motion.div
+                className="steps-grid"
+                variants={stagger}
+                initial="hidden"
+                whileInView="visible"
+                viewport={sectionViewport}
+              >
                 {steps.map(s => {
                   const Ico = s.icon;
                   return (
-                    <div key={s.num} className="step-cell">
+                    <motion.div key={s.num} className="step-cell" variants={fadeUp} transition={{ duration: 0.45 }}>
                       <div className="step-nn">{s.num}</div>
                       <div className="step-ic"><Ico size={22} /></div>
                       <div className="step-t">{s.title}</div>
                       <p className="step-d">{s.desc}</p>
-                    </div>
+                    </motion.div>
                   );
                 })}
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -865,16 +911,24 @@ export default function HomePage() {
               <div className="sec-tag">Risk scoring</div>
               <h2 className="sec-h">Four-tier classification</h2>
               <p className="sec-sub">Every check-in produces a 0–100 health score mapped to one of four response tiers.</p>
-              <div className="risk-row">
+              <motion.div
+                className="risk-row"
+                variants={stagger}
+                initial="hidden"
+                whileInView="visible"
+                viewport={sectionViewport}
+              >
                 {riskLevels.map(r => (
-                  <div key={r.label} className="risk-cell"
+                  <motion.div key={r.label} className="risk-cell"
+                    variants={fadeUp}
+                    transition={{ duration: 0.42 }}
                     style={{ background: r.bg, borderColor: r.border }}>
                     <div className="risk-lbl" style={{ color: r.color }}>{r.label}</div>
                     <div className="risk-rng" style={{ color: r.color }}>{r.range}</div>
                     <p className="risk-act">{r.action}</p>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -910,9 +964,15 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="papers-grid">
+              <motion.div
+                className="papers-grid"
+                variants={stagger}
+                initial="hidden"
+                whileInView="visible"
+                viewport={sectionViewport}
+              >
                 {papers.map(p => (
-                  <div key={p.num} className="paper-card">
+                  <motion.div key={p.num} className="paper-card" variants={fadeUp} transition={{ duration: 0.48 }}>
                     <div className="paper-top">
                       <div className="paper-num">{p.num}</div>
                       <div className="paper-tag" style={{
@@ -949,9 +1009,9 @@ export default function HomePage() {
                         </a>
                       ))}
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
 
               <div className="research-note">
                 <div className="research-note-icon">
@@ -969,14 +1029,20 @@ export default function HomePage() {
         <section className="cta-wrap">
           <img className="cta-img" src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1600&q=80" alt="" />
           <div className="cta-fade" />
-          <div className="cta-in">
-            <h2 className="cta-h">
+          <motion.div
+            className="cta-in"
+            initial="hidden"
+            whileInView="visible"
+            viewport={sectionViewport}
+            variants={stagger}
+          >
+            <motion.h2 className="cta-h" variants={fadeUp} transition={{ duration: 0.5 }}>
               Protect your people<br /><em>before</em> it's too late
-            </h2>
-            <p className="cta-p">
+            </motion.h2>
+            <motion.p className="cta-p" variants={fadeUp} transition={{ duration: 0.5 }}>
               Start a check-in in minutes. No hardware required — just a phone and a camera.
-            </p>
-            <div className="cta-btns">
+            </motion.p>
+            <motion.div className="cta-btns" variants={fadeUp} transition={{ duration: 0.45 }}>
               <a href={ROUTES.LOGIN} className="btn btn-md btn-solid">
                 Start worker check-in
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
@@ -987,15 +1053,15 @@ export default function HomePage() {
               <a href={ROUTES.ADMIN_DASHBOARD} className="btn btn-md btn-border">
                 View dashboard →
               </a>
-            </div>
-            <div className="checks">
+            </motion.div>
+            <motion.div className="checks" variants={fadeUp} transition={{ duration: 0.45 }}>
               {["No setup cost", "GDPR compliant", "Mobile-first", "Works offline"].map(t => (
                 <div key={t} className="check-it">
                   <span>✓</span> {t}
                 </div>
               ))}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </section>
 
         {/* FOOTER */}
@@ -1010,7 +1076,7 @@ export default function HomePage() {
           </div>
         </footer>
 
-      </div>
+      </motion.div>
     </>
   );
 }
