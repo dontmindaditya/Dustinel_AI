@@ -1,7 +1,7 @@
 # 🛡️ Dustinel AI
 ## Worker Safety & Health Monitoring System
 ### Complete Technical Architecture & Implementation Plan
-**Microsoft Imagine Cup 2025 | Built on Microsoft Azure | AI-Powered | Real-Time | Scalable**
+**Microsoft Imagine Cup 2026 | Built on Microsoft Azure | AI-Powered | Real-Time | Scalable**
 
 ---
 
