@@ -4,9 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Camera, TrendingUp, TrendingDown, Minus, Clock, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Card, CardContent } from "@/components/ui/Card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/Badge";
 import { RiskScoreGauge } from "@/components/dashboard/RiskScoreGauge";
 import { HealthTimeline } from "@/components/dashboard/HealthTimeline";
 import { SafetyRecommendations } from "@/components/dashboard/SafetyRecommendations";
@@ -102,14 +101,14 @@ export default function WorkerDashboardPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h1 className="text-xl font-semibold">My Dashboard</h1>
           <p className="text-sm text-muted-foreground mt-0.5">
             Last check-in: {formatRelativeTime(latestRecord.timestamp)}
           </p>
         </div>
-        <Button size="sm" asChild>
+        <Button size="sm" asChild className="w-full sm:w-auto">
           <Link href={ROUTES.WORKER_CHECKIN}>
             <Camera className="h-4 w-4" />
             Check In
@@ -134,7 +133,7 @@ export default function WorkerDashboardPage() {
             riskLevel={latestRecord.mlAnalysis.riskLevel}
             size="lg"
           />
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground sm:gap-4">
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" />
               {formatDateTime(latestRecord.timestamp)}
@@ -148,7 +147,7 @@ export default function WorkerDashboardPage() {
       </Card>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <StatCard
           label="7-Day Avg Score"
           value={Math.round(demoRecords.slice(0, 7).reduce((s, r) => s + r.mlAnalysis.healthScore, 0) / 7)}

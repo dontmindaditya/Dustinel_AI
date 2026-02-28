@@ -111,7 +111,7 @@ export function HealthTimeline({ records, loading = false }: HealthTimelineProps
             />
           </LineChart>
         </ResponsiveContainer>
-        <div className="flex gap-4 mt-2 justify-end">
+        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 justify-start sm:justify-end">
           {[
             { label: "Low (80+)", opacity: "opacity-40" },
             { label: "Medium (60-79)", opacity: "opacity-60" },

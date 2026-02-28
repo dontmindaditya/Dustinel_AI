@@ -13,7 +13,6 @@ import { ROUTES } from "@/lib/constants";
 import {
   WORKER_ALERTS_EVENT,
   WorkerAlert,
-  defaultMockAlerts,
   loadWorkerAlerts,
   loadWorkerSettings,
   saveWorkerAlerts,
@@ -39,7 +38,7 @@ export function Navbar({ role = "worker", workerName, unreadAlerts = 0 }: Navbar
   const { resolvedTheme, setTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [alertsOpen, setAlertsOpen] = useState(false);
-  const [alerts, setAlerts] = useState<WorkerAlert[]>(defaultMockAlerts);
+  const [alerts, setAlerts] = useState<WorkerAlert[]>(() => loadWorkerAlerts());
   const alertPanelRef = useRef<HTMLDivElement | null>(null);
 
   const links = role === "worker" ? workerLinks : [];
@@ -50,9 +49,7 @@ export function Navbar({ role = "worker", workerName, unreadAlerts = 0 }: Navbar
 
   useEffect(() => {
     if (role !== "worker") return;
-    const savedAlerts = loadWorkerAlerts();
     const savedSettings = loadWorkerSettings();
-    setAlerts(savedAlerts);
     setTheme(savedSettings.preferredTheme);
   }, [role, setTheme]);
 
@@ -190,7 +187,7 @@ export function Navbar({ role = "worker", workerName, unreadAlerts = 0 }: Navbar
       </div>
 
       {role === "worker" && alertsOpen && (
-        <div className="absolute right-4 top-14 z-50 w-[320px] rounded-lg border border-border bg-card shadow-lg">
+        <div className="absolute right-2 top-14 z-50 w-[calc(100vw-1rem)] max-w-[360px] rounded-lg border border-border bg-card shadow-lg sm:right-4 sm:w-[320px]">
           <div className="flex items-center justify-between border-b border-border px-3 py-2">
             <p className="text-sm font-medium">Notifications</p>
             <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={markAllAlertsRead}>

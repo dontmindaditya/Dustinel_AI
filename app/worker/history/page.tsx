@@ -46,13 +46,13 @@ export default function WorkerHistoryPage() {
 
   return (
     <div className="space-y-5 animate-fade-in">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-semibold">Health History</h1>
           <p className="text-sm text-muted-foreground mt-0.5">{filtered.length} check-ins</p>
         </div>
         <Select value={filter} onValueChange={setFilter}>
-          <SelectTrigger className="w-32 h-8 text-xs">
+          <SelectTrigger className="w-full sm:w-32 h-8 text-xs">
             <Filter className="h-3 w-3 mr-1" />
             <SelectValue />
           </SelectTrigger>
@@ -68,7 +68,7 @@ export default function WorkerHistoryPage() {
 
       {/* Timeline */}
       <div className="space-y-3">
-        {visible.map((record, i) => (
+        {visible.map((record) => (
           <Card key={record.id} className={cn("transition-all")}>
             <CardContent className="p-4">
               <div className="flex items-start gap-3">

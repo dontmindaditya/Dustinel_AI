@@ -9,7 +9,6 @@ import { ROUTES } from "@/lib/constants";
 import {
   WORKER_ALERTS_EVENT,
   defaultMockAlerts,
-  defaultWorkerSettings,
   loadWorkerSettings,
   saveWorkerAlerts,
   saveWorkerSettings,
@@ -20,14 +19,12 @@ import { useTheme } from "next-themes";
 export default function WorkerSettingsPage() {
   const router = useRouter();
   const { setTheme } = useTheme();
-  const [settings, setSettings] = useState<WorkerSettings>(defaultWorkerSettings);
+  const [settings, setSettings] = useState<WorkerSettings>(() => loadWorkerSettings());
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    const loaded = loadWorkerSettings();
-    setSettings(loaded);
-    setTheme(loaded.preferredTheme);
-  }, []);
+    setTheme(settings.preferredTheme);
+  }, [settings.preferredTheme, setTheme]);
 
   const setPreferredTheme = (preferredTheme: WorkerSettings["preferredTheme"]) => {
     setSettings((prev) => {
@@ -63,14 +60,16 @@ export default function WorkerSettingsPage() {
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm text-muted-foreground">Theme</p>
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row">
             <Button
+              className="w-full sm:w-auto"
               variant={settings.preferredTheme === "dark" ? "default" : "outline"}
               onClick={() => setPreferredTheme("dark")}
             >
               Dark
             </Button>
             <Button
+              className="w-full sm:w-auto"
               variant={settings.preferredTheme === "light" ? "default" : "outline"}
               onClick={() => setPreferredTheme("light")}
             >
@@ -85,7 +84,7 @@ export default function WorkerSettingsPage() {
           <CardTitle className="text-base">Notifications</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <label className="flex items-center justify-between text-sm">
+          <label className="flex items-center justify-between gap-3 text-sm">
             <span>Enable notifications</span>
             <input
               type="checkbox"
@@ -96,7 +95,7 @@ export default function WorkerSettingsPage() {
             />
           </label>
 
-          <label className="flex items-center justify-between text-sm">
+          <label className="flex items-center justify-between gap-3 text-sm">
             <span>Daily email digest (mock)</span>
             <input
               type="checkbox"
@@ -107,7 +106,7 @@ export default function WorkerSettingsPage() {
             />
           </label>
 
-          <label className="flex items-center justify-between text-sm">
+          <label className="flex items-center justify-between gap-3 text-sm">
             <span>Quiet hours</span>
             <input
               type="checkbox"
@@ -119,7 +118,7 @@ export default function WorkerSettingsPage() {
           </label>
 
           {settings.quietHoursEnabled && (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div>
                 <p className="text-xs text-muted-foreground mb-1">Start</p>
                 <Input

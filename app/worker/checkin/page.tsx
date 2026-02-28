@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ArrowRight, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { CameraCapture } from "@/components/camera/CameraCapture";
@@ -13,8 +13,6 @@ import { SafetyRecommendations } from "@/components/dashboard/SafetyRecommendati
 import { AlertBanner } from "@/components/dashboard/AlertBanner";
 import { useCheckin } from "@/hooks/useCheckin";
 import { formatDateTime } from "@/lib/utils";
-
-type Step = "capture" | "submitting" | "result";
 
 const stepLabels: Record<string, string> = {
   idle: "",
@@ -114,7 +112,7 @@ export default function CheckinPage() {
           </Card>
         )}
 
-        <div className="flex gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row">
           <Button variant="outline" className="flex-1" onClick={reset}>
             New Check-in
           </Button>

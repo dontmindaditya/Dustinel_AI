@@ -53,7 +53,7 @@ export function AlertBanner({
         )}
       />
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-0.5">
+        <div className="mb-0.5 flex flex-wrap items-center gap-2">
           <span className={cn("font-semibold", isCritical ? "text-background" : "text-foreground")}>
             {getRiskLevelLabel(riskLevel)} Alert
           </span>
