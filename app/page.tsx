@@ -1072,7 +1072,7 @@ export default function HomePage() {
               <span>Dustinel AI</span>
             </a>
             <p className="ftr-copy">Protecting workers, powered by AI</p>
-            <p className="ftr-copy">© 2025 Dustinel</p>
+            <p className="ftr-copy">© 2026 Dustinel</p>
           </div>
         </footer>
 
