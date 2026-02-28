@@ -1,36 +1,14 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dustinel AI
 
-## Getting Started
+Dustinel AI is a worker safety and health monitoring platform for high-risk job sites.
 
-First, run the development server:
+Workers use a mobile check-in flow to capture face and environment photos at the start of a shift.  
+The system analyzes those inputs to detect PPE compliance issues, fatigue indicators, and site hazards, then produces a health risk score.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Based on the score, Dustinel AI classifies risk levels (Low, Medium, High, Critical) and triggers the right response, including real-time alerts for serious conditions.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The platform includes:
+- A worker experience for check-ins, personal risk results, and safety recommendations.
+- An admin dashboard for live site monitoring, alerts, worker risk trends, and heatmap-based risk visibility across locations.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Overall, the project is built to help teams identify unsafe conditions early and prevent incidents before they happen.

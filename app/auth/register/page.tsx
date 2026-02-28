@@ -78,13 +78,23 @@ export default function RegisterPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="department">Department</Label>
-                <Input
-                  id="department"
-                  placeholder="Drilling"
+                <Select
                   value={form.department}
-                  onChange={(e) => setForm({ ...form, department: e.target.value })}
-                  required
-                />
+                  onValueChange={(v) => setForm({ ...form, department: v })}
+                >
+                  <SelectTrigger id="department">
+                    <SelectValue placeholder="Select department" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Drilling">Drilling</SelectItem>
+                    <SelectItem value="Blasting">Blasting</SelectItem>
+                    <SelectItem value="Survey">Survey</SelectItem>
+                    <SelectItem value="Transport">Transport</SelectItem>
+                    <SelectItem value="Safety">Safety</SelectItem>
+                    <SelectItem value="Maintenance">Maintenance</SelectItem>
+                    <SelectItem value="Construction">Construction</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
