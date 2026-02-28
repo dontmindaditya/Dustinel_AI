@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,6 +13,12 @@ interface WorkerTableProps {
 }
 
 export function WorkerTable({ workers, loading = false }: WorkerTableProps) {
+  const router = useRouter();
+
+  const goToWorkerDetail = (workerId: string) => {
+    router.push(`/admin/workers/${workerId}`);
+  };
+
   if (loading) {
     return (
       <Card>
@@ -44,14 +50,22 @@ export function WorkerTable({ workers, loading = false }: WorkerTableProps) {
             </thead>
             <tbody>
               {workers.map((worker) => (
-                <tr key={worker.workerId} className="border-b last:border-0">
+                <tr
+                  key={worker.workerId}
+                  tabIndex={0}
+                  role="link"
+                  aria-label={`Open details for ${worker.name}`}
+                  onClick={() => goToWorkerDetail(worker.workerId)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      goToWorkerDetail(worker.workerId);
+                    }
+                  }}
+                  className="border-b last:border-0 cursor-pointer transition-colors hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-inset"
+                >
                   <td className="px-4 py-3">
-                    <Link
-                      href={`/admin/workers/${worker.workerId}`}
-                      className="font-medium hover:underline"
-                    >
-                      {worker.name}
-                    </Link>
+                    <span className="font-medium">{worker.name}</span>
                     <div className="text-xs text-muted-foreground">{worker.workerId}</div>
                   </td>
                   <td className="px-4 py-3">{worker.department}</td>
