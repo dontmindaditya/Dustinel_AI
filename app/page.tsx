@@ -30,8 +30,8 @@ const features = [
     title: "Health Dashboard",
     description:
       "Monitor individual and site-wide health scores with real-time trend analysis and predictive risk insights.",
-    stat: "10k+",
-    statLabel: "Workers protected",
+    stat: "Beta",
+    statLabel: "In development",
   },
 ];
 
@@ -794,7 +794,7 @@ export default function HomePage() {
                 {[
                   { n: "99.2%", l: "PPE detection" },
                   { n: "<5s",   l: "Alert delivery" },
-                  { n: "10k+",  l: "Workers protected" },
+                  { n: "Beta",  l: "In development" },
                 ].map(s => (
                   <div key={s.l}>
                     <div className="st-n">{s.n}</div>
