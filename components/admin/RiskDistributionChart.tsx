@@ -69,34 +69,36 @@ export function RiskDistributionChart({ data, loading = false }: RiskDistributio
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="pie">
-          <TabsList className="mb-4">
+          <TabsList className="mb-4 grid w-full grid-cols-2 sm:w-auto sm:inline-grid">
             <TabsTrigger value="pie" className="text-xs">Pie</TabsTrigger>
             <TabsTrigger value="bar" className="text-xs">Bar</TabsTrigger>
           </TabsList>
 
           <TabsContent value="pie">
-            <div className="flex items-center gap-4">
-              <ResponsiveContainer width="60%" height={160}>
-                <PieChart>
-                  <Pie
-                    data={data}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={40}
-                    outerRadius={70}
-                    dataKey="count"
-                    nameKey="level"
-                    strokeWidth={0}
-                  >
-                    {data.map((entry) => (
-                      <Cell key={entry.level} fill={RISK_COLORS[entry.level]} />
-                    ))}
-                  </Pie>
-                  <Tooltip content={<CustomTooltip />} />
-                </PieChart>
-              </ResponsiveContainer>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="h-40 w-full sm:w-[60%]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={data}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={40}
+                      outerRadius={70}
+                      dataKey="count"
+                      nameKey="level"
+                      strokeWidth={0}
+                    >
+                      {data.map((entry) => (
+                        <Cell key={entry.level} fill={RISK_COLORS[entry.level]} />
+                      ))}
+                    </Pie>
+                    <Tooltip content={<CustomTooltip />} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
 
-              <div className="space-y-2 flex-1">
+              <div className="w-full space-y-2 flex-1">
                 {data.map((entry) => (
                   <div key={entry.level} className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">

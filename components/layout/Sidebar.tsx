@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -7,9 +8,9 @@ import {
   LayoutDashboard,
   Users,
   Bell,
-  BarChart3,
   Settings,
   ChevronRight,
+  Menu,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/constants";
@@ -89,28 +90,52 @@ export function Sidebar({ organizationName = "Organization" }: SidebarProps) {
 // Mobile sidebar toggle menu for admin on small screens
 export function MobileSidebarNav() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const activeHref =
+    adminNavItems.find(
+      (item) => pathname === item.href || pathname.startsWith(item.href + "/")
+    )?.href ?? adminNavItems[0].href;
 
   return (
-    <nav className="flex gap-1 overflow-x-auto pb-2 lg:hidden px-4">
-      {adminNavItems.map((item) => {
-        const Icon = item.icon;
-        const active = pathname === item.href;
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={cn(
-              "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm whitespace-nowrap transition-colors",
-              active
-                ? "bg-secondary text-foreground font-medium"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            <Icon className="h-3.5 w-3.5" />
-            {item.label}
-          </Link>
-        );
-      })}
-    </nav>
+    <div className="relative lg:hidden">
+      <button
+        type="button"
+        aria-label="Open admin navigation menu"
+        aria-expanded={open}
+        aria-controls="admin-mobile-nav-menu"
+        onClick={() => setOpen((prev) => !prev)}
+        className="inline-flex h-8 w-8 items-center justify-center rounded-md text-foreground hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring"
+      >
+        <Menu className="h-4 w-4" />
+      </button>
+
+      {open && (
+        <div
+          id="admin-mobile-nav-menu"
+          className="absolute right-0 top-full z-50 mt-2 w-52 rounded-md border border-border bg-popover p-1 shadow-md"
+        >
+          {adminNavItems.map((item) => {
+            const Icon = item.icon;
+            const active = activeHref === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  "flex items-center gap-2 rounded-sm px-2 py-2 text-sm transition-colors",
+                  active
+                    ? "bg-secondary text-foreground font-medium"
+                    : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
+                )}
+              >
+                <Icon className="h-4 w-4" />
+                {item.label}
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 }

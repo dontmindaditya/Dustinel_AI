@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { AlertTriangle, CheckCircle2, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -59,7 +58,7 @@ export function AlertFeed({ alerts, loading = false, onResolve, maxHeight = "400
                     alert.status === "RESOLVED" && "opacity-50"
                   )}
                 >
-                  <div className="flex items-start justify-between gap-2">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <Badge
@@ -76,10 +75,10 @@ export function AlertFeed({ alerts, loading = false, onResolve, maxHeight = "400
                         )}
                       </div>
                       <p className="text-xs text-muted-foreground line-clamp-2">{alert.message}</p>
-                      <div className="flex items-center gap-1 mt-1.5 text-xs text-muted-foreground">
+                      <div className="flex flex-wrap items-center gap-1 mt-1.5 text-xs text-muted-foreground">
                         <Clock className="h-3 w-3" />
                         {formatRelativeTime(alert.timestamp)}
-                        <span className="mx-1">·</span>
+                        <span className="mx-1">-</span>
                         {alert.site}
                       </div>
                     </div>
@@ -87,7 +86,7 @@ export function AlertFeed({ alerts, loading = false, onResolve, maxHeight = "400
                       <Button
                         size="sm"
                         variant="outline"
-                        className="shrink-0 h-7 text-xs px-2"
+                        className="h-7 w-fit shrink-0 text-xs px-2"
                         onClick={() => onResolve(alert.id)}
                       >
                         Resolve

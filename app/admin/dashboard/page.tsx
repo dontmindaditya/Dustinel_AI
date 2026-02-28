@@ -116,7 +116,7 @@ export default function AdminDashboardPage() {
     return (
       <div className="space-y-6">
         <Skeleton className="h-8 w-48" />
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => <Skeleton key={i} className="h-28" />)}
         </div>
         <div className="grid lg:grid-cols-2 gap-4">
@@ -135,7 +135,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard label="Total Workers" value={demoStats.totalWorkers} sub="registered" Icon={Users} />
         <StatCard label="Active Today" value={demoStats.activeToday} sub={`${Math.round(demoStats.activeToday / demoStats.totalWorkers * 100)}% checked in`} Icon={Activity} />
         <StatCard label="Avg Risk Score" value={demoStats.avgRiskScore} sub="organization-wide" Icon={TrendingUp} />

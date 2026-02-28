@@ -38,19 +38,19 @@ export function WorkerCard({ worker, isAdmin = false, className }: WorkerCardPro
           )}
         </div>
 
-        <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1">
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
+          <span className="flex min-w-0 items-center gap-1">
             <MapPin className="h-3 w-3" />
-            {worker.site}
+            <span className="truncate">{worker.site}</span>
           </span>
           {worker.lastCheckin && (
-            <span className="flex items-center gap-1">
+            <span className="flex min-w-0 items-center gap-1">
               <Clock className="h-3 w-3" />
-              {formatRelativeTime(worker.lastCheckin)}
+              <span className="truncate">{formatRelativeTime(worker.lastCheckin)}</span>
             </span>
           )}
           {worker.healthScore !== null && (
-            <span className="ml-auto font-medium tabular-nums text-foreground">
+            <span className="font-medium tabular-nums text-foreground sm:ml-auto">
               {Math.round(worker.healthScore)}
             </span>
           )}
