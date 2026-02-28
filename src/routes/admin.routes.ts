@@ -21,7 +21,12 @@ import { z } from "zod";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { requireRole } from "../middleware/role.middleware";
 import { asyncHandler, AppError } from "../utils/asyncHandler";
-import { validate, alertFiltersSchema, paginationSchema } from "../utils/validators";
+import {
+  validate,
+  alertFiltersSchema,
+  paginationSchema,
+  updateAdminProfileSchema,
+} from "../utils/validators";
 import * as adminController from "../controllers/admin.controller";
 
 const router = Router();
@@ -78,6 +83,25 @@ function validateBody<T>(schema: z.ZodSchema<T>) {
 router.get(
   "/dashboard",
   asyncHandler(adminController.getDashboard)
+);
+
+/**
+ * GET /api/v1/admin/profile
+ * Returns the current admin profile for settings page.
+ */
+router.get(
+  "/profile",
+  asyncHandler(adminController.getAdminProfile)
+);
+
+/**
+ * PATCH /api/v1/admin/profile
+ * Updates editable admin profile fields.
+ */
+router.patch(
+  "/profile",
+  validateBody(updateAdminProfileSchema),
+  asyncHandler(adminController.updateAdminProfile)
 );
 
 /**

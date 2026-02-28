@@ -10,6 +10,11 @@ export interface HealthProfile {
   streakDaysLowRisk: number;
 }
 
+export interface EmergencyContact {
+  name: string;
+  phone: string;
+}
+
 export interface Worker {
   id: string;
   workerId: string;
@@ -17,6 +22,8 @@ export interface Worker {
   name: string;
   email: string;
   phone: string;
+  profileImageUrl?: string;
+  emergencyContact?: EmergencyContact;
   role: WorkerRole;
   department: string;
   site: string;
@@ -49,5 +56,8 @@ export type CreateWorkerInput = Partial<Worker> & {
 };
 
 export type UpdateWorkerInput = Partial<
-  Pick<Worker, "name" | "email" | "phone" | "department" | "site" | "shift" | "deviceTokens">
+  Pick<
+    Worker,
+    "name" | "email" | "phone" | "profileImageUrl" | "emergencyContact" | "department" | "site" | "shift" | "deviceTokens"
+  >
 >;
