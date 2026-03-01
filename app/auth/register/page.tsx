@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Shield, Loader2 } from "lucide-react";
+import Image from "next/image";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,7 +35,7 @@ export default function RegisterPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-2">
-            <Shield className="h-8 w-8" />
+            <Image src="/logo.png" alt="Dustinel AI logo" width={44} height={44} priority />
           </div>
           <CardTitle>Worker Registration</CardTitle>
           <CardDescription>Create your Dustinel AI account</CardDescription>
