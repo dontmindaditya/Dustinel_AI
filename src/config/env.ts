@@ -70,6 +70,13 @@ const envSchema = z.object({
   RATE_LIMIT_WINDOW_MS: z.string().default("60000").transform(Number),
   RATE_LIMIT_MAX_REQUESTS: z.string().default("100").transform(Number),
   CHECKIN_RATE_LIMIT_MAX: z.string().default("10").transform(Number),
+
+  // Profile settings
+  PROFILE_IMAGE_MAX_MB: z.string().default("5").transform(Number),
+  PROFILE_ALLOWED_IMAGE_TYPES: z
+    .string()
+    .default("image/jpeg,image/png,image/webp"),
+  PROFILE_DEFAULT_AVATAR_URL: z.string().url().optional(),
 });
 
 function validateEnv() {

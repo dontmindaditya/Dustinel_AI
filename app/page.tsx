@@ -4,7 +4,7 @@ import { Cpu, Bell, BarChart3, Eye, ExternalLink, FileText, Download, Database }
 import { motion } from "framer-motion";
 
 const ROUTES = {
-  LOGIN: "/login",
+  LOGIN: "/auth/login",
   ADMIN_DASHBOARD: "/admin/dashboard",
 };
 

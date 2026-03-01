@@ -25,6 +25,7 @@ import {
   validate,
   createWorkerSchema,
   updateWorkerSchema,
+  updateWorkerProfileSchema,
   paginationSchema,
 } from "../utils/validators";
 import * as workerController from "../controllers/worker.controller";
@@ -89,6 +90,27 @@ router.get(
     req.params.id = workerId;
     await workerController.getWorker(req, res);
   })
+);
+
+/**
+ * GET /api/v1/workers/me/profile
+ * Returns worker profile data used by the settings page.
+ */
+router.get(
+  "/me/profile",
+  requireRole("worker"),
+  asyncHandler(workerController.getMyProfile)
+);
+
+/**
+ * PATCH /api/v1/workers/me/profile
+ * Updates worker profile fields from settings.
+ */
+router.patch(
+  "/me/profile",
+  requireRole("worker"),
+  validateBody(updateWorkerProfileSchema),
+  asyncHandler(workerController.updateMyProfile)
 );
 
 /**

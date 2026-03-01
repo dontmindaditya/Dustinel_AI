@@ -1,6 +1,16 @@
 import { Request, Response } from "express";
-import { workerRepository, alertRepository, healthRecordRepository } from "../services/cosmos.service";
-import { validate, alertFiltersSchema, paginationSchema } from "../utils/validators";
+import {
+  workerRepository,
+  alertRepository,
+  healthRecordRepository,
+  adminProfileRepository,
+} from "../services/cosmos.service";
+import {
+  validate,
+  alertFiltersSchema,
+  paginationSchema,
+  updateAdminProfileSchema,
+} from "../utils/validators";
 import { getContainer, CONTAINERS } from "../config/azure.config";
 import { logger } from "../utils/logger";
 import type { RiskLevel } from "../models/worker.model";
@@ -211,4 +221,39 @@ export async function streamAlerts(req: Request, res: Response): Promise<void> {
     clearInterval(heartbeat);
     logger.debug("SSE client disconnected", { orgId });
   });
+}
+
+/** GET /admin/profile â€” profile fields for admin settings */
+export async function getAdminProfile(req: Request, res: Response): Promise<void> {
+  const orgId = req.user!.organizationId;
+  const adminUserId = req.user!.sub;
+  const profile = await adminProfileRepository.upsert(
+    orgId,
+    adminUserId,
+    {
+      fullName: req.user!.name || "Admin User",
+      email: req.user!.email || "",
+    }
+  );
+
+  res.status(200).json({ data: profile });
+}
+
+/** PATCH /admin/profile â€” update editable admin profile fields */
+export async function updateAdminProfile(req: Request, res: Response): Promise<void> {
+  const orgId = req.user!.organizationId;
+  const adminUserId = req.user!.sub;
+  const input = validate(updateAdminProfileSchema, req.body);
+
+  const updated = await adminProfileRepository.upsert(
+    orgId,
+    adminUserId,
+    {
+      fullName: req.user!.name || "Admin User",
+      email: req.user!.email || "",
+    },
+    input
+  );
+
+  res.status(200).json({ data: updated });
 }

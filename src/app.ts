@@ -5,6 +5,7 @@ import helmet from "helmet";
 import compression from "compression";
 import morgan from "morgan";
 import { corsOptions } from "./config/cors.config";
+import { env } from "./config/env";
 import { apiRateLimit } from "./middleware/rateLimit.middleware";
 import { errorMiddleware, notFoundMiddleware } from "./middleware/error.middleware";
 import { logger } from "./utils/logger";
@@ -33,8 +34,9 @@ export function createApp(): Application {
   app.set("trust proxy", 1); // for rate limiter behind Azure App Service
 
   // ─── Request parsing ────────────────────────────────────────────────────────
-  app.use(express.json({ limit: "1mb" }));
-  app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+  const requestBodyLimit = `${Math.max(1, env.PROFILE_IMAGE_MAX_MB)}mb`;
+  app.use(express.json({ limit: requestBodyLimit }));
+  app.use(express.urlencoded({ extended: true, limit: requestBodyLimit }));
   app.use(compression());
 
   // ─── Logging ────────────────────────────────────────────────────────────────

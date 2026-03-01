@@ -32,6 +32,13 @@ export const createWorkerSchema = z.object({
   name: z.string().min(2).max(100),
   email: z.string().email(),
   phone: z.string().optional(),
+  profileImageUrl: z.string().url().optional(),
+  emergencyContact: z
+    .object({
+      name: z.string().min(1).max(100),
+      phone: z.string().min(1).max(30),
+    })
+    .optional(),
   department: z.string().min(1).max(100),
   site: z.string().min(1).max(100),
   shift: z.enum(["morning", "afternoon", "night"]),
@@ -43,10 +50,45 @@ export const updateWorkerSchema = z.object({
   name: z.string().min(2).max(100).optional(),
   email: z.string().email().optional(),
   phone: z.string().optional(),
+  profileImageUrl: z.string().url().optional(),
+  emergencyContact: z
+    .object({
+      name: z.string().min(1).max(100),
+      phone: z.string().min(1).max(30),
+    })
+    .optional(),
   department: z.string().min(1).max(100).optional(),
   site: z.string().min(1).max(100).optional(),
   shift: z.enum(["morning", "afternoon", "night"]).optional(),
   deviceTokens: z.array(z.string()).optional(),
+});
+
+export const updateWorkerProfileSchema = z.object({
+  name: z.string().min(2).max(100).optional(),
+  email: z.string().email().optional(),
+  phone: z.string().max(30).optional(),
+  profileImageUrl: z.string().url().optional(),
+  emergencyContact: z
+    .object({
+      name: z.string().min(1).max(100),
+      phone: z.string().min(1).max(30),
+    })
+    .optional(),
+  department: z.string().min(1).max(100).optional(),
+});
+
+export const updateAdminProfileSchema = z.object({
+  fullName: z.string().min(2).max(100).optional(),
+  email: z.string().email().optional(),
+  phone: z.string().max(30).optional(),
+  department: z.string().min(1).max(100).optional(),
+  profileImageUrl: z.string().url().optional(),
+  emergencyContact: z
+    .object({
+      name: z.string().min(1).max(100),
+      phone: z.string().min(1).max(30),
+    })
+    .optional(),
 });
 
 // ─── Pagination ───────────────────────────────────────────────────────────────

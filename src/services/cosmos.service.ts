@@ -3,6 +3,7 @@ import { getContainer, CONTAINERS } from "../config/azure.config";
 import { logger } from "../utils/logger";
 import { NotFoundError } from "../utils/asyncHandler";
 import type { Worker, WorkerSummary, CreateWorkerInput, UpdateWorkerInput } from "../models/worker.model";
+import type { AdminProfile, UpdateAdminProfileInput } from "../models/adminProfile.model";
 import type { HealthRecord, CreateHealthRecordInput } from "../models/healthRecord.model";
 import type { Alert, CreateAlertInput, AlertStatus } from "../models/alert.model";
 
@@ -85,7 +86,9 @@ export const workerRepository = {
       organizationId: input.organizationId,
       name: input.name,
       email: input.email,
-      phone: input.phone,
+      phone: input.phone ?? "",
+      profileImageUrl: input.profileImageUrl ?? "",
+      emergencyContact: input.emergencyContact ?? { name: "", phone: "" },
       role: input.role ?? "worker",
       department: input.department,
       site: input.site,
@@ -136,6 +139,64 @@ export const workerRepository = {
 
     const container = getContainer(CONTAINERS.WORKERS);
     await container.item(existing.id, organizationId).replace(updated);
+  },
+};
+
+export const adminProfileRepository = {
+  async findByUserId(organizationId: string, adminUserId: string): Promise<AdminProfile | null> {
+    const container = getContainer(CONTAINERS.ORGANIZATIONS);
+    const { resources } = await container.items
+      .query({
+        query: `SELECT * FROM c
+                WHERE c.type = "adminProfile"
+                  AND c.organizationId = @orgId
+                  AND c.adminUserId = @adminUserId`,
+        parameters: [
+          { name: "@orgId", value: organizationId },
+          { name: "@adminUserId", value: adminUserId },
+        ],
+      })
+      .fetchAll();
+
+    return resources.length ? (resources[0] as AdminProfile) : null;
+  },
+
+  async upsert(
+    organizationId: string,
+    adminUserId: string,
+    fallback: { fullName: string; email: string },
+    patch: UpdateAdminProfileInput = {}
+  ): Promise<AdminProfile> {
+    const container = getContainer(CONTAINERS.ORGANIZATIONS);
+    const existing = await this.findByUserId(organizationId, adminUserId);
+    const now = new Date().toISOString();
+
+    const base: AdminProfile =
+      existing ??
+      {
+        id: `adminProfile_${adminUserId}`,
+        type: "adminProfile",
+        organizationId,
+        adminUserId,
+        fullName: fallback.fullName,
+        email: fallback.email,
+        phone: "",
+        department: "",
+        profileImageUrl: "",
+        emergencyContact: { name: "", phone: "" },
+        createdAt: now,
+        updatedAt: now,
+      };
+
+    const updated: AdminProfile = {
+      ...base,
+      ...patch,
+      emergencyContact: patch.emergencyContact ?? base.emergencyContact,
+      updatedAt: now,
+    };
+
+    await container.items.upsert(updated);
+    return updated;
   },
 };
 

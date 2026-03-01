@@ -1,6 +1,12 @@
 import { Request, Response } from "express";
 import { workerRepository, healthRecordRepository } from "../services/cosmos.service";
-import { validate, createWorkerSchema, updateWorkerSchema, paginationSchema } from "../utils/validators";
+import {
+  validate,
+  createWorkerSchema,
+  updateWorkerSchema,
+  updateWorkerProfileSchema,
+  paginationSchema,
+} from "../utils/validators";
 import { NotFoundError, ForbiddenError } from "../utils/asyncHandler";
 import { logger } from "../utils/logger";
 
@@ -82,6 +88,8 @@ export async function createWorker(req: Request, res: Response): Promise<void> {
     name: input.name,
     email: input.email,
     phone: input.phone ?? "",
+    profileImageUrl: input.profileImageUrl ?? "",
+    emergencyContact: input.emergencyContact ?? { name: "", phone: "" },
     department: input.department,
     site: input.site,
     shift: input.shift ?? "morning",
@@ -108,4 +116,58 @@ export async function updateWorker(req: Request, res: Response): Promise<void> {
   logger.info("Worker updated", { workerId: req.params.id, by: req.user!.sub });
 
   res.status(200).json({ data: updated });
+}
+
+/** GET /workers/me/profile â€” profile fields used by settings page */
+export async function getMyProfile(req: Request, res: Response): Promise<void> {
+  if (!req.user?.workerId) {
+    throw new NotFoundError("Worker profile");
+  }
+
+  const worker = await workerRepository.findById(req.user.workerId);
+  res.status(200).json({
+    data: {
+      workerId: worker.workerId,
+      fullName: worker.name,
+      email: worker.email,
+      phone: worker.phone,
+      department: worker.department,
+      profileImageUrl: worker.profileImageUrl ?? "",
+      emergencyContact: worker.emergencyContact ?? { name: "", phone: "" },
+    },
+  });
+}
+
+/** PATCH /workers/me/profile â€” update editable worker profile fields */
+export async function updateMyProfile(req: Request, res: Response): Promise<void> {
+  if (!req.user?.workerId) {
+    throw new NotFoundError("Worker profile");
+  }
+
+  const input = validate(updateWorkerProfileSchema, req.body);
+  const orgId = req.user.organizationId;
+  const updated = await workerRepository.update(
+    req.user.workerId,
+    {
+      name: input.name,
+      email: input.email,
+      phone: input.phone,
+      department: input.department,
+      profileImageUrl: input.profileImageUrl,
+      emergencyContact: input.emergencyContact,
+    },
+    orgId
+  );
+
+  res.status(200).json({
+    data: {
+      workerId: updated.workerId,
+      fullName: updated.name,
+      email: updated.email,
+      phone: updated.phone,
+      department: updated.department,
+      profileImageUrl: updated.profileImageUrl ?? "",
+      emergencyContact: updated.emergencyContact ?? { name: "", phone: "" },
+    },
+  });
 }
