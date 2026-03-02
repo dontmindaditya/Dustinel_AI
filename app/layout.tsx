@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   description:
     "AI-powered worker safety and health monitoring system built on Microsoft Azure.",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
     { media: "(prefers-color-scheme: dark)", color: "black" },
