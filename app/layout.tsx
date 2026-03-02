@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
+import CapacitorBackHandler from "@/components/capacitor-back-handler";
 
 export const metadata: Metadata = {
   title: "Dustinel AI — Worker Safety Monitoring",
@@ -17,18 +18,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${GeistSans.variable} ${GeistMono.variable} font-sans antialiased min-h-screen`}>
+      <body
+        className={`${GeistSans.variable} ${GeistMono.variable} font-sans antialiased min-h-screen`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
+          <CapacitorBackHandler />
           {children}
         </ThemeProvider>
       </body>
