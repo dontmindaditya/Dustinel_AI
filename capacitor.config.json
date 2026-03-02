@@ -1,0 +1,9 @@
+{
+  "appId": "com.dustinel.app",
+  "appName": "Dustinel AI",
+  "webDir": "out",
+  "server": {
+    "url": "https://dustinel-ai.vercel.app",
+    "cleartext": false
+  }
+}
