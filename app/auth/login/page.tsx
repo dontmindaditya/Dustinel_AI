@@ -2,18 +2,19 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Shield, Loader2 } from "lucide-react";
+import Image from "next/image";
+import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card";
-import { getRedirectByRole } from "@/lib/auth";
-import Link from "next/link";
+import { ROUTES } from "@/lib/constants";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [workerId, setWorkerId] = useState("");
+  const [passcode, setPasscode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -23,13 +24,11 @@ export default function LoginPage() {
     setError("");
 
     try {
-      // In real app: call signIn("azure-ad-b2c") via NextAuth
-      // For demo, simulate based on email
-      await new Promise((res) => setTimeout(res, 1000));
-      const role = email.includes("admin") ? "admin" : "worker";
-      router.push(getRedirectByRole(role));
+      // Prototype auth flow: accept any credentials and continue.
+      await new Promise((res) => setTimeout(res, 500));
+      router.push(ROUTES.WORKER_DASHBOARD);
     } catch {
-      setError("Login failed. Please check your credentials.");
+      setError("Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -40,35 +39,35 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-2">
-            <Shield className="h-8 w-8" />
+            <Image src="/logo.png" alt="Dustinel AI logo" width={44} height={44} priority />
           </div>
           <CardTitle>Dustinel AI</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
+          <CardDescription>Prototype sign-in</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="worker-id">Worker ID or Email</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="worker@company.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="worker-id"
+                type="text"
+                placeholder="Type anything"
+                value={workerId}
+                onChange={(e) => setWorkerId(e.target.value)}
                 required
-                autoComplete="email"
+                autoComplete="username"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="passcode">Password</Label>
               <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                id="passcode"
+                type="text"
+                placeholder="Type anything"
+                value={passcode}
+                onChange={(e) => setPasscode(e.target.value)}
                 required
-                autoComplete="current-password"
+                autoComplete="off"
               />
             </div>
 
@@ -78,14 +77,13 @@ export default function LoginPage() {
 
             <Button type="submit" className="w-full" disabled={loading}>
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              {loading ? "Signing in..." : "Sign in"}
+              {loading ? "Signing in..." : "Continue"}
             </Button>
           </form>
 
           <div className="mt-4 text-center">
             <p className="text-xs text-muted-foreground">
-              Secured by{" "}
-              <span className="font-medium text-foreground">Azure AD B2C</span>
+              Prototype mode: any input is accepted.
             </p>
           </div>
 
