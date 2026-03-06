@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Search, ArrowUpDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
@@ -32,9 +33,14 @@ const riskOrder: Record<RiskLevel, number> = {
 };
 
 export function WorkerTable({ workers, loading = false }: WorkerTableProps) {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("currentRiskLevel");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+  const openWorker = (workerId: string) => {
+    router.push(`${ROUTES.ADMIN_WORKERS}/${workerId}`);
+  };
 
   const toggleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -148,7 +154,20 @@ export function WorkerTable({ workers, loading = false }: WorkerTableProps) {
               </tr>
             ) : (
               filtered.map((worker) => (
-                <tr key={worker.workerId} className="border-b last:border-0 hover:bg-muted/30 transition-colors">
+                <tr
+                  key={worker.workerId}
+                  className="border-b last:border-0 hover:bg-muted/30 transition-colors cursor-pointer focus-within:bg-muted/30"
+                  onClick={() => openWorker(worker.workerId)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      openWorker(worker.workerId);
+                    }
+                  }}
+                  role="link"
+                  tabIndex={0}
+                  aria-label={`Open ${worker.name} details`}
+                >
                   <td className="px-4 py-3">
                     <div>
                       <p className="font-medium">{worker.name}</p>
@@ -179,7 +198,10 @@ export function WorkerTable({ workers, loading = false }: WorkerTableProps) {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <Button variant="ghost" size="icon" asChild className="h-7 w-7">
-                      <Link href={`${ROUTES.ADMIN_WORKERS}/${worker.workerId}`}>
+                      <Link
+                        href={`${ROUTES.ADMIN_WORKERS}/${worker.workerId}`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <ChevronRight className="h-4 w-4" />
                       </Link>
                     </Button>

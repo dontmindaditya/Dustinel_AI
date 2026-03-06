@@ -11,54 +11,37 @@ import { RiskScoreGauge } from "@/components/dashboard/RiskScoreGauge";
 import { HealthTimeline } from "@/components/dashboard/HealthTimeline";
 import { SafetyRecommendations } from "@/components/dashboard/SafetyRecommendations";
 import { getRiskLevelLabel, getRiskLevelVariant, formatDateTime } from "@/lib/utils";
-import type { HealthRecord } from "@/types/health";
 import { ROUTES } from "@/lib/constants";
-
-// Demo worker data
-const demoWorker = {
-  id: "w1", workerId: "w1", organizationId: "org1",
-  name: "Rajesh Kumar", email: "rajesh@minecorp.com", phone: "+91-9876543210",
-  role: "worker" as const, department: "Drilling", site: "Mine Site A",
-  shift: "morning" as const, azureUserId: "", deviceTokens: [],
-  healthProfile: {
-    baselineScore: 85, conditions: ["asthma"],
-    lastCheckin: new Date(Date.now() - 5 * 60000).toISOString(),
-    currentRiskLevel: "CRITICAL" as const, streakDaysLowRisk: 0,
-  },
-  createdAt: "2025-01-01T00:00:00Z",
-  updatedAt: new Date().toISOString(),
-};
-
-const demoRecords: HealthRecord[] = Array.from({ length: 8 }, (_, i) => ({
-  id: `chk_${i}`,
-  workerId: "w1",
-  organizationId: "org1",
-  timestamp: new Date(Date.now() - i * 8 * 60 * 60 * 1000).toISOString(),
-  shiftType: "morning" as const,
-  location: { lat: 28.6, lng: 77.2, site: "Mine Site A" },
-  images: { faceUrl: "", envUrl: "" },
-  visionAnalysis: {
-    face: { hasMask: i > 1, hasHelmet: true, fatigueScore: 0.3, estimatedAge: 34, confidence: 0.9 },
-    environment: { dustLevel: "HIGH" as any, lightingLevel: "OK" as any, detectedHazards: [], safetyEquipmentVisible: true },
-  },
-  mlAnalysis: {
-    healthScore: Math.max(25, 88 - i * 8),
-    riskLevel: i === 0 ? "CRITICAL" : i < 3 ? "HIGH" : i < 6 ? "MEDIUM" : "LOW" as any,
-    riskFactors: [{ type: "NO_MASK", severity: "HIGH" as any, weight: 0.35 }],
-    modelVersion: "v2.1.0",
-  },
-  recommendations: i < 2 ? ["Wear N95 mask immediately", "Report to safety officer before entering work zone"] : [],
-  alertSent: i < 3,
-  alertId: null,
-}));
+import { getDemoRecords, getDemoWorker } from "../demo-data";
 
 export default function WorkerDetailPage() {
-  const { id } = useParams();
-  const latest = demoRecords[0];
+  const params = useParams<{ id: string | string[] }>();
+  const workerId = Array.isArray(params.id) ? params.id[0] : params.id;
+
+  const worker = getDemoWorker(workerId);
+  const records = getDemoRecords(workerId);
+  const latest = records[0];
+
+  if (!worker || !latest) {
+    return (
+      <div className="space-y-4 animate-fade-in">
+        <Button variant="ghost" size="sm" asChild className="w-fit">
+          <Link href={ROUTES.ADMIN_WORKERS}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to workers
+          </Link>
+        </Button>
+        <Card>
+          <CardContent className="py-8 text-sm text-muted-foreground">
+            Worker not found.
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Header */}
       <div className="flex items-start gap-3">
         <Button variant="ghost" size="icon" asChild className="mt-0.5 shrink-0">
           <Link href={ROUTES.ADMIN_WORKERS}>
@@ -67,23 +50,21 @@ export default function WorkerDetailPage() {
         </Button>
         <div className="flex-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-xl font-semibold">{demoWorker.name}</h1>
-            {demoWorker.healthProfile.currentRiskLevel && (
-              <Badge variant={getRiskLevelVariant(demoWorker.healthProfile.currentRiskLevel)}>
-                {getRiskLevelLabel(demoWorker.healthProfile.currentRiskLevel)}
+            <h1 className="text-xl font-semibold">{worker.name}</h1>
+            {worker.healthProfile.currentRiskLevel && (
+              <Badge variant={getRiskLevelVariant(worker.healthProfile.currentRiskLevel)}>
+                {getRiskLevelLabel(worker.healthProfile.currentRiskLevel)}
               </Badge>
             )}
           </div>
           <p className="text-sm text-muted-foreground mt-0.5">
-            {demoWorker.department} · {demoWorker.site}
+            {worker.department} · {worker.site}
           </p>
         </div>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Left: Profile + latest score */}
         <div className="space-y-4">
-          {/* Current score */}
           <Card>
             <CardContent className="flex flex-col items-center py-6">
               <RiskScoreGauge
@@ -98,7 +79,6 @@ export default function WorkerDetailPage() {
             </CardContent>
           </Card>
 
-          {/* Worker info */}
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-medium">Worker Info</CardTitle>
@@ -106,15 +86,15 @@ export default function WorkerDetailPage() {
             <CardContent className="space-y-3 text-sm">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="h-3.5 w-3.5 shrink-0" />
-                <span className="truncate">{demoWorker.email}</span>
+                <span className="truncate">{worker.email}</span>
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Phone className="h-3.5 w-3.5 shrink-0" />
-                {demoWorker.phone}
+                {worker.phone}
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <MapPin className="h-3.5 w-3.5 shrink-0" />
-                {demoWorker.site}
+                {worker.site}
               </div>
 
               <Separator />
@@ -122,40 +102,38 @@ export default function WorkerDetailPage() {
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div>
                   <p className="text-muted-foreground">Shift</p>
-                  <p className="font-medium capitalize">{demoWorker.shift}</p>
+                  <p className="font-medium capitalize">{worker.shift}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground">Baseline Score</p>
-                  <p className="font-medium">{demoWorker.healthProfile.baselineScore}</p>
+                  <p className="font-medium">{worker.healthProfile.baselineScore}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground">Conditions</p>
                   <p className="font-medium capitalize">
-                    {demoWorker.healthProfile.conditions.join(", ") || "None"}
+                    {worker.healthProfile.conditions.join(", ") || "None"}
                   </p>
                 </div>
                 <div>
                   <p className="text-muted-foreground">Streak (Low Risk)</p>
-                  <p className="font-medium">{demoWorker.healthProfile.streakDaysLowRisk} days</p>
+                  <p className="font-medium">{worker.healthProfile.streakDaysLowRisk} days</p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Right: History + recommendations */}
         <div className="lg:col-span-2 space-y-4">
-          <HealthTimeline records={demoRecords} />
+          <HealthTimeline records={records} />
           <SafetyRecommendations recommendations={latest.recommendations} />
 
-          {/* Recent check-ins table */}
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-medium">Recent Check-ins</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <div className="divide-y">
-                {demoRecords.slice(0, 5).map((r) => (
+                {records.slice(0, 5).map((r) => (
                   <div key={r.id} className="flex items-center gap-4 px-4 py-3 text-sm">
                     <span className="tabular-nums font-medium w-8">
                       {Math.round(r.mlAnalysis.healthScore)}
@@ -181,3 +159,4 @@ export default function WorkerDetailPage() {
     </div>
   );
 }
+
