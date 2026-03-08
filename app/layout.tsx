@@ -13,8 +13,8 @@ export const metadata: Metadata = {
     "AI-powered worker safety and health monitoring system built on Microsoft Azure.",
   manifest: "/manifest.json",
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
+    icon: "/logo.png",
+    shortcut: "/logo.png",
     apple: "/logo.png",
   },
 };
