@@ -37,6 +37,7 @@ export interface Worker {
 export interface WorkerSummary {
   workerId: string;
   name: string;
+  profilePicture?: string;
   department: string;
   site: string;
   currentRiskLevel: RiskLevel | null;

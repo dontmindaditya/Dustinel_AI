@@ -47,3 +47,13 @@ export const RISK_SCORE_DEDUCTIONS = {
   PREVIOUS_SCORE_LOW: 5,
   CHRONIC_CONDITION: 5,
 } as const;
+
+export const TREND_DATA = [
+  { d: "M 20", v: 74 },
+  { d: "M 21", v: 69 },
+  { d: "M 22", v: 72 },
+  { d: "M 23", v: 68 },
+  { d: "M 24", v: 75 },
+  { d: "M 25", v: 71 },
+  { d: "M 26", v: 71 },
+];

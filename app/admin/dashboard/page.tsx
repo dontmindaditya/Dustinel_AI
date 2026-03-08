@@ -1,192 +1,372 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Users, AlertTriangle, TrendingUp, Activity } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useAdminI18n } from "@/lib/adminI18n";
-import { RiskDistributionChart } from "@/components/admin/RiskDistributionChart";
-import { AlertFeed } from "@/components/admin/AlertFeed";
-import { HeatmapWidget } from "@/components/admin/HeatmapWidget";
-import { WorkerCard } from "@/components/dashboard/WorkerCard";
-import type { WorkerSummary } from "@/types/worker";
-import type { Alert } from "@/types/api";
+import React, { useState, useEffect } from "react";
+import { Users, AlertTriangle, TrendingUp, Activity, ChevronRight, Search } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  PieChart, Pie, Cell,
 } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import dynamic from "next/dynamic";
+import type { RiskLevel } from "@/types/worker";
 
-// Demo data
-const demoStats = {
-  totalWorkers: 42,
-  activeToday: 38,
-  avgRiskScore: 71,
-  alertsToday: 5,
-  riskDistribution: [
-    { level: "LOW" as const, count: 22, percentage: 52 },
-    { level: "MEDIUM" as const, count: 12, percentage: 29 },
-    { level: "HIGH" as const, count: 6, percentage: 14 },
-    { level: "CRITICAL" as const, count: 2, percentage: 5 },
-  ],
+// ─── Leaflet map — fully isolated, loaded client-side only ────────────────────
+const LeafletMap = dynamic(() => import("./leafletmap"), {
+  ssr: false,
+  loading: () => <div className="flex-1 bg-muted animate-pulse" style={{ minHeight: 400 }} />,
+});
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type Worker = {
+  id: string;
+  name: string;
+  dept: string;
+  zone: string;
+  risk: RiskLevel;
+  health: number;
+  lat: number;
+  lng: number;
+  lastSeen: string;
 };
 
-const demoTrend = [
-  { date: "Feb 20", avgScore: 74 },
-  { date: "Feb 21", avgScore: 69 },
-  { date: "Feb 22", avgScore: 72 },
-  { date: "Feb 23", avgScore: 68 },
-  { date: "Feb 24", avgScore: 75 },
-  { date: "Feb 25", avgScore: 71 },
-  { date: "Feb 26", avgScore: 71 },
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const RISK_COLOR: Record<RiskLevel, string> = {
+  CRITICAL: "#dc2626",
+  HIGH:     "#ea580c",
+  MEDIUM:   "#ca8a04",
+  LOW:      "#16a34a",
+};
+
+const RISK_ORDER: Record<RiskLevel, number> = {
+  CRITICAL: 0,
+  HIGH:     1,
+  MEDIUM:   2,
+  LOW:      3,
+};
+
+const BASE_LAT = 23.7948;
+const BASE_LNG = 86.4304;
+
+const TREND_DATA = [
+  { date: "Feb 20", score: 74 },
+  { date: "Feb 21", score: 69 },
+  { date: "Feb 22", score: 72 },
+  { date: "Feb 23", score: 68 },
+  { date: "Feb 24", score: 75 },
+  { date: "Feb 25", score: 71 },
+  { date: "Feb 26", score: 71 },
 ];
 
-const demoAlerts: Alert[] = [
-  {
-    id: "a1", organizationId: "org1", workerId: "w1", workerName: "Rajesh Kumar",
-    checkinId: "c1", timestamp: new Date(Date.now() - 5 * 60000).toISOString(),
-    severity: "CRITICAL", type: "HEALTH_RISK",
-    message: "No mask detected in high-dust environment. Health score: 28",
-    riskFactors: ["NO_MASK", "DUST_LEVEL_HIGH"], status: "OPEN",
-    resolvedBy: null, resolvedAt: null, notificationsSent: ["push", "sms"], site: "Mine Site A",
-  },
-  {
-    id: "a2", organizationId: "org1", workerId: "w2", workerName: "Amit Singh",
-    checkinId: "c2", timestamp: new Date(Date.now() - 22 * 60000).toISOString(),
-    severity: "HIGH", type: "HEALTH_RISK",
-    message: "High fatigue score detected. Rest recommended before continuing work.",
-    riskFactors: ["FATIGUE_HIGH"], status: "OPEN",
-    resolvedBy: null, resolvedAt: null, notificationsSent: ["push"], site: "Mine Site B",
-  },
-  {
-    id: "a3", organizationId: "org1", workerId: "w3", workerName: "Priya Sharma",
-    checkinId: "c3", timestamp: new Date(Date.now() - 2 * 3600000).toISOString(),
-    severity: "HIGH", type: "HEALTH_RISK",
-    message: "No helmet detected in drilling area.",
-    riskFactors: ["NO_HELMET"], status: "RESOLVED",
-    resolvedBy: "admin_001", resolvedAt: new Date(Date.now() - 1 * 3600000).toISOString(),
-    notificationsSent: ["push"], site: "Mine Site A",
-  },
+const RISK_DIST_DATA = [
+  { level: "LOW"      as RiskLevel, count: 11, percentage: 46 },
+  { level: "MEDIUM"   as RiskLevel, count:  8, percentage: 33 },
+  { level: "HIGH"     as RiskLevel, count:  3, percentage: 13 },
+  { level: "CRITICAL" as RiskLevel, count:  2, percentage:  8 },
 ];
 
-const demoWorkers: WorkerSummary[] = [
-  { workerId: "w1", name: "Rajesh Kumar", department: "Drilling", site: "Mine Site A", currentRiskLevel: "CRITICAL", lastCheckin: new Date(Date.now() - 5 * 60000).toISOString(), healthScore: 28 },
-  { workerId: "w2", name: "Amit Singh", department: "Blasting", site: "Mine Site B", currentRiskLevel: "HIGH", lastCheckin: new Date(Date.now() - 22 * 60000).toISOString(), healthScore: 52 },
-  { workerId: "w3", name: "Priya Sharma", department: "Survey", site: "Mine Site A", currentRiskLevel: "MEDIUM", lastCheckin: new Date(Date.now() - 4 * 3600000).toISOString(), healthScore: 67 },
-  { workerId: "w4", name: "Suresh Nair", department: "Transport", site: "Mine Site C", currentRiskLevel: "LOW", lastCheckin: new Date(Date.now() - 2 * 3600000).toISOString(), healthScore: 88 },
-];
+const FILTER_OPTIONS = ["ALL", "CRITICAL", "HIGH", "MEDIUM", "LOW"] as const;
+type FilterOption = typeof FILTER_OPTIONS[number];
 
-const demoSites = [
-  { siteId: "s1", siteName: "Mine Site A", x: 30, y: 35, riskLevel: "CRITICAL" as const, workerCount: 15, avgScore: 58 },
-  { siteId: "s2", siteName: "Mine Site B", x: 60, y: 55, riskLevel: "HIGH" as const, workerCount: 12, avgScore: 67 },
-  { siteId: "s3", siteName: "Mine Site C", x: 75, y: 25, riskLevel: "LOW" as const, workerCount: 10, avgScore: 82 },
-  { siteId: "s4", siteName: "Mine Site D", x: 20, y: 70, riskLevel: "MEDIUM" as const, workerCount: 5, avgScore: 74 },
-];
+// ─── Worker factory ───────────────────────────────────────────────────────────
 
-function StatCard({ label, value, sub, Icon }: { label: string; value: string | number; sub?: string; Icon: any }) {
-  return (
-    <Card>
-      <CardContent className="p-5">
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">{label}</p>
-            <p className="text-3xl font-bold tabular-nums">{value}</p>
-            {sub && <p className="text-xs text-muted-foreground mt-1">{sub}</p>}
-          </div>
-          <Icon className="h-5 w-5 text-muted-foreground" />
-        </div>
-      </CardContent>
-    </Card>
-  );
+function makeWorkers(n: number): Worker[] {
+  const depts = ["Drilling","Blasting","Survey","Transport","Extraction","Ventilation","Safety"];
+  const zones = ["Zone A","Zone B","Zone C","Zone D","Zone E"];
+  const risks: RiskLevel[] = ["CRITICAL","HIGH","MEDIUM","MEDIUM","LOW","LOW","LOW"];
+  const first = ["Rajesh","Amit","Priya","Suresh","Meena","Karan","Divya","Rohit","Sunita","Arjun","Neha","Vikram","Pooja","Ravi","Aisha","Deepak","Sneha","Manish","Kavita","Rahul","Sanjay","Lakshmi","Prakash","Nisha"];
+  const last  = ["Kumar","Singh","Sharma","Nair","Patel","Mehta","Verma","Joshi","Gupta","Rao","Shah","Tiwari","Mishra","Iyer","Bose","Kapoor","Pandey","Chauhan","Pillai","Reddy"];
+  return Array.from({ length: n }, (_, i): Worker => ({
+    id:       `w${i + 1}`,
+    name:     `${first[i % first.length]} ${last[i % last.length]}`,
+    dept:     depts[i % depts.length],
+    zone:     zones[i % zones.length],
+    risk:     risks[i % risks.length],
+    health:   Math.floor(20 + Math.random() * 75),
+    lat:      BASE_LAT + (Math.random() - 0.5) * 0.02,
+    lng:      BASE_LNG + (Math.random() - 0.5) * 0.02,
+    lastSeen: `${Math.floor(Math.random() * 15) + 1}m ago`,
+  }));
 }
 
-export default function AdminDashboardPage() {
-  const { t } = useAdminI18n();
-  const [loading, setLoading] = useState(true);
-  const [alerts, setAlerts] = useState(demoAlerts);
+const INITIAL_WORKERS = makeWorkers(24);
 
+// ─── Main Dashboard ───────────────────────────────────────────────────────────
+
+// ─── Main Dashboard ───────────────────────────────────────────────────────────
+
+export default function AdminDashboard() {
+  const [loading,    setLoading]    = useState(true);
+  const [workers,    setWorkers]    = useState<Worker[]>(INITIAL_WORKERS);
+  const [selected,   setSelected]   = useState<string | null>(null);
+  const [search,     setSearch]     = useState("");
+  const [filterRisk, setFilterRisk] = useState<FilterOption>("ALL");
+
+  // Initial load delay
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 600);
+    const t = setTimeout(() => setLoading(false), 500);
     return () => clearTimeout(t);
   }, []);
 
-  const handleResolve = (id: string) => {
-    setAlerts((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, status: "RESOLVED" as const } : a))
-    );
-  };
+  // Simulate GPS movement every 2s
+  useEffect(() => {
+    const id = setInterval(() => {
+      setWorkers((prev) =>
+        prev.map((w) => ({
+          ...w,
+          lat: Math.max(BASE_LAT - 0.01, Math.min(BASE_LAT + 0.01, w.lat + (Math.random() - 0.5) * 0.001)),
+          lng: Math.max(BASE_LNG - 0.01, Math.min(BASE_LNG + 0.01, w.lng + (Math.random() - 0.5) * 0.001)),
+        }))
+      );
+    }, 2000);
+    return () => clearInterval(id);
+  }, []);
 
+  // Filtered + sorted worker list
+  const visibleWorkers = workers
+    .filter((w) =>
+      (filterRisk === "ALL" || w.risk === filterRisk) &&
+      (
+        w.name.toLowerCase().includes(search.toLowerCase()) ||
+        w.dept.toLowerCase().includes(search.toLowerCase())
+      )
+    )
+    .sort((a, b) => RISK_ORDER[a.risk] - RISK_ORDER[b.risk]);
+
+  // ── Loading skeleton ─────────────────────────────────────────
   if (loading) {
     return (
-      <div className="space-y-6">
-        <Skeleton className="h-8 w-48" />
+      <div className="space-y-4 p-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[1, 2, 3, 4].map((i) => <Skeleton key={i} className="h-28" />)}
+          {[1, 2, 3, 4].map((i) => <Skeleton key={i} className="h-24" />)}
         </div>
-        <div className="grid lg:grid-cols-2 gap-4">
-          <Skeleton className="h-64" />
-          <Skeleton className="h-64" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[1, 2].map((i) => <Skeleton key={i} className="h-52" />)}
         </div>
+        <Skeleton className="h-[500px]" />
       </div>
     );
   }
 
+  // ── Dashboard ────────────────────────────────────────────────
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-xl font-semibold">{t("adminDashboard.title")}</h1>
-        <p className="text-sm text-muted-foreground">{t("adminDashboard.subtitle")}</p>
+    <div className="space-y-4">
+
+      {/* ── Header ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div>
+          <h1 className="text-xl font-semibold">SafeGuard · Admin Console</h1>
+          <p className="text-sm text-muted-foreground">dustinel-ai · Mine Operations</p>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <span className="w-2 h-2 rounded-full bg-green-500" />
+          All systems nominal · {new Date().toLocaleTimeString()}
+        </div>
       </div>
 
-      {/* Stats grid */}
+      {/* ── Stat cards ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label={t("adminDashboard.totalWorkers")} value={demoStats.totalWorkers} sub={t("adminDashboard.registered")} Icon={Users} />
-        <StatCard label={t("adminDashboard.activeToday")} value={demoStats.activeToday} sub={`${Math.round(demoStats.activeToday / demoStats.totalWorkers * 100)}% ${t("adminDashboard.checkedIn")}`} Icon={Activity} />
-        <StatCard label={t("adminDashboard.avgRiskScore")} value={demoStats.avgRiskScore} sub={t("adminDashboard.orgWide")} Icon={TrendingUp} />
-        <StatCard label={t("adminDashboard.alertsToday")} value={demoStats.alertsToday} sub={`${alerts.filter((a) => a.status === "OPEN").length} ${t("adminDashboard.open")}`} Icon={AlertTriangle} />
+        {[
+          { label: "Total Workers",  value: 42, sub: "24 on-site now",      Icon: Users },
+          { label: "Active Today",   value: 38, sub: "90% check-in rate",   Icon: Activity },
+          { label: "Avg Risk Score", value: 71, sub: "org-wide baseline",   Icon: TrendingUp },
+          { label: "Alerts Today",   value:  5, sub: "2 open · 3 resolved", Icon: AlertTriangle },
+        ].map(({ label, value, sub, Icon }) => (
+          <Card key={label}>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</span>
+                <Icon className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div className="text-3xl font-bold tabular-nums">{value}</div>
+              <div className="mt-1 text-xs text-muted-foreground">{sub}</div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      {/* Charts row */}
-      <div className="grid lg:grid-cols-2 gap-4">
-        {/* Risk trend */}
+      {/* ── Charts row ── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        {/* Trend chart — matches screenshot */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">{t("adminDashboard.riskTrend")}</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium">7-Day Risk Score Trend</CardTitle>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={180}>
-              <LineChart data={demoTrend} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                <XAxis dataKey="date" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
-                <YAxis domain={[50, 90]} tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
-                <Tooltip
-                  contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: "6px", fontSize: 12 }}
+          <CardContent className="pr-2">
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={TREND_DATA} margin={{ top: 10, right: 16, left: 0, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={false} />
+                <XAxis
+                  dataKey="date"
+                  tick={{ fontSize: 11, fill: "#9ca3af" }}
+                  axisLine={false}
+                  tickLine={false}
+                  tickMargin={8}
                 />
-                <Line type="monotone" dataKey="avgScore" stroke="#38bdf8" strokeWidth={2.5} dot={{ r: 3, strokeWidth: 0, fill: "#38bdf8" }} activeDot={{ r: 5, fill: "#22d3ee", strokeWidth: 0 }} />
+                <YAxis
+                  domain={[50, 90]}
+                  ticks={[50, 60, 70, 80, 90]}
+                  tick={{ fontSize: 11, fill: "#9ca3af" }}
+                  axisLine={false}
+                  tickLine={false}
+                  tickMargin={8}
+                  width={36}
+                />
+                <Tooltip
+                  cursor={{ stroke: "hsl(var(--border))", strokeWidth: 1, strokeDasharray: "3 3" }}
+                  contentStyle={{
+                    background: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "6px",
+                    fontSize: "12px",
+                    color: "hsl(var(--foreground))",
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="score"
+                  stroke="#38bdf8"
+                  strokeWidth={2}
+                  dot={{ r: 4, fill: "#38bdf8", strokeWidth: 0 }}
+                  activeDot={{ r: 5, fill: "#7dd3fc", strokeWidth: 0 }}
+                />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
         {/* Risk distribution */}
-        <RiskDistributionChart data={demoStats.riskDistribution} />
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium">Risk Distribution</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-6">
+              <ResponsiveContainer width={120} height={120}>
+                <PieChart>
+                  <Pie
+                    data={RISK_DIST_DATA.map((d) => ({ name: d.level, value: d.count, color: RISK_COLOR[d.level] }))}
+                    dataKey="value"
+                    cx="50%" cy="50%"
+                    innerRadius={34} outerRadius={56}
+                    paddingAngle={2}
+                    strokeWidth={0}
+                  >
+                    {RISK_DIST_DATA.map((d, i) => (
+                      <Cell key={i} fill={RISK_COLOR[d.level]} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="flex-1 space-y-2">
+                {RISK_DIST_DATA.map((d) => (
+                  <div key={d.level} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: RISK_COLOR[d.level] }} />
+                      <span className="text-xs text-muted-foreground">{d.level}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground">{d.percentage}%</span>
+                      <span className="text-xs font-semibold tabular-nums w-4 text-right">{d.count}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Heatmap + Alert feed */}
-      <div className="grid lg:grid-cols-2 gap-4">
-        <HeatmapWidget sites={demoSites} />
-        <AlertFeed alerts={alerts} onResolve={handleResolve} maxHeight="300px" />
-      </div>
+      {/* ── Worker Location Tracking ── */}
+      <Card className="overflow-hidden">
+        <CardHeader className="pb-3 border-b">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-sm font-medium">Worker Location Tracking</CardTitle>
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            </div>
+            <span className="text-xs text-muted-foreground">{workers.length} workers tracked</span>
+          </div>
+        </CardHeader>
 
-      {/* High-risk workers */}
-      <div>
-        <h2 className="text-sm font-medium mb-3">{t("adminDashboard.workersNeedingAttention")}</h2>
-        <div className="grid sm:grid-cols-2 gap-3">
-          {demoWorkers
-            .filter((w) => w.currentRiskLevel === "CRITICAL" || w.currentRiskLevel === "HIGH")
-            .map((w) => (
-              <WorkerCard key={w.workerId} worker={w} isAdmin />
-            ))}
+        <div className="flex flex-col md:flex-row h-[460px]">
+
+          {/* Sidebar */}
+          <div className="w-full md:w-56 shrink-0 border-b md:border-b-0 md:border-r flex flex-col">
+            {/* Search + filters */}
+            <div className="p-3 border-b space-y-2.5">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                <Input
+                  placeholder="Search workers…"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-7 h-8 text-xs"
+                />
+              </div>
+              <div className="flex flex-wrap gap-1">
+                {FILTER_OPTIONS.map((r) => (
+                  <Button
+                    key={r}
+                    variant={filterRisk === r ? "default" : "ghost"}
+                    size="sm"
+                    onClick={() => setFilterRisk(r)}
+                    className="h-6 text-[10px] px-2 font-medium"
+                  >
+                    {r === "ALL" ? "All" : r[0] + r.slice(1).toLowerCase()}
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            {/* Worker list */}
+            <div className="flex-1 overflow-y-auto">
+              {visibleWorkers.length === 0 ? (
+                <div className="p-6 text-center text-xs text-muted-foreground">No workers match</div>
+              ) : (
+                visibleWorkers.map((w) => {
+                  const active = selected === w.id;
+                  return (
+                    <button
+                      key={w.id}
+                      onClick={() => setSelected(active ? null : w.id)}
+                      className={`
+                        w-full flex items-center gap-2 px-3 py-2 text-left
+                        border-b border-border/40 last:border-0 transition-colors
+                        ${active ? "bg-secondary" : "hover:bg-secondary/50"}
+                      `}
+                    >
+                      <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: RISK_COLOR[w.risk] }} />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium truncate">{w.name}</div>
+                        <div className="text-xs text-muted-foreground truncate">{w.dept} · {w.zone}</div>
+                      </div>
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        <span className="text-sm font-bold tabular-nums" style={{ color: RISK_COLOR[w.risk] }}>{w.health}</span>
+                        <ChevronRight className="h-3 w-3 text-muted-foreground" />
+                      </div>
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          </div>
+
+          {/* Map */}
+          <LeafletMap
+            workers={visibleWorkers}
+            selected={selected}
+            onSelect={(id) => setSelected((prev) => (prev === id ? null : id))}
+            baseLat={BASE_LAT}
+            baseLng={BASE_LNG}
+          />
         </div>
-      </div>
+      </Card>
     </div>
   );
 }
