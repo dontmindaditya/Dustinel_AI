@@ -5,6 +5,7 @@ import { Camera, RefreshCw, Check, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { CAMERA_COUNTDOWN_SECONDS } from "@/lib/constants";
+import { useWorkerI18n } from "@/lib/workerI18n";
 
 interface CameraCaptureProps {
   onCapture: (blob: Blob, previewUrl: string) => void;
@@ -16,11 +17,12 @@ interface CameraCaptureProps {
 
 export function CameraCapture({
   onCapture,
-  label = "Face Photo",
-  hint = "Position your face within the frame",
+  label,
+  hint,
   className,
   autoCapture = false,
 }: CameraCaptureProps) {
+  const { t } = useWorkerI18n();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -29,6 +31,8 @@ export function CameraCapture({
   const [countdown, setCountdown] = useState(CAMERA_COUNTDOWN_SECONDS);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const resolvedLabel = label ?? t("camera.face.label");
+  const resolvedHint = hint ?? t("camera.face.hint");
 
   // Declare triggerCountdown first so it can be used in startCamera
   const triggerCountdown = useCallback(() => {
@@ -80,11 +84,11 @@ export function CameraCapture({
       if (autoCapture) {
         triggerCountdown();
       }
-    } catch (err) {
-      setErrorMsg("Camera access denied. Please allow camera permissions.");
+    } catch {
+      setErrorMsg(t("camera.face.permissionError"));
       setState("error");
     }
-  }, [autoCapture, triggerCountdown]);
+  }, [autoCapture, t, triggerCountdown]);
 
   useEffect(() => {
     if (state !== "countdown") return;
@@ -116,7 +120,7 @@ export function CameraCapture({
 
   return (
     <div className={cn("flex flex-col items-center gap-3", className)}>
-      <div className="text-sm font-medium">{label}</div>
+      <div className="text-sm font-medium">{resolvedLabel}</div>
 
       {/* Viewfinder / Preview */}
       <div className="relative w-full max-w-sm aspect-[4/3] rounded-lg overflow-hidden bg-muted border">
@@ -135,14 +139,14 @@ export function CameraCapture({
         {/* Preview after capture */}
         {state === "captured" && previewUrl && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={previewUrl} alt="Captured" className="w-full h-full object-cover" />
+          <img src={previewUrl} alt={t("camera.capturedAlt")} className="w-full h-full object-cover" />
         )}
 
         {/* Idle placeholder */}
         {state === "idle" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-muted-foreground">
             <Camera className="h-10 w-10 opacity-30" />
-            <p className="text-xs">{hint}</p>
+            <p className="text-xs">{resolvedHint}</p>
           </div>
         )}
 
@@ -210,23 +214,23 @@ export function CameraCapture({
         {state === "idle" && (
           <Button onClick={startCamera} size="sm">
             <Camera className="h-4 w-4" />
-            Open Camera
+            {t("camera.openCamera")}
           </Button>
         )}
         {state === "streaming" && (
           <Button onClick={triggerCountdown} size="sm">
-            Capture
+            {t("camera.capture")}
           </Button>
         )}
         {state === "captured" && (
           <Button variant="outline" onClick={retake} size="sm">
             <RefreshCw className="h-4 w-4" />
-            Retake
+            {t("camera.retake")}
           </Button>
         )}
         {state === "error" && (
           <Button variant="outline" onClick={startCamera} size="sm">
-            Try Again
+            {t("camera.tryAgain")}
           </Button>
         )}
       </div>

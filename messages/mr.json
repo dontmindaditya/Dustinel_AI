@@ -1,0 +1,206 @@
+{
+  "common": {
+    "justNow": "आताच",
+    "minutesAgo": "{{count}} मिनिटांपूर्वी",
+    "hoursAgo": "{{count}} तासांपूर्वी",
+    "daysAgo": "{{count}} दिवसांपूर्वी",
+    "toggleTheme": "थीम बदला",
+    "language": "भाषा"
+  },
+  "risk": {
+    "low": "कमी जोखीम",
+    "medium": "मध्यम जोखीम",
+    "high": "जास्त जोखीम",
+    "critical": "निकृष्ट"
+  },
+  "nav": {
+    "checkin": "चेक-इन",
+    "dashboard": "डॅशबोर्ड",
+    "history": "इतिहास",
+    "settings": "सेटिंग्ज",
+    "notifications": "सूचना",
+    "markAllRead": "सर्व वाचलेले चिन्हांकित करा",
+    "workers": "कर्मचारी",
+    "alerts": "सूचना",
+    "overview": "सारांश"
+  },
+  "footer": {
+    "tagline": "Dustinel AI - वर्कर सुरक्षा देखरेख"
+  },
+  "alert": {
+    "title": "{{risk}} सूचना",
+    "dismiss": "सूचना रद्द करा"
+  },
+  "recommendations": {
+    "title": "सुरक्षा शिफारस",
+    "empty": "कोणतीही सक्रिय शिफारस नाहीत. सुरक्षित रहा!",
+    "itemsCount": "{{count}} आयटम{{suffix}}"
+  },
+  "timeline": {
+    "score": "गुण: {{score}}",
+    "scoreLabel": "गुण",
+    "title": "आरोग्य प्रवृत्ती",
+    "titleLast14": "आरोग्य प्रवृत्ती (गेल्या 14 चेक-इन)",
+    "noHistory": "अद्यापपर्यंत कोणतीही चेक-इन इतिहास नाही",
+    "low": "कमी (80+)",
+    "medium": "मध्यम (60-79)",
+    "high": "जास्त (40-59)",
+    "critical": "निकृष्ट (<40)"
+  },
+  "camera": {
+    "openCamera": "कॅमेरा उघडा",
+    "capture": "कॅप्चर करा",
+    "retake": "पुन्हा कॅप्चर करा",
+    "tryAgain": "पुन्हा प्रयत्न करा",
+    "capturedAlt": "कॅप्चर केलेले",
+    "face": {
+      "label": "चेहऱ्याचे फोटो",
+      "hint": "आपले चेहरे फ्रेममध्ये ठेवा",
+      "permissionError": "कॅमेरा एक्सेस नाकारण्यात आला. कॅमेरा परवानग्या देण्यासाठी कृपया अनुमती द्या."
+    },
+    "environment": {
+      "label": "काम परिसर फोटो",
+      "hint": "आपले काम क्षेत्र कॅप्चर करा",
+      "unavailable": "कॅमेरा उपलब्ध नाही. कृपया त्याऐवजी फोटो अपलोड करा.",
+      "invalidType": "कृपया JPEG, PNG, किंवा WebP इमेज अपलोड करा.",
+      "tooLarge": "इमेज अवश्य {{maxSize}}MB पेक्षा कमी असावी.",
+      "alt": "परिसर",
+      "useCamera": "कॅमेरा वापरा",
+      "upload": "फोटो अपलोड करा"
+    }
+  },
+  "dashboard": {
+    "title": "माझा डॅशबोर्ड",
+    "lastCheckin": "अंतिम चेक-इन: {{time}}",
+    "highRiskMessage": "आपल्या अंतिम चेक-इन मध्ये वाढत्या जोखीम आढळली. कृपया खालील शिफारसांची समीक्षा करा.",
+    "stat": {
+      "avg": "7-दिवस सरासरी गुण",
+      "vsLastWeek": "गेल्या आठवड्याशी तुलना",
+      "streak": "सलग (कमी जोखीम)",
+      "days": "{{count}} दिवस",
+      "keepItUp": "चालू ठेवा!",
+      "alertsWeek": "या आठवड्यातील सूचना",
+      "past7Days": "गेल्या 7 दिवसांत",
+      "totalCheckins": "एकूण चेक-इन",
+      "allTime": "एकूण"
+    }
+  },
+  "checkin": {
+    "title": "दैनिक सुरक्षा चेक-इन",
+    "subtitle": "आपले चेहरे आणि काम परिसर कॅप्चर करा आणि आपला सुरक्षा गुण मिळवा.",
+    "step1": "पायरी 1 - चेहऱ्याचे फोटो",
+    "step1Hint": "कॅमेराकडे थेट पाहा. सुनिश्चित करा की आपले हेल्मेट आणि PPE दिसत आहे.",
+    "uploadingFace": "चेहऱ्याचे फोटो अपलोड करत आहे...",
+    "uploadingEnv": "काम परिसर फोटो अपलोड करत आहे...",
+    "analyzing": "आपल्या सुरक्षा स्थितीचे AI विश्लेषण करत आहे...",
+    "completeStep": "विश्लेषण पूर्ण झाले!",
+    "genericError": "काहीतरी चुकले आहे",
+    "submit": "चेक-इन सबमिट करा",
+    "captureBoth": "सुरू ठेवण्यासाठी दोन्ही फोटो कॅप्चर करा",
+    "completeTitle": "चेक-इन पूर्ण झाले",
+    "highRiskMessage": "आपला सुरक्षा गुण {{score}} आहे. {{notify}}",
+    "supervisorNotified": "आपल्या पर्यवेक्षकाला सूचित करण्यात आले आहे.",
+    "detectedRiskFactors": "ओळखलेल्या जोखीम कारणांशी",
+    "newCheckin": "नवीन चेक-इन",
+    "viewDashboard": "डॅशबोर्ड पहा"
+  },
+  "history": {
+    "title": "आरोग्य इतिहास",
+    "checkinsCount": "{{count}} चेक-इन",
+    "filter": {
+      "allLevels": "सर्व पातळ्या",
+      "low": "कमी",
+      "medium": "मध्यम",
+      "high": "जास्त",
+      "critical": "निकृष्ट"
+    },
+    "shift": "{{shift}} शिफ्ट",
+    "alertSent": "सूचना पाठवली गेली",
+    "mask": "मास्क",
+    "helmet": "हेल्मेट",
+    "dust": "धूळ",
+    "more": "+{{count}} अधिक",
+    "loadMore": "अधिक लोड करा ({{count}} उरलेले)",
+    "noCheckins": "या फिल्टरसाठी कोणतेही चेक-इन सापडले नाहीत."
+  },
+  "settings": {
+    "title": "सेटिंग्ज",
+    "subtitle": "आपल्या वर्कर अँप प्राधान्यक्रमाने व्यवस्थापित करा.",
+    "profile": "प्रोफाइल",
+    "uploadPhoto": "फोटो अपलोड करा",
+    "fullName": "पूर्ण नाव",
+    "workerId": "वर्कर ID / बॅज",
+    "email": "ईमेल",
+    "phone": "फोन नंबर",
+    "emergencyName": "आपत्कालीन संपर्क नाव",
+    "emergencyPhone": "आपत्कालीन संपर्क फोन",
+    "department": "काम भूमिका / विभाग",
+    "selectDepartment": "विभाग निवडा",
+    "saveProfile": "प्रोफाइल सेव करा",
+    "changePassword": "पासवर्ड बदला",
+    "profileSaved": "प्रोफाइल यशस्वीरित्या सेव केली",
+    "appearance": "दिसणे",
+    "theme": "थीम",
+    "dark": "डार्क",
+    "light": "लाईट",
+    "language": "भाषा",
+    "notifications": "सूचना",
+    "enableNotifications": "सूचना सक्षम करा",
+    "dailyDigest": "दैनंदिन ईमेल सारांश (नक्कली)",
+    "quietHours": "शांत तास",
+    "start": "सुरुवात",
+    "end": "शेवट",
+    "session": "सत्र",
+    "reloadMockAlerts": "नक्कली सूचना रिलोड करा",
+    "signOut": "साईन आउट",
+    "saveSettings": "सेटिंग्ज सेव करा",
+    "saved": "सेव केलेले"
+  },
+  "adminSettings": {
+    "consolePreferences": "कन्सोल प्राधान्ये",
+    "title": "अॅडमिन सेटिंग्ज",
+    "subtitle": "डॅशबोर्ड प्राधान्ये, भाषा आणि सत्र नियंत्रण कन्फिगर करा.",
+    "activeProfile": "सक्रिय प्रोफाइल",
+    "adminId": "अॅडमिन ID / बॅज",
+    "interfaceLanguage": "इंटरफेस भाषा",
+    "alertsDashboard": "आलर्ट आणि डॅशबोर्ड",
+    "criticalSmsAlerts": "गंभीर SMS आलर्ट (मॉक)",
+    "dashboardAutoRefresh": "डॅशबोर्ड ऑटो रिफ्रेश (सेकंद)"
+  },
+  "adminDashboard": {
+    "title": "विहंगावलोकन",
+    "subtitle": "माइन कॉर्प लिमिटेड · आज",
+    "totalWorkers": "एकूण कामगार",
+    "registered": "नोंदणीकृत",
+    "activeToday": "आज सक्रिय",
+    "checkedIn": "चेक इन",
+    "avgRiskScore": "सरासरी जोखीम स्कोर",
+    "orgWide": "संस्था-व्यापी",
+    "alertsToday": "आजच्या सूचना",
+    "open": "उघडी",
+    "riskTrend": "७-दिवस जोखीम स्कोर ट्रेंड",
+    "workersNeedingAttention": "लक्ष देणे आवश्यक कामगार"
+  },
+  "adminAlerts": {
+    "allSeverities": "सर्व तीव्रता",
+    "openCount": "{{count}} उघडी",
+    "resolvedCount": "{{count}} सोडवले",
+    "openTab": "उघडी",
+    "resolvedTab": "सोडवले",
+    "resolve": "सोडवा",
+    "noOpenAlerts": "कोणतीही उघडी सूचना नाही",
+    "sentVia": "द्वारे पाठवले:"
+  },
+  "adminWorkers": {
+    "registeredCount": "{{count}} नोंदणीकृत कामगार",
+    "addWorker": "कामगार जोडा",
+    "backToWorkers": "कामगारांकडे परत",
+    "workerInfo": "कामगार माहिती",
+    "recentCheckins": "अलीकडील चेक-इन",
+    "notFound": "कामगार सापडला नाही.",
+    "shift": "पाळी",
+    "baselineScore": "बेसलाइन स्कोर",
+    "conditions": "परिस्थिती",
+    "streakLowRisk": "स्ट्रीक (कमी जोखीम)"
+  }
+}

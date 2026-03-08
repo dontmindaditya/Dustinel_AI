@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Users, AlertTriangle, TrendingUp, Activity } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAdminI18n } from "@/lib/adminI18n";
 import { RiskDistributionChart } from "@/components/admin/RiskDistributionChart";
 import { AlertFeed } from "@/components/admin/AlertFeed";
 import { HeatmapWidget } from "@/components/admin/HeatmapWidget";
@@ -98,6 +99,7 @@ function StatCard({ label, value, sub, Icon }: { label: string; value: string | 
 }
 
 export default function AdminDashboardPage() {
+  const { t } = useAdminI18n();
   const [loading, setLoading] = useState(true);
   const [alerts, setAlerts] = useState(demoAlerts);
 
@@ -130,16 +132,16 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-xl font-semibold">Overview</h1>
-        <p className="text-sm text-muted-foreground">Mine Corp Ltd · Today</p>
+        <h1 className="text-xl font-semibold">{t("adminDashboard.title")}</h1>
+        <p className="text-sm text-muted-foreground">{t("adminDashboard.subtitle")}</p>
       </div>
 
       {/* Stats grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Total Workers" value={demoStats.totalWorkers} sub="registered" Icon={Users} />
-        <StatCard label="Active Today" value={demoStats.activeToday} sub={`${Math.round(demoStats.activeToday / demoStats.totalWorkers * 100)}% checked in`} Icon={Activity} />
-        <StatCard label="Avg Risk Score" value={demoStats.avgRiskScore} sub="organization-wide" Icon={TrendingUp} />
-        <StatCard label="Alerts Today" value={demoStats.alertsToday} sub={`${alerts.filter((a) => a.status === "OPEN").length} open`} Icon={AlertTriangle} />
+        <StatCard label={t("adminDashboard.totalWorkers")} value={demoStats.totalWorkers} sub={t("adminDashboard.registered")} Icon={Users} />
+        <StatCard label={t("adminDashboard.activeToday")} value={demoStats.activeToday} sub={`${Math.round(demoStats.activeToday / demoStats.totalWorkers * 100)}% ${t("adminDashboard.checkedIn")}`} Icon={Activity} />
+        <StatCard label={t("adminDashboard.avgRiskScore")} value={demoStats.avgRiskScore} sub={t("adminDashboard.orgWide")} Icon={TrendingUp} />
+        <StatCard label={t("adminDashboard.alertsToday")} value={demoStats.alertsToday} sub={`${alerts.filter((a) => a.status === "OPEN").length} ${t("adminDashboard.open")}`} Icon={AlertTriangle} />
       </div>
 
       {/* Charts row */}
@@ -147,7 +149,7 @@ export default function AdminDashboardPage() {
         {/* Risk trend */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">7-Day Risk Score Trend</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("adminDashboard.riskTrend")}</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={180}>
@@ -176,7 +178,7 @@ export default function AdminDashboardPage() {
 
       {/* High-risk workers */}
       <div>
-        <h2 className="text-sm font-medium mb-3">Workers Needing Attention</h2>
+        <h2 className="text-sm font-medium mb-3">{t("adminDashboard.workersNeedingAttention")}</h2>
         <div className="grid sm:grid-cols-2 gap-3">
           {demoWorkers
             .filter((w) => w.currentRiskLevel === "CRITICAL" || w.currentRiskLevel === "HIGH")

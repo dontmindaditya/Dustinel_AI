@@ -6,16 +6,16 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { cn, formatDateTime, getRiskLevelLabel, getRiskLevelVariant } from "@/lib/utils";
+import { cn, getRiskLevelVariant } from "@/lib/utils";
+import { useWorkerI18n } from "@/lib/workerI18n";
 import type { HealthRecord } from "@/types/health";
 
-// Demo data
 const demoRecords: HealthRecord[] = Array.from({ length: 12 }, (_, i) => ({
   id: `chk_${i}`,
   workerId: "worker_001",
   organizationId: "org_minecorp",
   timestamp: new Date(Date.now() - i * 8 * 60 * 60 * 1000).toISOString(),
-  shiftType: i % 3 === 0 ? "night" : "morning" as any,
+  shiftType: (i % 3 === 0 ? "night" : "morning") as any,
   location: { lat: 28.6, lng: 77.2, site: "Mine Site A" },
   images: { faceUrl: "", envUrl: "" },
   visionAnalysis: {
@@ -24,7 +24,7 @@ const demoRecords: HealthRecord[] = Array.from({ length: 12 }, (_, i) => ({
   },
   mlAnalysis: {
     healthScore: Math.max(30, 90 - i * 5),
-    riskLevel: i < 3 ? "LOW" : i < 6 ? "MEDIUM" : i < 10 ? "HIGH" : "CRITICAL" as any,
+    riskLevel: (i < 3 ? "LOW" : i < 6 ? "MEDIUM" : i < 10 ? "HIGH" : "CRITICAL") as any,
     riskFactors: i < 3 ? [] : [{ type: "NO_MASK", severity: "HIGH" as any, weight: 0.3 }],
     modelVersion: "v2.1.0",
   },
@@ -34,6 +34,7 @@ const demoRecords: HealthRecord[] = Array.from({ length: 12 }, (_, i) => ({
 }));
 
 export default function WorkerHistoryPage() {
+  const { t, formatDateTime, getRiskLevelLabel } = useWorkerI18n();
   const [filter, setFilter] = useState<string>("all");
   const [showCount, setShowCount] = useState(6);
 
@@ -48,8 +49,8 @@ export default function WorkerHistoryPage() {
     <div className="space-y-5 animate-fade-in">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold">Health History</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">{filtered.length} check-ins</p>
+          <h1 className="text-xl font-semibold">{t("history.title")}</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">{t("history.checkinsCount", { count: filtered.length })}</p>
         </div>
         <Select value={filter} onValueChange={setFilter}>
           <SelectTrigger className="w-full sm:w-32 h-8 text-xs">
@@ -57,26 +58,22 @@ export default function WorkerHistoryPage() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Levels</SelectItem>
-            <SelectItem value="LOW">Low</SelectItem>
-            <SelectItem value="MEDIUM">Medium</SelectItem>
-            <SelectItem value="HIGH">High</SelectItem>
-            <SelectItem value="CRITICAL">Critical</SelectItem>
+            <SelectItem value="all">{t("history.filter.allLevels")}</SelectItem>
+            <SelectItem value="LOW">{t("history.filter.low")}</SelectItem>
+            <SelectItem value="MEDIUM">{t("history.filter.medium")}</SelectItem>
+            <SelectItem value="HIGH">{t("history.filter.high")}</SelectItem>
+            <SelectItem value="CRITICAL">{t("history.filter.critical")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      {/* Timeline */}
       <div className="space-y-3">
         {visible.map((record) => (
           <Card key={record.id} className={cn("transition-all")}>
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
-                {/* Score circle */}
                 <div className="flex-shrink-0 w-11 h-11 rounded-full border-2 border-border flex items-center justify-center">
-                  <span className="text-sm font-bold tabular-nums">
-                    {Math.round(record.mlAnalysis.healthScore)}
-                  </span>
+                  <span className="text-sm font-bold tabular-nums">{Math.round(record.mlAnalysis.healthScore)}</span>
                 </div>
 
                 <div className="flex-1 min-w-0">
@@ -88,35 +85,34 @@ export default function WorkerHistoryPage() {
                       {getRiskLevelLabel(record.mlAnalysis.riskLevel)}
                     </Badge>
                     <span className="text-xs text-muted-foreground capitalize">
-                      {record.shiftType} shift
+                      {t("history.shift", { shift: record.shiftType })}
                     </span>
                     {record.alertSent && (
                       <Badge variant="outline" className="text-[10px] h-4 px-1.5">
-                        Alert sent
+                        {t("history.alertSent")}
                       </Badge>
                     )}
                   </div>
 
                   <p className="text-xs text-muted-foreground mt-1">
-                    {formatDateTime(record.timestamp)} · {record.location.site}
+                    {formatDateTime(record.timestamp)} - {record.location.site}
                   </p>
 
-                  {/* PPE Status */}
                   <div className="flex gap-3 mt-2 text-xs text-muted-foreground">
                     <span className={cn(record.visionAnalysis.face.hasMask ? "" : "line-through opacity-50")}>
-                      Mask
+                      {t("history.mask")}
                     </span>
                     <span className={cn(record.visionAnalysis.face.hasHelmet ? "" : "line-through opacity-50")}>
-                      Helmet
+                      {t("history.helmet")}
                     </span>
-                    <span>Dust: {record.visionAnalysis.environment.dustLevel}</span>
+                    <span>{t("history.dust")}: {record.visionAnalysis.environment.dustLevel}</span>
                   </div>
 
-                  {/* Recommendations preview */}
                   {record.recommendations.length > 0 && (
                     <p className="text-xs text-muted-foreground mt-1.5 italic">
                       {record.recommendations[0]}
-                      {record.recommendations.length > 1 && ` +${record.recommendations.length - 1} more`}
+                      {record.recommendations.length > 1 &&
+                        ` ${t("history.more", { count: record.recommendations.length - 1 })}`}
                     </p>
                   )}
                 </div>
@@ -126,7 +122,6 @@ export default function WorkerHistoryPage() {
         ))}
       </div>
 
-      {/* Load more */}
       {showCount < filtered.length && (
         <Button
           variant="outline"
@@ -134,14 +129,12 @@ export default function WorkerHistoryPage() {
           onClick={() => setShowCount((c) => c + 6)}
         >
           <ChevronDown className="h-4 w-4" />
-          Load more ({filtered.length - showCount} remaining)
+          {t("history.loadMore", { count: filtered.length - showCount })}
         </Button>
       )}
 
       {filtered.length === 0 && (
-        <div className="text-center py-12 text-muted-foreground text-sm">
-          No check-ins found for this filter.
-        </div>
+        <div className="text-center py-12 text-muted-foreground text-sm">{t("history.noCheckins")}</div>
       )}
     </div>
   );

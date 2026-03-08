@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   cn, formatDateTime, getRiskLevelLabel, getRiskLevelVariant
 } from "@/lib/utils";
+import { useAdminI18n } from "@/lib/adminI18n";
 import type { Alert } from "@/types/api";
 import type { RiskLevel } from "@/types/worker";
 
@@ -39,6 +40,7 @@ const demoAlerts: Alert[] = Array.from({ length: 20 }, (_, i) => ({
 }));
 
 export default function AlertsPage() {
+  const { t } = useAdminI18n();
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
   const [severityFilter, setSeverityFilter] = useState<string>("all");
@@ -77,7 +79,7 @@ export default function AlertsPage() {
               <span className="text-sm font-medium">{alert.workerName}</span>
               {alert.status === "RESOLVED" && (
                 <Badge variant="outline" className="text-[10px] h-4 px-1.5">
-                  Resolved
+                  {t("adminAlerts.resolvedTab")}
                 </Badge>
               )}
             </div>
@@ -89,7 +91,7 @@ export default function AlertsPage() {
               <span>·</span>
               <span>{alert.site}</span>
               <span>·</span>
-              <span>Sent via: {alert.notificationsSent.join(", ")}</span>
+              <span>{t("adminAlerts.sentVia")} {alert.notificationsSent.join(", ")}</span>
             </div>
 
             {alert.riskFactors.length > 0 && (
@@ -114,7 +116,7 @@ export default function AlertsPage() {
               onClick={() => handleResolve(alert.id)}
             >
               <CheckCircle2 className="h-3 w-3 mr-1" />
-              Resolve
+              {t("adminAlerts.resolve")}
             </Button>
           )}
         </div>
@@ -126,9 +128,9 @@ export default function AlertsPage() {
     <div className="space-y-5 animate-fade-in">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold">Alerts</h1>
+          <h1 className="text-xl font-semibold">{t("nav.alerts")}</h1>
           <p className="text-sm text-muted-foreground">
-            {openAlerts.length} open · {resolvedAlerts.length} resolved
+            {t("adminAlerts.openCount", { count: openAlerts.length })} · {t("adminAlerts.resolvedCount", { count: resolvedAlerts.length })}
           </p>
         </div>
 
@@ -138,7 +140,7 @@ export default function AlertsPage() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Severities</SelectItem>
+            <SelectItem value="all">{t("adminAlerts.allSeverities")}</SelectItem>
             <SelectItem value="CRITICAL">Critical</SelectItem>
             <SelectItem value="HIGH">High</SelectItem>
             <SelectItem value="MEDIUM">Medium</SelectItem>
@@ -155,10 +157,10 @@ export default function AlertsPage() {
         <Tabs defaultValue="open">
           <TabsList>
             <TabsTrigger value="open">
-              Open ({filterAlerts(openAlerts).length})
+              {t("adminAlerts.openTab")} ({filterAlerts(openAlerts).length})
             </TabsTrigger>
             <TabsTrigger value="resolved">
-              Resolved ({filterAlerts(resolvedAlerts).length})
+              {t("adminAlerts.resolvedTab")} ({filterAlerts(resolvedAlerts).length})
             </TabsTrigger>
           </TabsList>
 
@@ -166,7 +168,7 @@ export default function AlertsPage() {
             {filterAlerts(openAlerts).length === 0 ? (
               <div className="text-center py-12 text-muted-foreground">
                 <CheckCircle2 className="h-10 w-10 mx-auto mb-2 opacity-30" />
-                <p className="text-sm">No open alerts</p>
+                <p className="text-sm">{t("adminAlerts.noOpenAlerts")}</p>
               </div>
             ) : (
               filterAlerts(openAlerts).map((alert) => (

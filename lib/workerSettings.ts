@@ -1,7 +1,9 @@
 export type PreferredTheme = "light" | "dark";
+export type PreferredLanguage = "en" | "hi" | "bn" | "te" | "mr" | "ta";
 
 export interface WorkerSettings {
   preferredTheme: PreferredTheme;
+  preferredLanguage: PreferredLanguage;
   notificationsEnabled: boolean;
   emailDigest: boolean;
   quietHoursEnabled: boolean;
@@ -23,6 +25,7 @@ export const WORKER_ALERTS_EVENT = "worker:alerts-updated";
 
 export const defaultWorkerSettings: WorkerSettings = {
   preferredTheme: "dark",
+  preferredLanguage: "en",
   notificationsEnabled: true,
   emailDigest: false,
   quietHoursEnabled: false,

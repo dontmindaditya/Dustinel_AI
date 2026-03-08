@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { cn, scoreToRiskLevel, getRiskLevelLabel } from "@/lib/utils";
+import { cn, scoreToRiskLevel } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
 import type { RiskLevel } from "@/types/worker";
+import { useWorkerI18n } from "@/lib/workerI18n";
 
 interface RiskScoreGaugeProps {
   score: number;
@@ -26,6 +26,7 @@ export function RiskScoreGauge({
   showLabel = true,
   className,
 }: RiskScoreGaugeProps) {
+  const { getRiskLevelLabel } = useWorkerI18n();
   const { svgSize, strokeWidth, radius, fontSize } = sizeConfig[size];
   const center = svgSize / 2;
   const level = riskLevel ?? scoreToRiskLevel(score);
@@ -38,7 +39,6 @@ export function RiskScoreGauge({
   const arcLength = (totalAngle / 360) * circumference;
   const scorePercent = Math.max(0, Math.min(100, score)) / 100;
   const fillLength = scorePercent * arcLength;
-  const gapLength = circumference - arcLength;
 
   const polarToCartesian = (angle: number) => {
     const rad = ((angle - 90) * Math.PI) / 180;

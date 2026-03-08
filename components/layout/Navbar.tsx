@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/constants";
+import { useWorkerI18n } from "@/lib/workerI18n";
 import {
   WORKER_ALERTS_EVENT,
   WorkerAlert,
@@ -19,13 +20,6 @@ import {
   saveWorkerSettings,
 } from "@/lib/workerSettings";
 
-const workerLinks = [
-  { href: ROUTES.WORKER_CHECKIN, label: "Check In" },
-  { href: ROUTES.WORKER_DASHBOARD, label: "Dashboard" },
-  { href: ROUTES.WORKER_HISTORY, label: "History" },
-  { href: ROUTES.WORKER_SETTINGS, label: "Settings" },
-];
-
 interface NavbarProps {
   role?: "worker" | "admin";
   workerName?: string;
@@ -33,6 +27,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ role = "worker", workerName, unreadAlerts = 0 }: NavbarProps) {
+  const { t } = useWorkerI18n();
   const pathname = usePathname();
   const router = useRouter();
   const { resolvedTheme, setTheme } = useTheme();
@@ -41,7 +36,15 @@ export function Navbar({ role = "worker", workerName, unreadAlerts = 0 }: Navbar
   const [alerts, setAlerts] = useState<WorkerAlert[]>(() => loadWorkerAlerts());
   const alertPanelRef = useRef<HTMLDivElement | null>(null);
 
-  const links = role === "worker" ? workerLinks : [];
+  const links =
+    role === "worker"
+      ? [
+          { href: ROUTES.WORKER_CHECKIN, label: t("nav.checkin") },
+          { href: ROUTES.WORKER_DASHBOARD, label: t("nav.dashboard") },
+          { href: ROUTES.WORKER_HISTORY, label: t("nav.history") },
+          { href: ROUTES.WORKER_SETTINGS, label: t("nav.settings") },
+        ]
+      : [];
   const unreadCount =
     role === "worker"
       ? alerts.filter((a) => !a.read).length
@@ -156,7 +159,7 @@ export function Navbar({ role = "worker", workerName, unreadAlerts = 0 }: Navbar
             >
               <Sun className="h-4 w-4 rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" />
               <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-100" />
-              <span className="sr-only">Toggle theme</span>
+              <span className="sr-only">{t("common.toggleTheme")}</span>
             </Button>
           )}
 
@@ -189,9 +192,9 @@ export function Navbar({ role = "worker", workerName, unreadAlerts = 0 }: Navbar
       {role === "worker" && alertsOpen && (
         <div className="absolute right-2 top-14 z-50 w-[calc(100vw-1rem)] max-w-[360px] rounded-lg border border-border bg-card shadow-lg sm:right-4 sm:w-[320px]">
           <div className="flex items-center justify-between border-b border-border px-3 py-2">
-            <p className="text-sm font-medium">Notifications</p>
+            <p className="text-sm font-medium">{t("nav.notifications")}</p>
             <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={markAllAlertsRead}>
-              Mark all read
+              {t("nav.markAllRead")}
             </Button>
           </div>
           <div className="max-h-72 overflow-y-auto p-2 space-y-2">

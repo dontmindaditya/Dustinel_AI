@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -14,7 +14,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ROUTES } from "@/lib/constants";
+import { useAdminI18n, type AdminLanguage } from "@/lib/adminI18n";
 import {
+  defaultAdminSettings,
   loadAdminSettings,
   saveAdminSettings,
   type AdminSettings,
@@ -33,9 +35,11 @@ type AdminProfile = {
 
 export default function AdminSettingsPage() {
   const router = useRouter();
+  const pathname = usePathname();
+  const { t, language, setLanguage } = useAdminI18n();
   const { setTheme } = useTheme();
   const photoInputRef = useRef<HTMLInputElement | null>(null);
-  const [settings, setSettings] = useState<AdminSettings>(() => loadAdminSettings());
+  const [settings, setSettings] = useState<AdminSettings>(defaultAdminSettings);
   const [profile, setProfile] = useState<AdminProfile>({
     fullName: "Admin User",
     adminId: "ADM-001",
@@ -48,6 +52,10 @@ export default function AdminSettingsPage() {
   });
   const [saved, setSaved] = useState(false);
   const [profileSaved, setProfileSaved] = useState(false);
+
+  useEffect(() => {
+    setSettings(loadAdminSettings());
+  }, []);
 
   useEffect(() => {
     setTheme(settings.preferredTheme);
@@ -93,16 +101,46 @@ export default function AdminSettingsPage() {
     .map((part) => part[0]?.toUpperCase())
     .join("");
 
+  const languageOptions = [
+    { value: "en", label: "English", nativeLabel: "English", region: "Default" },
+    { value: "hi", label: "Hindi", nativeLabel: "हिन्दी", region: "India" },
+    { value: "bn", label: "Bengali", nativeLabel: "বাংলা", region: "East India" },
+    { value: "te", label: "Telugu", nativeLabel: "తెలుగు", region: "South India" },
+    { value: "mr", label: "Marathi", nativeLabel: "मराठी", region: "West India" },
+    { value: "ta", label: "Tamil", nativeLabel: "தமிழ்", region: "Tamil Nadu" },
+  ];
+
+  const handleLanguageChange = (value: string) => {
+    if (value === language) return;
+    setLanguage(value as AdminLanguage);
+  };
+
   return (
-    <div className="space-y-4">
-      <div>
-        <h1 className="text-xl font-semibold">Admin Settings</h1>
-        <p className="text-sm text-muted-foreground">Configure dashboard preferences and session controls.</p>
+    <div className="space-y-6">
+      <div className="overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-primary/[0.12] via-card to-card shadow-sm">
+        <div className="flex flex-col gap-3 px-6 py-6 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary/80">
+              {t("adminSettings.consolePreferences")}
+            </p>
+            <h1 className="mt-2 text-2xl font-semibold tracking-tight">{t("adminSettings.title")}</h1>
+            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+              {t("adminSettings.subtitle")}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-border bg-background/80 px-4 py-3">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+              {t("adminSettings.activeProfile")}
+            </p>
+            <p className="mt-1 text-sm font-medium text-foreground">{profile.fullName}</p>
+            <p className="text-xs text-muted-foreground">{profile.department}</p>
+          </div>
+        </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Profile</CardTitle>
+          <CardTitle className="text-base">{t("settings.profile")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-start">
@@ -133,24 +171,24 @@ export default function AdminSettingsPage() {
                 size="sm"
                 onClick={() => photoInputRef.current?.click()}
               >
-                Upload Photo
+                {t("settings.uploadPhoto")}
               </Button>
             </div>
 
             <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">Full Name</p>
+                <p className="text-xs text-muted-foreground">{t("settings.fullName")}</p>
                 <Input
                   value={profile.fullName}
                   onChange={(e) => setProfile((prev) => ({ ...prev, fullName: e.target.value }))}
                 />
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">Admin ID / Badge</p>
+                <p className="text-xs text-muted-foreground">{t("adminSettings.adminId")}</p>
                 <Input value={profile.adminId} readOnly className="opacity-80" />
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">Email</p>
+                <p className="text-xs text-muted-foreground">{t("settings.email")}</p>
                 <Input
                   type="email"
                   value={profile.email}
@@ -158,14 +196,14 @@ export default function AdminSettingsPage() {
                 />
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">Phone Number</p>
+                <p className="text-xs text-muted-foreground">{t("settings.phone")}</p>
                 <Input
                   value={profile.phone}
                   onChange={(e) => setProfile((prev) => ({ ...prev, phone: e.target.value }))}
                 />
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">Emergency Contact Name</p>
+                <p className="text-xs text-muted-foreground">{t("settings.emergencyName")}</p>
                 <Input
                   value={profile.emergencyContactName}
                   onChange={(e) =>
@@ -174,7 +212,7 @@ export default function AdminSettingsPage() {
                 />
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">Emergency Contact Phone</p>
+                <p className="text-xs text-muted-foreground">{t("settings.emergencyPhone")}</p>
                 <Input
                   value={profile.emergencyContactPhone}
                   onChange={(e) =>
@@ -183,13 +221,13 @@ export default function AdminSettingsPage() {
                 />
               </div>
               <div className="space-y-1 sm:col-span-2">
-                <p className="text-xs text-muted-foreground">Job Role / Department</p>
+                <p className="text-xs text-muted-foreground">{t("settings.department")}</p>
                 <Select
                   value={profile.department}
                   onValueChange={(value) => setProfile((prev) => ({ ...prev, department: value }))}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select department" />
+                    <SelectValue placeholder={t("settings.selectDepartment")} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Drilling">Drilling</SelectItem>
@@ -206,47 +244,62 @@ export default function AdminSettingsPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <Button onClick={handleProfileSave}>Save Profile</Button>
+            <Button onClick={handleProfileSave}>{t("settings.saveProfile")}</Button>
             <Button variant="link" className="px-1" type="button">
-              Change Password
+              {t("settings.changePassword")}
             </Button>
             {profileSaved && (
-              <span className="text-sm text-muted-foreground">Profile saved successfully</span>
+              <span className="text-sm text-muted-foreground">{t("settings.profileSaved")}</span>
             )}
           </div>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="overflow-hidden rounded-2xl">
         <CardHeader>
-          <CardTitle className="text-base">Appearance</CardTitle>
+          <CardTitle className="text-base">{t("settings.appearance")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <p className="text-sm text-muted-foreground">Theme</p>
+          <p className="text-sm text-muted-foreground">{t("settings.theme")}</p>
           <div className="flex gap-2">
             <Button
               variant={settings.preferredTheme === "dark" ? "default" : "outline"}
               onClick={() => setPreferredTheme("dark")}
             >
-              Dark
+              {t("settings.dark")}
             </Button>
             <Button
               variant={settings.preferredTheme === "light" ? "default" : "outline"}
               onClick={() => setPreferredTheme("light")}
             >
-              Light
+              {t("settings.light")}
             </Button>
+          </div>
+          <div className="space-y-1.5">
+            <p className="text-sm text-muted-foreground">{t("adminSettings.interfaceLanguage")}</p>
+            <Select value={language} onValueChange={handleLanguageChange}>
+              <SelectTrigger className="h-11 rounded-xl bg-background/80">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {languageOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label} ({option.nativeLabel})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Alerts & Dashboard</CardTitle>
+          <CardTitle className="text-base">{t("adminSettings.alertsDashboard")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <label className="flex items-center justify-between text-sm">
-            <span>Enable notifications</span>
+            <span>{t("settings.enableNotifications")}</span>
             <input
               type="checkbox"
               checked={settings.notificationsEnabled}
@@ -257,7 +310,7 @@ export default function AdminSettingsPage() {
           </label>
 
           <label className="flex items-center justify-between text-sm">
-            <span>Critical SMS alerts (mock)</span>
+            <span>{t("adminSettings.criticalSmsAlerts")}</span>
             <input
               type="checkbox"
               checked={settings.criticalSmsAlerts}
@@ -268,7 +321,7 @@ export default function AdminSettingsPage() {
           </label>
 
           <label className="flex items-center justify-between text-sm">
-            <span>Daily email digest (mock)</span>
+            <span>{t("settings.dailyDigest")}</span>
             <input
               type="checkbox"
               checked={settings.emailDigest}
@@ -279,7 +332,7 @@ export default function AdminSettingsPage() {
           </label>
 
           <div>
-            <p className="text-xs text-muted-foreground mb-1">Dashboard auto refresh (seconds)</p>
+            <p className="text-xs text-muted-foreground mb-1">{t("adminSettings.dashboardAutoRefresh")}</p>
             <Input
               type="number"
               min={10}
@@ -299,14 +352,14 @@ export default function AdminSettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Session</CardTitle>
+          <CardTitle className="text-base">{t("settings.session")}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap items-center gap-2">
-          <Button onClick={handleSave}>Save Settings</Button>
+          <Button onClick={handleSave}>{t("settings.saveSettings")}</Button>
           <Button variant="destructive" onClick={handleSignOut}>
-            Sign Out
+            {t("settings.signOut")}
           </Button>
-          {saved && <span className="text-sm text-muted-foreground">Saved</span>}
+          {saved && <span className="text-sm text-muted-foreground">{t("settings.saved")}</span>}
         </CardContent>
       </Card>
     </div>

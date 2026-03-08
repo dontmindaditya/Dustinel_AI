@@ -15,6 +15,7 @@ import {
 import { ROUTES } from "@/lib/constants";
 import {
   WORKER_ALERTS_EVENT,
+  defaultWorkerSettings,
   defaultMockAlerts,
   loadWorkerSettings,
   saveWorkerAlerts,
@@ -22,6 +23,7 @@ import {
   type WorkerSettings,
 } from "@/lib/workerSettings";
 import { useTheme } from "next-themes";
+import { useWorkerI18n, type WorkerLanguage } from "@/lib/workerI18n";
 
 type WorkerProfile = {
   fullName: string;
@@ -37,8 +39,9 @@ type WorkerProfile = {
 export default function WorkerSettingsPage() {
   const router = useRouter();
   const { setTheme } = useTheme();
+  const { t, language, setLanguage } = useWorkerI18n();
   const photoInputRef = useRef<HTMLInputElement | null>(null);
-  const [settings, setSettings] = useState<WorkerSettings>(() => loadWorkerSettings());
+  const [settings, setSettings] = useState<WorkerSettings>(defaultWorkerSettings);
   const [profile, setProfile] = useState<WorkerProfile>({
     fullName: "Rajesh Kumar",
     workerId: "WKR-001",
@@ -51,6 +54,10 @@ export default function WorkerSettingsPage() {
   });
   const [saved, setSaved] = useState(false);
   const [profileSaved, setProfileSaved] = useState(false);
+
+  useEffect(() => {
+    setSettings(loadWorkerSettings());
+  }, []);
 
   useEffect(() => {
     setTheme(settings.preferredTheme);
@@ -97,16 +104,30 @@ export default function WorkerSettingsPage() {
     .map((part) => part[0]?.toUpperCase())
     .join("");
 
+  const languageOptions: {
+    value: WorkerLanguage;
+    label: string;
+    nativeLabel: string;
+    region: string;
+  }[] = [
+    { value: "en", label: "English", nativeLabel: "English", region: "Worker app" },
+    { value: "hi", label: "Hindi", nativeLabel: "हिन्दी", region: "Worker app" },
+    { value: "bn", label: "Bengali", nativeLabel: "বাংলা", region: "Worker app" },
+    { value: "te", label: "Telugu", nativeLabel: "తెలుగు", region: "Worker app" },
+    { value: "mr", label: "Marathi", nativeLabel: "मराठी", region: "Worker app" },
+    { value: "ta", label: "Tamil", nativeLabel: "தமிழ்", region: "Worker app" },
+  ];
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-semibold">Settings</h1>
-        <p className="text-sm text-muted-foreground">Manage your worker app preferences.</p>
+        <h1 className="text-xl font-semibold">{t("settings.title")}</h1>
+        <p className="text-sm text-muted-foreground">{t("settings.subtitle")}</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Profile</CardTitle>
+          <CardTitle className="text-base">{t("settings.profile")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-start">
@@ -137,24 +158,24 @@ export default function WorkerSettingsPage() {
                 size="sm"
                 onClick={() => photoInputRef.current?.click()}
               >
-                Upload Photo
+                {t("settings.uploadPhoto")}
               </Button>
             </div>
 
             <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">Full Name</p>
+                <p className="text-xs text-muted-foreground">{t("settings.fullName")}</p>
                 <Input
                   value={profile.fullName}
                   onChange={(e) => setProfile((prev) => ({ ...prev, fullName: e.target.value }))}
                 />
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">Worker ID / Badge</p>
+                <p className="text-xs text-muted-foreground">{t("settings.workerId")}</p>
                 <Input value={profile.workerId} readOnly className="opacity-80" />
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">Email</p>
+                <p className="text-xs text-muted-foreground">{t("settings.email")}</p>
                 <Input
                   type="email"
                   value={profile.email}
@@ -162,14 +183,14 @@ export default function WorkerSettingsPage() {
                 />
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">Phone Number</p>
+                <p className="text-xs text-muted-foreground">{t("settings.phone")}</p>
                 <Input
                   value={profile.phone}
                   onChange={(e) => setProfile((prev) => ({ ...prev, phone: e.target.value }))}
                 />
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">Emergency Contact Name</p>
+                <p className="text-xs text-muted-foreground">{t("settings.emergencyName")}</p>
                 <Input
                   value={profile.emergencyContactName}
                   onChange={(e) =>
@@ -178,7 +199,7 @@ export default function WorkerSettingsPage() {
                 />
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">Emergency Contact Phone</p>
+                <p className="text-xs text-muted-foreground">{t("settings.emergencyPhone")}</p>
                 <Input
                   value={profile.emergencyContactPhone}
                   onChange={(e) =>
@@ -187,13 +208,13 @@ export default function WorkerSettingsPage() {
                 />
               </div>
               <div className="space-y-1 sm:col-span-2">
-                <p className="text-xs text-muted-foreground">Job Role / Department</p>
+                <p className="text-xs text-muted-foreground">{t("settings.department")}</p>
                 <Select
                   value={profile.department}
                   onValueChange={(value) => setProfile((prev) => ({ ...prev, department: value }))}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select department" />
+                    <SelectValue placeholder={t("settings.selectDepartment")} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Drilling">Drilling</SelectItem>
@@ -210,49 +231,79 @@ export default function WorkerSettingsPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <Button onClick={handleProfileSave}>Save Profile</Button>
+            <Button onClick={handleProfileSave}>{t("settings.saveProfile")}</Button>
             <Button variant="link" className="px-1" type="button">
-              Change Password
+              {t("settings.changePassword")}
             </Button>
             {profileSaved && (
-              <span className="text-sm text-muted-foreground">Profile saved successfully</span>
+              <span className="text-sm text-muted-foreground">{t("settings.profileSaved")}</span>
             )}
           </div>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="overflow-hidden rounded-2xl">
         <CardHeader>
-          <CardTitle className="text-base">Appearance</CardTitle>
+          <CardTitle className="text-base">{t("settings.appearance")}</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <p className="text-sm text-muted-foreground">Theme</p>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">{t("settings.theme")}</p>
           <div className="flex flex-col gap-2 sm:flex-row">
             <Button
               className="w-full sm:w-auto"
               variant={settings.preferredTheme === "dark" ? "default" : "outline"}
               onClick={() => setPreferredTheme("dark")}
             >
-              Dark
+              {t("settings.dark")}
             </Button>
             <Button
               className="w-full sm:w-auto"
               variant={settings.preferredTheme === "light" ? "default" : "outline"}
               onClick={() => setPreferredTheme("light")}
             >
-              Light
+              {t("settings.light")}
             </Button>
+          </div>
+          <div className="space-y-1.5">
+            <p className="text-sm text-muted-foreground">{t("settings.language")}</p>
+            <Select
+              value={language}
+              onValueChange={(value) => {
+                const nextLanguage = value as typeof language;
+                try {
+                  setLanguage(nextLanguage);
+                  setSettings((prev) => {
+                    const updated = { ...prev, preferredLanguage: nextLanguage };
+                    saveWorkerSettings(updated);
+                    return updated;
+                  });
+                } catch (error) {
+                  console.error('Failed to save language preference:', error);
+                }
+              }}
+            >
+              <SelectTrigger className="h-11 rounded-xl bg-background/80">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {languageOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label} ({option.nativeLabel})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Notifications</CardTitle>
+          <CardTitle className="text-base">{t("settings.notifications")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <label className="flex items-center justify-between gap-3 text-sm">
-            <span>Enable notifications</span>
+            <span>{t("settings.enableNotifications")}</span>
             <input
               type="checkbox"
               checked={settings.notificationsEnabled}
@@ -263,7 +314,7 @@ export default function WorkerSettingsPage() {
           </label>
 
           <label className="flex items-center justify-between gap-3 text-sm">
-            <span>Daily email digest (mock)</span>
+            <span>{t("settings.dailyDigest")}</span>
             <input
               type="checkbox"
               checked={settings.emailDigest}
@@ -274,7 +325,7 @@ export default function WorkerSettingsPage() {
           </label>
 
           <label className="flex items-center justify-between gap-3 text-sm">
-            <span>Quiet hours</span>
+            <span>{t("settings.quietHours")}</span>
             <input
               type="checkbox"
               checked={settings.quietHoursEnabled}
@@ -287,7 +338,7 @@ export default function WorkerSettingsPage() {
           {settings.quietHoursEnabled && (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Start</p>
+                <p className="text-xs text-muted-foreground mb-1">{t("settings.start")}</p>
                 <Input
                   type="time"
                   value={settings.quietHoursStart}
@@ -297,7 +348,7 @@ export default function WorkerSettingsPage() {
                 />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground mb-1">End</p>
+                <p className="text-xs text-muted-foreground mb-1">{t("settings.end")}</p>
                 <Input
                   type="time"
                   value={settings.quietHoursEnd}
@@ -313,17 +364,17 @@ export default function WorkerSettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Session</CardTitle>
+          <CardTitle className="text-base">{t("settings.session")}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
           <Button variant="outline" onClick={resetMockAlerts}>
-            Reload Mock Alerts
+            {t("settings.reloadMockAlerts")}
           </Button>
           <Button variant="destructive" onClick={() => router.push(ROUTES.LOGIN)}>
-            Sign Out
+            {t("settings.signOut")}
           </Button>
-          <Button onClick={handleSave}>Save Settings</Button>
-          {saved && <span className="text-sm text-muted-foreground self-center">Saved</span>}
+          <Button onClick={handleSave}>{t("settings.saveSettings")}</Button>
+          {saved && <span className="text-sm text-muted-foreground self-center">{t("settings.saved")}</span>}
         </CardContent>
       </Card>
     </div>

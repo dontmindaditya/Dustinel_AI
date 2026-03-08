@@ -15,24 +15,26 @@ import {
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/constants";
 
+import { useAdminI18n } from "@/lib/adminI18n";
+
 const adminNavItems = [
   {
-    label: "Dashboard",
+    label: "nav.dashboard",
     href: ROUTES.ADMIN_DASHBOARD,
     icon: LayoutDashboard,
   },
   {
-    label: "Workers",
+    label: "nav.workers",
     href: ROUTES.ADMIN_WORKERS,
     icon: Users,
   },
   {
-    label: "Alerts",
+    label: "nav.alerts",
     href: ROUTES.ADMIN_ALERTS,
     icon: Bell,
   },
   {
-    label: "Settings",
+    label: "nav.settings",
     href: ROUTES.ADMIN_SETTINGS,
     icon: Settings,
   },
@@ -44,6 +46,7 @@ interface SidebarProps {
 
 export function Sidebar({ organizationName = "Organization" }: SidebarProps) {
   const pathname = usePathname();
+  const { t } = useAdminI18n();
 
   return (
     <aside className="hidden lg:flex h-screen w-60 flex-col border-r border-border bg-background fixed left-0 top-0">
@@ -59,7 +62,7 @@ export function Sidebar({ organizationName = "Organization" }: SidebarProps) {
       {/* Nav */}
       <nav className="flex-1 px-2 py-4 space-y-1">
         <p className="px-2 py-1 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-          Overview
+          {t("nav.overview")}
         </p>
         {adminNavItems.map((item) => {
           const Icon = item.icon;
@@ -76,7 +79,7 @@ export function Sidebar({ organizationName = "Organization" }: SidebarProps) {
               )}
             >
               <Icon className="h-4 w-4 shrink-0" />
-              {item.label}
+              {t(item.label)}
               {active && <ChevronRight className="h-3 w-3 ml-auto" />}
             </Link>
           );
@@ -90,6 +93,7 @@ export function Sidebar({ organizationName = "Organization" }: SidebarProps) {
 // Mobile sidebar toggle menu for admin on small screens
 export function MobileSidebarNav() {
   const pathname = usePathname();
+  const { t } = useAdminI18n();
   const [open, setOpen] = useState(false);
   const activeHref =
     adminNavItems.find(
@@ -130,7 +134,7 @@ export function MobileSidebarNav() {
                 )}
               >
                 <Icon className="h-4 w-4" />
-                {item.label}
+                {t(item.label)}
               </Link>
             );
           })}

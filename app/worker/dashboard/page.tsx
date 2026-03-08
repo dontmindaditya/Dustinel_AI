@@ -10,9 +10,10 @@ import { RiskScoreGauge } from "@/components/dashboard/RiskScoreGauge";
 import { HealthTimeline } from "@/components/dashboard/HealthTimeline";
 import { SafetyRecommendations } from "@/components/dashboard/SafetyRecommendations";
 import { AlertBanner } from "@/components/dashboard/AlertBanner";
-import { cn, formatRelativeTime, formatDateTime } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import type { HealthRecord } from "@/types/health";
 import { ROUTES } from "@/lib/constants";
+import { useWorkerI18n } from "@/lib/workerI18n";
 
 // Demo data for UI preview
 const demoRecords: HealthRecord[] = Array.from({ length: 8 }, (_, i) => ({
@@ -77,11 +78,12 @@ function StatCard({
 }
 
 export default function WorkerDashboardPage() {
+  const { t, formatRelativeTime, formatDateTime } = useWorkerI18n();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(t);
+    const timeoutId = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timeoutId);
   }, []);
 
   if (loading) {
@@ -103,15 +105,15 @@ export default function WorkerDashboardPage() {
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold">My Dashboard</h1>
+          <h1 className="text-xl font-semibold">{t("dashboard.title")}</h1>
           <p className="text-sm text-muted-foreground mt-0.5">
-            Last check-in: {formatRelativeTime(latestRecord.timestamp)}
+            {t("dashboard.lastCheckin", { time: formatRelativeTime(latestRecord.timestamp) })}
           </p>
         </div>
         <Button size="sm" asChild className="w-full sm:w-auto">
           <Link href={ROUTES.WORKER_CHECKIN}>
             <Camera className="h-4 w-4" />
-            Check In
+            {t("nav.checkin")}
           </Link>
         </Button>
       </div>
@@ -120,7 +122,7 @@ export default function WorkerDashboardPage() {
       {(latestRecord.mlAnalysis.riskLevel === "HIGH" || latestRecord.mlAnalysis.riskLevel === "CRITICAL") && (
         <AlertBanner
           riskLevel={latestRecord.mlAnalysis.riskLevel}
-          message="Your last check-in detected elevated risk. Please review recommendations below."
+          message={t("dashboard.highRiskMessage")}
           timestamp={formatRelativeTime(latestRecord.timestamp)}
         />
       )}
@@ -149,27 +151,27 @@ export default function WorkerDashboardPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <StatCard
-          label="7-Day Avg Score"
+          label={t("dashboard.stat.avg")}
           value={Math.round(demoRecords.slice(0, 7).reduce((s, r) => s + r.mlAnalysis.healthScore, 0) / 7)}
           trend="up"
-          sub="vs last week"
+          sub={t("dashboard.stat.vsLastWeek")}
         />
         <StatCard
-          label="Streak (Low Risk)"
-          value="3 days"
+          label={t("dashboard.stat.streak")}
+          value={t("dashboard.stat.days", { count: 3 })}
           trend="up"
-          sub="keep it up!"
+          sub={t("dashboard.stat.keepItUp")}
         />
         <StatCard
-          label="Alerts This Week"
+          label={t("dashboard.stat.alertsWeek")}
           value={demoRecords.filter((r) => r.alertSent).length}
           trend="flat"
-          sub="past 7 days"
+          sub={t("dashboard.stat.past7Days")}
         />
         <StatCard
-          label="Total Check-ins"
+          label={t("dashboard.stat.totalCheckins")}
           value={demoRecords.length}
-          sub="all time"
+          sub={t("dashboard.stat.allTime")}
         />
       </div>
 

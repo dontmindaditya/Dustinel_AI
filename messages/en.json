@@ -1,0 +1,206 @@
+{
+  "common": {
+    "justNow": "just now",
+    "minutesAgo": "{{count}}m ago",
+    "hoursAgo": "{{count}}h ago",
+    "daysAgo": "{{count}}d ago",
+    "toggleTheme": "Toggle theme",
+    "language": "Language"
+  },
+  "risk": {
+    "low": "Low Risk",
+    "medium": "Medium Risk",
+    "high": "High Risk",
+    "critical": "Critical"
+  },
+  "nav": {
+    "checkin": "Check In",
+    "dashboard": "Dashboard",
+    "history": "History",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "markAllRead": "Mark all read",
+    "workers": "Workers",
+    "alerts": "Alerts",
+    "overview": "Overview"
+  },
+  "footer": {
+    "tagline": "Dustinel AI - Worker Safety Monitoring"
+  },
+  "alert": {
+    "title": "{{risk}} Alert",
+    "dismiss": "Dismiss alert"
+  },
+  "recommendations": {
+    "title": "Safety Recommendations",
+    "empty": "No active recommendations. Stay safe!",
+    "itemsCount": "{{count}} item{{suffix}}"
+  },
+  "timeline": {
+    "score": "Score: {{score}}",
+    "scoreLabel": "Score",
+    "title": "Health Trend",
+    "titleLast14": "Health Trend (Last 14 Check-ins)",
+    "noHistory": "No check-in history yet",
+    "low": "Low (80+)",
+    "medium": "Medium (60-79)",
+    "high": "High (40-59)",
+    "critical": "Critical (<40)"
+  },
+  "camera": {
+    "openCamera": "Open Camera",
+    "capture": "Capture",
+    "retake": "Retake",
+    "tryAgain": "Try Again",
+    "capturedAlt": "Captured",
+    "face": {
+      "label": "Face Photo",
+      "hint": "Position your face within the frame",
+      "permissionError": "Camera access denied. Please allow camera permissions."
+    },
+    "environment": {
+      "label": "Work Environment Photo",
+      "hint": "Capture your work area",
+      "unavailable": "Camera unavailable. Please upload a photo instead.",
+      "invalidType": "Please upload a JPEG, PNG, or WebP image.",
+      "tooLarge": "Image must be under {{maxSize}}MB.",
+      "alt": "Environment",
+      "useCamera": "Use Camera",
+      "upload": "Upload Photo"
+    }
+  },
+  "dashboard": {
+    "title": "My Dashboard",
+    "lastCheckin": "Last check-in: {{time}}",
+    "highRiskMessage": "Your last check-in detected elevated risk. Please review recommendations below.",
+    "stat": {
+      "avg": "7-Day Avg Score",
+      "vsLastWeek": "vs last week",
+      "streak": "Streak (Low Risk)",
+      "days": "{{count}} days",
+      "keepItUp": "keep it up!",
+      "alertsWeek": "Alerts This Week",
+      "past7Days": "past 7 days",
+      "totalCheckins": "Total Check-ins",
+      "allTime": "all time"
+    }
+  },
+  "checkin": {
+    "title": "Daily Safety Check-in",
+    "subtitle": "Capture your face and work environment to get your safety score.",
+    "step1": "Step 1 - Face Photo",
+    "step1Hint": "Look directly at the camera. Make sure your helmet and PPE are visible.",
+    "uploadingFace": "Uploading face photo...",
+    "uploadingEnv": "Uploading environment photo...",
+    "analyzing": "AI analyzing your safety status...",
+    "completeStep": "Analysis complete!",
+    "genericError": "Something went wrong",
+    "submit": "Submit Check-in",
+    "captureBoth": "Capture both photos to continue",
+    "completeTitle": "Check-in Complete",
+    "highRiskMessage": "Your safety score is {{score}}. {{notify}}",
+    "supervisorNotified": "Your supervisor has been notified.",
+    "detectedRiskFactors": "Detected Risk Factors",
+    "newCheckin": "New Check-in",
+    "viewDashboard": "View Dashboard"
+  },
+  "history": {
+    "title": "Health History",
+    "checkinsCount": "{{count}} check-ins",
+    "filter": {
+      "allLevels": "All Levels",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "critical": "Critical"
+    },
+    "shift": "{{shift}} shift",
+    "alertSent": "Alert sent",
+    "mask": "Mask",
+    "helmet": "Helmet",
+    "dust": "Dust",
+    "more": "+{{count}} more",
+    "loadMore": "Load more ({{count}} remaining)",
+    "noCheckins": "No check-ins found for this filter."
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your worker app preferences.",
+    "profile": "Profile",
+    "uploadPhoto": "Upload Photo",
+    "fullName": "Full Name",
+    "workerId": "Worker ID / Badge",
+    "email": "Email",
+    "phone": "Phone Number",
+    "emergencyName": "Emergency Contact Name",
+    "emergencyPhone": "Emergency Contact Phone",
+    "department": "Job Role / Department",
+    "selectDepartment": "Select department",
+    "saveProfile": "Save Profile",
+    "changePassword": "Change Password",
+    "profileSaved": "Profile saved successfully",
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "dark": "Dark",
+    "light": "Light",
+    "language": "Language",
+    "notifications": "Notifications",
+    "enableNotifications": "Enable notifications",
+    "dailyDigest": "Daily email digest (mock)",
+    "quietHours": "Quiet hours",
+    "start": "Start",
+    "end": "End",
+    "session": "Session",
+    "reloadMockAlerts": "Reload Mock Alerts",
+    "signOut": "Sign Out",
+    "saveSettings": "Save Settings",
+    "saved": "Saved"
+  },
+  "adminSettings": {
+    "consolePreferences": "Console preferences",
+    "title": "Admin Settings",
+    "subtitle": "Configure dashboard preferences, language, and session controls.",
+    "activeProfile": "Active profile",
+    "adminId": "Admin ID / Badge",
+    "interfaceLanguage": "Interface language",
+    "alertsDashboard": "Alerts & Dashboard",
+    "criticalSmsAlerts": "Critical SMS alerts (mock)",
+    "dashboardAutoRefresh": "Dashboard auto refresh (seconds)"
+  },
+  "adminDashboard": {
+    "title": "Overview",
+    "subtitle": "Mine Corp Ltd · Today",
+    "totalWorkers": "Total Workers",
+    "registered": "registered",
+    "activeToday": "Active Today",
+    "checkedIn": "checked in",
+    "avgRiskScore": "Avg Risk Score",
+    "orgWide": "organization-wide",
+    "alertsToday": "Alerts Today",
+    "open": "open",
+    "riskTrend": "7-Day Risk Score Trend",
+    "workersNeedingAttention": "Workers Needing Attention"
+  },
+  "adminAlerts": {
+    "allSeverities": "All Severities",
+    "openCount": "{{count}} open",
+    "resolvedCount": "{{count}} resolved",
+    "openTab": "Open",
+    "resolvedTab": "Resolved",
+    "resolve": "Resolve",
+    "noOpenAlerts": "No open alerts",
+    "sentVia": "Sent via:"
+  },
+  "adminWorkers": {
+    "registeredCount": "{{count}} registered workers",
+    "addWorker": "Add Worker",
+    "backToWorkers": "Back to workers",
+    "workerInfo": "Worker Info",
+    "recentCheckins": "Recent Check-ins",
+    "notFound": "Worker not found.",
+    "shift": "Shift",
+    "baselineScore": "Baseline Score",
+    "conditions": "Conditions",
+    "streakLowRisk": "Streak (Low Risk)"
+  }
+}

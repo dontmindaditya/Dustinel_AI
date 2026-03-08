@@ -14,19 +14,20 @@ import { format, parseISO } from "date-fns";
 import type { HealthRecord } from "@/types/health";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { useWorkerI18n } from "@/lib/workerI18n";
 
 interface HealthTimelineProps {
   records: HealthRecord[];
   loading?: boolean;
 }
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label, scoreLabel }: any) => {
   if (active && payload && payload.length) {
     const score = payload[0].value;
     return (
       <div className="rounded-md border bg-popover p-3 shadow-sm text-sm">
         <p className="text-muted-foreground mb-1">{label}</p>
-        <p className="font-semibold">Score: {score}</p>
+        <p className="font-semibold">{scoreLabel}: {score}</p>
       </div>
     );
   }
@@ -34,6 +35,8 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export function HealthTimeline({ records, loading = false }: HealthTimelineProps) {
+  const { t } = useWorkerI18n();
+
   if (loading) {
     return (
       <Card>
@@ -51,11 +54,11 @@ export function HealthTimeline({ records, loading = false }: HealthTimelineProps
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm font-medium">Health Trend</CardTitle>
+          <CardTitle className="text-sm font-medium">{t("timeline.title")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-[200px] flex items-center justify-center text-sm text-muted-foreground">
-            No check-in history yet
+            {t("timeline.noHistory")}
           </div>
         </CardContent>
       </Card>
@@ -74,7 +77,7 @@ export function HealthTimeline({ records, loading = false }: HealthTimelineProps
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-sm font-medium">Health Trend (Last 14 Check-ins)</CardTitle>
+        <CardTitle className="text-sm font-medium">{t("timeline.titleLast14")}</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={200}>
@@ -96,7 +99,7 @@ export function HealthTimeline({ records, loading = false }: HealthTimelineProps
               axisLine={false}
               tickLine={false}
             />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CustomTooltip scoreLabel={t("timeline.scoreLabel")} />} />
             {/* Reference lines for risk zones */}
             <ReferenceLine y={80} stroke="var(--muted-foreground)" strokeDasharray="3 3" strokeOpacity={0.5} />
             <ReferenceLine y={60} stroke="var(--muted-foreground)" strokeDasharray="3 3" strokeOpacity={0.5} />
@@ -113,10 +116,10 @@ export function HealthTimeline({ records, loading = false }: HealthTimelineProps
         </ResponsiveContainer>
         <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 justify-start sm:justify-end">
           {[
-            { label: "Low (80+)", opacity: "opacity-40" },
-            { label: "Medium (60-79)", opacity: "opacity-60" },
-            { label: "High (40-59)", opacity: "opacity-80" },
-            { label: "Critical (<40)", opacity: "opacity-100" },
+            { label: t("timeline.low"), opacity: "opacity-40" },
+            { label: t("timeline.medium"), opacity: "opacity-60" },
+            { label: t("timeline.high"), opacity: "opacity-80" },
+            { label: t("timeline.critical"), opacity: "opacity-100" },
           ].map(({ label, opacity }) => (
             <div key={label} className="flex items-center gap-1">
               <div className={`h-2 w-2 rounded-full bg-foreground ${opacity}`} />

@@ -2,7 +2,8 @@
 
 import { AlertTriangle, X } from "lucide-react";
 import { useState } from "react";
-import { cn, getRiskLevelLabel } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { useWorkerI18n } from "@/lib/workerI18n";
 import type { RiskLevel } from "@/types/worker";
 
 interface AlertBannerProps {
@@ -22,6 +23,7 @@ export function AlertBanner({
   onDismiss,
   className,
 }: AlertBannerProps) {
+  const { t, getRiskLevelLabel } = useWorkerI18n();
   const [dismissed, setDismissed] = useState(false);
 
   if (dismissed) return null;
@@ -55,7 +57,7 @@ export function AlertBanner({
       <div className="flex-1 min-w-0">
         <div className="mb-0.5 flex flex-wrap items-center gap-2">
           <span className={cn("font-semibold", isCritical ? "text-background" : "text-foreground")}>
-            {getRiskLevelLabel(riskLevel)} Alert
+            {t("alert.title", { risk: getRiskLevelLabel(riskLevel) })}
           </span>
           {timestamp && (
             <span className={cn("text-xs", isCritical ? "text-background/70" : "text-muted-foreground")}>
@@ -74,7 +76,7 @@ export function AlertBanner({
             "shrink-0 opacity-70 hover:opacity-100 transition-opacity",
             isCritical ? "text-background" : "text-foreground"
           )}
-          aria-label="Dismiss alert"
+          aria-label={t("alert.dismiss")}
         >
           <X className="h-4 w-4" />
         </button>

@@ -1,0 +1,206 @@
+{
+  "common": {
+    "justNow": "अभी",
+    "minutesAgo": "{{count}} मिनट पहले",
+    "hoursAgo": "{{count}} घंटे पहले",
+    "daysAgo": "{{count}} दिन पहले",
+    "toggleTheme": "थीम बदलें",
+    "language": "भाषा"
+  },
+  "risk": {
+    "low": "कम जोखिम",
+    "medium": "मध्यम जोखिम",
+    "high": "उच्च जोखिम",
+    "critical": "गंभीर"
+  },
+  "nav": {
+    "checkin": "चेक-इन",
+    "dashboard": "डैशबोर्ड",
+    "history": "इतिहास",
+    "settings": "सेटिंग्स",
+    "notifications": "सूचनाएं",
+    "markAllRead": "सभी पढ़े गए चिह्नित करें",
+    "workers": "कार्यकर्ता",
+    "alerts": "अलर्ट",
+    "overview": "अवलोकन"
+  },
+  "footer": {
+    "tagline": "Dustinel AI - वर्कर सुरक्षा निगरानी"
+  },
+  "alert": {
+    "title": "{{risk}} अलर्ट",
+    "dismiss": "अलर्ट हटाएं"
+  },
+  "recommendations": {
+    "title": "सुरक्षा सिफारिशें",
+    "empty": "कोई सक्रिय सिफारिशें नहीं। सुरक्षित रहें!",
+    "itemsCount": "{{count}} आइटम{{suffix}}"
+  },
+  "timeline": {
+    "score": "स्कोर: {{score}}",
+    "scoreLabel": "स्कोर",
+    "title": "स्वास्थ्य प्रवृत्ति",
+    "titleLast14": "स्वास्थ्य प्रवृत्ति (पिछले 14 चेक-इन)",
+    "noHistory": "अभी तक कोई चेक-इन इतिहास नहीं",
+    "low": "कम (80+)",
+    "medium": "मध्यम (60-79)",
+    "high": "उच्च (40-59)",
+    "critical": "गंभीर (<40)"
+  },
+  "camera": {
+    "openCamera": "कैमरा खोलें",
+    "capture": "कैप्चर करें",
+    "retake": "पुन: कैप्चर करें",
+    "tryAgain": "पुन: प्रयास करें",
+    "capturedAlt": "कैप्चर किया गया",
+    "face": {
+      "label": "चेहरा फोटो",
+      "hint": "अपना चेहरा फ्रेम के भीतर स्थित करें",
+      "permissionError": "कैमरा एक्सेस अस्वीकृत। कृपया कैमरा अनुमतियाँ सक्षम करें।"
+    },
+    "environment": {
+      "label": "कार्य वातावरण फोटो",
+      "hint": "अपना कार्य क्षेत्र कैप्चर करें",
+      "unavailable": "कैमरा उपलब्ध नहीं। कृपया इसके बजाय फोटो अपलोड करें।",
+      "invalidType": "कृपया JPEG, PNG, या WebP इमेज अपलोड करें।",
+      "tooLarge": "इमेज {{maxSize}}MB से कम होनी चाहिए।",
+      "alt": "वातावरण",
+      "useCamera": "कैमरा उपयोग करें",
+      "upload": "फोटो अपलोड करें"
+    }
+  },
+  "dashboard": {
+    "title": "मेरा डैशबोर्ड",
+    "lastCheckin": "अंतिम चेक-इन: {{time}}",
+    "highRiskMessage": "आपका अंतिम चेक-इन में उच्च जोखिम पाया गया। कृपया नीचे दी गई सिफारिशों की समीक्षा करें।",
+    "stat": {
+      "avg": "7-दिन औसत स्कोर",
+      "vsLastWeek": "पिछले सप्ताह की तुलना में",
+      "streak": "लगातार (कम जोखिम)",
+      "days": "{{count}} दिन",
+      "keepItUp": "जारी रखें!",
+      "alertsWeek": "इस सप्ताह के अलर्ट",
+      "past7Days": "पिछले 7 दिन",
+      "totalCheckins": "कुल चेक-इन",
+      "allTime": "कुल मिलाकर"
+    }
+  },
+  "checkin": {
+    "title": "दैनिक सुरक्षा चेक-इन",
+    "subtitle": "अपना चेहरा और कार्य वातावरण कैप्चर करें ताकि आपका सुरक्षा स्कोर प्राप्त हो सके।",
+    "step1": "चरण 1 - चेहरा फोटो",
+    "step1Hint": "कैमरे की ओर सीधे देखें। सुनिश्चित करें कि आपका हेलमेट और PPE दिखाई दे रहा है।",
+    "uploadingFace": "चेहरा फोटो अपलोड किया जा रहा है...",
+    "uploadingEnv": "कार्य वातावरण फोटो अपलोड किया जा रहा है...",
+    "analyzing": "आपकी सुरक्षा स्थिति का AI विश्लेषण किया जा रहा है...",
+    "completeStep": "विश्लेषण पूरा हुआ!",
+    "genericError": "कुछ गलत हो गया",
+    "submit": "चेक-इन सबमिट करें",
+    "captureBoth": "जारी रखने के लिए दोनों फोटो कैप्चर करें",
+    "completeTitle": "चेक-इन पूरा हुआ",
+    "highRiskMessage": "आपका सुरक्षा स्कोर {{score}} है। {{notify}}",
+    "supervisorNotified": "आपके पर्यवेक्षक को सूचित कर दिया गया है।",
+    "detectedRiskFactors": "पहचाने गए जोखिम कारक",
+    "newCheckin": "नया चेक-इन",
+    "viewDashboard": "डैशबोर्ड देखें"
+  },
+  "history": {
+    "title": "स्वास्थ्य इतिहास",
+    "checkinsCount": "{{count}} चेक-इन",
+    "filter": {
+      "allLevels": "सभी स्तर",
+      "low": "कम",
+      "medium": "मध्यम",
+      "high": "उच्च",
+      "critical": "गंभीर"
+    },
+    "shift": "{{shift}} शिफ्ट",
+    "alertSent": "अलर्ट भेजा गया",
+    "mask": "मास्क",
+    "helmet": "हेलमेट",
+    "dust": "धूल",
+    "more": "+{{count}} और",
+    "loadMore": "और लोड करें ({{count}} शेष)",
+    "noCheckins": "इस फ़िल्टर के लिए कोई चेक-इन नहीं मिले।"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "subtitle": "अपने वर्कर ऐप प्राथमिकताओं का प्रबंधन करें।",
+    "profile": "प्रोफ़ाइल",
+    "uploadPhoto": "फोटो अपलोड करें",
+    "fullName": "पूरा नाम",
+    "workerId": "वर्कर ID / बैज",
+    "email": "ईमेल",
+    "phone": "फ़ोन नंबर",
+    "emergencyName": "आपातकालीन संपर्क नाम",
+    "emergencyPhone": "आपातकालीन संपर्क फ़ोन",
+    "department": "कार्य भूमिका / विभाग",
+    "selectDepartment": "विभाग चुनें",
+    "saveProfile": "प्रोफ़ाइल सहेजें",
+    "changePassword": "पासवर्ड बदलें",
+    "profileSaved": "प्रोफ़ाइल सफलतापूर्वक सहेजी गई",
+    "appearance": "प्रकटीकरण",
+    "theme": "थीम",
+    "dark": "डार्क",
+    "light": "लाइट",
+    "language": "भाषा",
+    "notifications": "सूचनाएं",
+    "enableNotifications": "सूचनाएं सक्षम करें",
+    "dailyDigest": "दैनिक ईमेल सारांश (नकली)",
+    "quietHours": "शांत घंटे",
+    "start": "शुरू",
+    "end": "अंत",
+    "session": "सत्र",
+    "reloadMockAlerts": "नकली अलर्ट रीलोड करें",
+    "signOut": "साइन आउट",
+    "saveSettings": "सेटिंग्स सहेजें",
+    "saved": "सहेजा गया"
+  },
+  "adminSettings": {
+    "consolePreferences": "कन्सोल प्राथमिकताएँ",
+    "title": "एडमिन सेटिंग्स",
+    "subtitle": "डैशबोर्ड प्राथमिकताएँ, भाषा और सेशन नियंत्रण को कन्फिगर करें।",
+    "activeProfile": "सक्रिय प्रोफ़ाइल",
+    "adminId": "एडमिन ID / बैज",
+    "interfaceLanguage": "इंटरफेस भाषा",
+    "alertsDashboard": "अलर्ट और डैशबोर्ड",
+    "criticalSmsAlerts": "गंभीर SMS अलर्ट (मॉक)",
+    "dashboardAutoRefresh": "डैशबोर्ड ऑटो रिफ्रेश (सेकंड)"
+  },
+  "adminDashboard": {
+    "title": "अवलोकन",
+    "subtitle": "माइन कॉर्प लिमिटेड · आज",
+    "totalWorkers": "कुल कार्यकर्ता",
+    "registered": "पंजीकृत",
+    "activeToday": "आज सक्रिय",
+    "checkedIn": "चेक इन",
+    "avgRiskScore": "औसत जोखिम स्कोर",
+    "orgWide": "संगठन-व्यापी",
+    "alertsToday": "आज के अलर्ट",
+    "open": "खुले",
+    "riskTrend": "7-दिन जोखिम स्कोर प्रवृत्ति",
+    "workersNeedingAttention": "ध्यान देने वाले कार्यकर्ता"
+  },
+  "adminAlerts": {
+    "allSeverities": "सभी गंभीरता",
+    "openCount": "{{count}} खुले",
+    "resolvedCount": "{{count}} हल हुए",
+    "openTab": "खुले",
+    "resolvedTab": "हल हुए",
+    "resolve": "हल करें",
+    "noOpenAlerts": "कोई खुले अलर्ट नहीं",
+    "sentVia": "के माध्यम से भेजा:"
+  },
+  "adminWorkers": {
+    "registeredCount": "{{count}} पंजीकृत कार्यकर्ता",
+    "addWorker": "कार्यकर्ता जोड़ें",
+    "backToWorkers": "कार्यकर्ताओं पर वापस",
+    "workerInfo": "कार्यकर्ता जानकारी",
+    "recentCheckins": "हाल के चेक-इन",
+    "notFound": "कार्यकर्ता नहीं मिला।",
+    "shift": "पाली",
+    "baselineScore": "आधार स्कोर",
+    "conditions": "स्थितियाँ",
+    "streakLowRisk": "स्ट्रीक (कम जोखिम)"
+  }
+}

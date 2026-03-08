@@ -5,6 +5,7 @@ import { Building2, RefreshCw, Check, AlertCircle, Upload } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { MAX_IMAGE_SIZE_MB, ALLOWED_IMAGE_TYPES } from "@/lib/constants";
+import { useWorkerI18n } from "@/lib/workerI18n";
 
 interface EnvironmentCaptureProps {
   onCapture: (blob: Blob, previewUrl: string) => void;
@@ -12,6 +13,7 @@ interface EnvironmentCaptureProps {
 }
 
 export function EnvironmentCapture({ onCapture, className }: EnvironmentCaptureProps) {
+  const { t } = useWorkerI18n();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -33,10 +35,10 @@ export function EnvironmentCapture({ onCapture, className }: EnvironmentCaptureP
       }
       setState("streaming");
     } catch {
-      setErrorMsg("Camera unavailable. Please upload a photo instead.");
+      setErrorMsg(t("camera.environment.unavailable"));
       setState("error");
     }
-  }, []);
+  }, [t]);
 
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -69,12 +71,12 @@ export function EnvironmentCapture({ onCapture, className }: EnvironmentCaptureP
     if (!file) return;
 
     if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-      setErrorMsg("Please upload a JPEG, PNG, or WebP image.");
+      setErrorMsg(t("camera.environment.invalidType"));
       setState("error");
       return;
     }
     if (file.size > MAX_IMAGE_SIZE_MB * 1024 * 1024) {
-      setErrorMsg(`Image must be under ${MAX_IMAGE_SIZE_MB}MB.`);
+      setErrorMsg(t("camera.environment.tooLarge", { maxSize: MAX_IMAGE_SIZE_MB }));
       setState("error");
       return;
     }
@@ -94,7 +96,7 @@ export function EnvironmentCapture({ onCapture, className }: EnvironmentCaptureP
 
   return (
     <div className={cn("flex flex-col items-center gap-3", className)}>
-      <div className="text-sm font-medium">Work Environment Photo</div>
+      <div className="text-sm font-medium">{t("camera.environment.label")}</div>
 
       <div className="relative w-full max-w-sm aspect-video rounded-lg overflow-hidden bg-muted border">
         <video
@@ -107,13 +109,13 @@ export function EnvironmentCapture({ onCapture, className }: EnvironmentCaptureP
 
         {state === "captured" && previewUrl && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={previewUrl} alt="Environment" className="w-full h-full object-cover" />
+          <img src={previewUrl} alt={t("camera.environment.alt")} className="w-full h-full object-cover" />
         )}
 
         {state === "idle" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-muted-foreground">
             <Building2 className="h-10 w-10 opacity-30" />
-            <p className="text-xs">Capture your work area</p>
+            <p className="text-xs">{t("camera.environment.hint")}</p>
           </div>
         )}
 
@@ -155,23 +157,23 @@ export function EnvironmentCapture({ onCapture, className }: EnvironmentCaptureP
           <>
             <Button onClick={startCamera} size="sm">
               <Building2 className="h-4 w-4" />
-              Use Camera
+              {t("camera.environment.useCamera")}
             </Button>
             <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
               <Upload className="h-4 w-4" />
-              Upload Photo
+              {t("camera.environment.upload")}
             </Button>
           </>
         )}
         {state === "streaming" && (
           <Button onClick={capturePhoto} size="sm">
-            Capture
+            {t("camera.capture")}
           </Button>
         )}
         {state === "captured" && (
           <Button variant="outline" onClick={retake} size="sm">
             <RefreshCw className="h-4 w-4" />
-            Retake
+            {t("camera.retake")}
           </Button>
         )}
       </div>

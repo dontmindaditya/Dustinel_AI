@@ -12,16 +12,8 @@ import { RiskScoreGauge } from "@/components/dashboard/RiskScoreGauge";
 import { SafetyRecommendations } from "@/components/dashboard/SafetyRecommendations";
 import { AlertBanner } from "@/components/dashboard/AlertBanner";
 import { useCheckin } from "@/hooks/useCheckin";
-import { formatDateTime } from "@/lib/utils";
-
-const stepLabels: Record<string, string> = {
-  idle: "",
-  "uploading-face": "Uploading face photo...",
-  "uploading-env": "Uploading environment photo...",
-  analyzing: "AI analyzing your safety status...",
-  complete: "Analysis complete!",
-  error: "Something went wrong",
-};
+import { useWorkerI18n } from "@/lib/workerI18n";
+import { ROUTES } from "@/lib/constants";
 
 const progressValues: Record<string, number> = {
   idle: 0,
@@ -33,9 +25,18 @@ const progressValues: Record<string, number> = {
 };
 
 export default function CheckinPage() {
+  const { t, formatDateTime } = useWorkerI18n();
   const [faceBlob, setFaceBlob] = useState<Blob | null>(null);
   const [envBlob, setEnvBlob] = useState<Blob | null>(null);
   const { step: checkinStep, result, error, submitCheckin, reset } = useCheckin();
+  const stepLabels: Record<string, string> = {
+    idle: "",
+    "uploading-face": t("checkin.uploadingFace"),
+    "uploading-env": t("checkin.uploadingEnv"),
+    analyzing: t("checkin.analyzing"),
+    complete: t("checkin.completeStep"),
+    error: t("checkin.genericError"),
+  };
 
   const canSubmit = faceBlob !== null && envBlob !== null && checkinStep === "idle";
   const isSubmitting = ["uploading-face", "uploading-env", "analyzing"].includes(checkinStep);
@@ -67,7 +68,7 @@ export default function CheckinPage() {
       <div className="space-y-6 animate-fade-in">
         <div className="text-center">
           <CheckCircle2 className="h-10 w-10 mx-auto mb-3 opacity-60" />
-          <h1 className="text-xl font-semibold">Check-in Complete</h1>
+          <h1 className="text-xl font-semibold">{t("checkin.completeTitle")}</h1>
           <p className="text-sm text-muted-foreground mt-1">
             {formatDateTime(result.timestamp)}
           </p>
@@ -88,7 +89,10 @@ export default function CheckinPage() {
         {(result.riskLevel === "HIGH" || result.riskLevel === "CRITICAL") && (
           <AlertBanner
             riskLevel={result.riskLevel}
-            message={`Your safety score is ${result.healthScore}. ${result.alertSent ? "Your supervisor has been notified." : ""}`}
+            message={t("checkin.highRiskMessage", {
+              score: result.healthScore,
+              notify: result.alertSent ? t("checkin.supervisorNotified") : "",
+            })}
           />
         )}
 
@@ -99,7 +103,7 @@ export default function CheckinPage() {
         {result.riskFactors.length > 0 && (
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm font-medium">Detected Risk Factors</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("checkin.detectedRiskFactors")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               {result.riskFactors.map((factor, i) => (
@@ -114,10 +118,10 @@ export default function CheckinPage() {
 
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button variant="outline" className="flex-1" onClick={reset}>
-            New Check-in
+            {t("checkin.newCheckin")}
           </Button>
           <Button className="flex-1" asChild>
-            <a href="/worker/dashboard">View Dashboard</a>
+            <a href={ROUTES.WORKER_DASHBOARD}>{t("checkin.viewDashboard")}</a>
           </Button>
         </div>
       </div>
@@ -127,9 +131,9 @@ export default function CheckinPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-xl font-semibold">Daily Safety Check-in</h1>
+        <h1 className="text-xl font-semibold">{t("checkin.title")}</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Capture your face and work environment to get your safety score.
+          {t("checkin.subtitle")}
         </p>
       </div>
 
@@ -138,8 +142,8 @@ export default function CheckinPage() {
         <CardContent className="pt-6 space-y-6">
           <CameraCapture
             onCapture={(blob) => setFaceBlob(blob)}
-            label="Step 1 — Face Photo"
-            hint="Look directly at the camera. Make sure your helmet and PPE are visible."
+            label={t("checkin.step1")}
+            hint={t("checkin.step1Hint")}
           />
 
           <Separator />
@@ -170,11 +174,11 @@ export default function CheckinPage() {
         >
           {canSubmit ? (
             <>
-              Submit Check-in
+              {t("checkin.submit")}
               <ArrowRight className="h-4 w-4" />
             </>
           ) : (
-            "Capture both photos to continue"
+            t("checkin.captureBoth")
           )}
         </Button>
       )}
@@ -188,7 +192,7 @@ export default function CheckinPage() {
 
       {checkinStep === "error" && (
         <Button variant="outline" className="w-full" onClick={reset}>
-          Try Again
+          {t("camera.tryAgain")}
         </Button>
       )}
     </div>

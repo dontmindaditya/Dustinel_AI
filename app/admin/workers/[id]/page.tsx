@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { ArrowLeft, MapPin, Phone, Mail, Clock } from "lucide-react";
 import Link from "next/link";
+import { useAdminI18n } from "@/lib/adminI18n";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -15,6 +16,7 @@ import { ROUTES } from "@/lib/constants";
 import { getDemoRecords, getDemoWorker } from "../demo-data";
 
 export default function WorkerDetailPage() {
+  const { t } = useAdminI18n();
   const params = useParams<{ id: string | string[] }>();
   const workerId = Array.isArray(params.id) ? params.id[0] : params.id;
 
@@ -33,7 +35,7 @@ export default function WorkerDetailPage() {
         </Button>
         <Card>
           <CardContent className="py-8 text-sm text-muted-foreground">
-            Worker not found.
+            {t("adminWorkers.notFound")}
           </CardContent>
         </Card>
       </div>
@@ -81,7 +83,7 @@ export default function WorkerDetailPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm font-medium">Worker Info</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("adminWorkers.workerInfo")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               <div className="flex items-center gap-2 text-muted-foreground">
@@ -101,21 +103,21 @@ export default function WorkerDetailPage() {
 
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div>
-                  <p className="text-muted-foreground">Shift</p>
+                  <p className="text-muted-foreground">{t("adminWorkers.shift")}</p>
                   <p className="font-medium capitalize">{worker.shift}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Baseline Score</p>
+                  <p className="text-muted-foreground">{t("adminWorkers.baselineScore")}</p>
                   <p className="font-medium">{worker.healthProfile.baselineScore}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Conditions</p>
+                  <p className="text-muted-foreground">{t("adminWorkers.conditions")}</p>
                   <p className="font-medium capitalize">
                     {worker.healthProfile.conditions.join(", ") || "None"}
                   </p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Streak (Low Risk)</p>
+                  <p className="text-muted-foreground">{t("adminWorkers.streakLowRisk")}</p>
                   <p className="font-medium">{worker.healthProfile.streakDaysLowRisk} days</p>
                 </div>
               </div>
@@ -129,7 +131,7 @@ export default function WorkerDetailPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm font-medium">Recent Check-ins</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("adminWorkers.recentCheckins")}</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <div className="divide-y">
