@@ -4,6 +4,15 @@ import { ROUTES, fadeUp, stagger } from "@/lib/landingData";
 export function Hero() {
   return (
     <section className="hero">
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="hero-video-bg"
+        src="/assets/main.mp4"
+      />
+      <div className="hero-overlay" />
       <div className="hero-in">
         <motion.div className="hero-left" initial="hidden" animate="visible" variants={stagger}>
           <motion.div className="eyebrow" variants={fadeUp} transition={{ duration: 0.45 }}>
@@ -47,23 +56,6 @@ export function Hero() {
               </div>
             ))}
           </motion.div>
-        </motion.div>
-
-        <motion.div
-          className="photo-stack"
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.65, ease: "easeOut", delay: 0.12 }}
-        >
-          <div className="pc pc-main">
-            <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=640&q=80" alt="Workers with safety helmets on site" />
-          </div>
-          <div className="pc pc-b1">
-            <img src="https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?w=400&q=80" alt="Industrial safety environment" />
-          </div>
-          <div className="pc pc-b2">
-            <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80" alt="Worker in protective gear" />
-          </div>
         </motion.div>
       </div>
     </section>

@@ -89,9 +89,8 @@ export const globalStyles = `
   /* ── Header ── */
   .hdr {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    border-bottom: 1px solid var(--border);
-    background: rgba(15,13,11,0.82);
-    backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+    background: transparent;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   }
   .hdr-in {
     max-width: 1160px; margin: 0 auto; padding: 0 28px;
@@ -115,15 +114,17 @@ export const globalStyles = `
     min-height: 100vh; display: flex; align-items: center;
     position: relative; overflow: hidden;
   }
-  .hero::after {
-    content: '';
-    position: absolute; top: -10%; left: 40%;
-    width: 600px; height: 600px;
-    background: radial-gradient(ellipse at center, rgba(201,147,58,0.05) 0%, transparent 65%);
-    pointer-events: none;
+  .hero-video-bg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; z-index: 0;
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(15,13,11,0.88) 0%, rgba(15,13,11,0.65) 50%, rgba(15,13,11,0.5) 100%);
+    z-index: 1;
   }
   .hero-in {
-    position: relative; z-index: 1; width: 100%;
+    position: relative; z-index: 2; width: 100%;
     max-width: 1160px; margin: 0 auto; padding: 120px 28px 80px;
     display: grid; grid-template-columns: 1fr 440px;
     gap: 56px; align-items: center;
@@ -170,28 +171,123 @@ export const globalStyles = `
     border: 1px solid var(--border2); box-shadow: 0 20px 56px rgba(0,0,0,0.6);
   }
   .pc img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero-video { width: 100%; height: 100%; object-fit: cover; display: block; }
   .pc-main  { width: 310px; height: 270px; top: 10px; right: 0; left: auto; }
   .pc-b1    { width: 200px; height: 175px; bottom: 10px; left: 0; animation: bob1 7s ease-in-out infinite; }
   .pc-b2    { width: 170px; height: 150px; top: 200px; left: 110px; animation: bob2 9s ease-in-out infinite; z-index: 3; }
   @keyframes bob1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
   @keyframes bob2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)}  }
 
-  /* ── Image strip ── */
-  .strip { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .strip-row { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: repeat(3,1fr); }
-  .strip-cell { position: relative; height: 260px; overflow: hidden; }
-  .strip-cell:not(:last-child) { border-right: 1px solid var(--border); }
-  .strip-cell img {
-    width:100%; height:100%; object-fit:cover; display:block;
-    filter: brightness(0.48) saturate(0.6);
-    transition: filter 0.45s, transform 0.45s;
+  /* ── Why Dustinel AI Section ── */
+  .why-section {
+    margin-top: 48px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
   }
-  .strip-cell:hover img { filter: brightness(0.7) saturate(0.85); transform: scale(1.04); }
-  .strip-tag {
-    position: absolute; bottom: 18px; left: 20px;
-    font-size: 10.5px; font-weight: 500;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(255,255,255,0.55);
+  .why-container {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 80px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .why-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .why-title {
+    font-family: var(--ff-serif);
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .why-stat {
+    font-size: 16px;
+    color: var(--muted2);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .why-mission {
+    font-size: 18px;
+    color: var(--text);
+    line-height: 1.6;
+    font-weight: 400;
+    padding-top: 8px;
+  }
+  .why-desc {
+    font-size: 15px;
+    color: var(--muted2);
+    line-height: 1.75;
+    font-weight: 300;
+    margin-top: 8px;
+  }
+  .highlight {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .highlight-accent {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .why-video {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border2);
+  }
+  .why-video-element {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .why-images {
+    position: relative;
+    height: 420px;
+    flex-shrink: 0;
+  }
+  .why-img {
+    position: absolute;
+    border-radius: 14px;
+    border: 1px solid var(--border2);
+    object-fit: cover;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.55);
+  }
+  .why-img:first-child {
+    width: 78%;
+    height: 64%;
+    top: 0;
+    left: 0;
+    transform: rotate(-2deg);
+    z-index: 1;
+  }
+  .why-img:last-child {
+    width: 65%;
+    height: 58%;
+    bottom: 0;
+    right: 0;
+    transform: rotate(2.5deg);
+    z-index: 2;
+  }
+
+  @media (max-width: 768px) {
+    .why-container {
+      grid-template-columns: 1fr;
+      padding: 48px 28px;
+      gap: 40px;
+    }
+    .why-video {
+      order: -1;
+    }
+    .why-images {
+      order: -1;
+      height: 300px;
+    }
   }
 
   /* ── Features ── */
@@ -327,10 +423,6 @@ export const globalStyles = `
   /* ── Responsive ── */
   @media (max-width: 960px) {
     .hero-in { grid-template-columns: 1fr; gap: 48px; }
-    .photo-stack { width: 100%; height: 320px; }
-    .pc-main { width: 260px; height: 220px; top: 10px; right: 0; left: auto; }
-    .pc-b1   { width: 155px; height: 135px; bottom: 10px; left: 0; }
-    .pc-b2   { width: 140px; height: 120px; top: 160px; left: 90px; }
     .feat-grid  { grid-template-columns: 1fr; }
     .steps-grid { grid-template-columns: 1fr 1fr; }
     .risk-row   { grid-template-columns: 1fr 1fr; }

@@ -1,20 +1,39 @@
-"use client"
-const STRIP_IMAGES = [
-  { src: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&q=80", tag: "PPE detection" },
-  { src: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80", tag: "Environment monitoring" },
-  { src: "https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?w=800&q=80", tag: "Real-time alerts" },
-];
+"use client";
 
 export function ImageStrip() {
   return (
-    <div className="strip">
-      <div className="strip-row">
-        {STRIP_IMAGES.map(i => (
-          <div key={i.tag} className="strip-cell">
-            <img src={i.src} alt={i.tag} />
-            <div className="strip-tag">{i.tag}</div>
-          </div>
-        ))}
+    <div className="why-section">
+      <div className="why-container">
+        <div className="why-content">
+          <h2 className="why-title">
+            Why Dustinel AI?
+          </h2>
+
+          <p className="why-stat">
+            Every <span className="highlight">15 seconds</span>, a worker somewhere in the world dies because of unsafe working conditions.
+          </p>
+
+          <p className="why-stat">
+            More than <span className="highlight">2.9 million workers</span> lose their lives every year, and <span className="highlight">hundreds of millions</span> suffer injuries that could often be prevented.
+          </p>
+
+          <p className="why-stat">
+            Most safety systems react <span className="highlight-accent">after accidents happen</span>.
+          </p>
+
+          <p className="why-mission">
+            <span className="highlight-accent">Dustinel AI exists to prevent them before they do.</span>
+          </p>
+
+          <p className="why-desc">
+            By using AI to analyze workers and their environments in real time, Dustinel AI detects risks early — helping organizations protect their people and ensure workers return home safely every day.
+          </p>
+        </div>
+
+        <div className="why-images">
+          <img src="/assets/worker.png" alt="Worker" className="why-img" />
+          <img src="/assets/damage.png" alt="Damage" className="why-img" />
+        </div>
       </div>
     </div>
   );
