@@ -415,9 +415,6 @@ npx capacitor run android
 
 ---
 
-## License
-
-MIT License
 
 ---
 
