@@ -117,27 +117,6 @@ export default function AdminSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-primary/[0.12] via-card to-card shadow-sm">
-        <div className="flex flex-col gap-3 px-6 py-6 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary/80">
-              {t("adminSettings.consolePreferences")}
-            </p>
-            <h1 className="mt-2 text-2xl font-semibold tracking-tight">{t("adminSettings.title")}</h1>
-            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-              {t("adminSettings.subtitle")}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-border bg-background/80 px-4 py-3">
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-              {t("adminSettings.activeProfile")}
-            </p>
-            <p className="mt-1 text-sm font-medium text-foreground">{profile.fullName}</p>
-            <p className="text-xs text-muted-foreground">{profile.department}</p>
-          </div>
-        </div>
-      </div>
-
       <Card>
         <CardHeader>
           <CardTitle className="text-base">{t("settings.profile")}</CardTitle>
