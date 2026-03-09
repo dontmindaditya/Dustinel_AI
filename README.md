@@ -99,6 +99,19 @@ Dustinel AI is a comprehensive safety monitoring platform that:
 
 ---
 
+## Screenshots
+
+### Landing Page
+![Landing Page](public/images/main.png)
+
+### Admin Dashboard
+![Admin Dashboard](public/images/dashboard.png)
+
+### Worker Location Tracker
+![Worker Tracker](public/images/tracker.png)
+
+---
+
 ## Technology Stack
 
 ### Frontend

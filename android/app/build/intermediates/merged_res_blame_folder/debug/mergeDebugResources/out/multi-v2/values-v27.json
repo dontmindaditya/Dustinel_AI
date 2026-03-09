@@ -4,7 +4,7 @@
             "outputFile": "com.dustinel.app-mergeDebugResources-26:/values-v27/values-v27.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\adits\\.gradle\\caches\\8.14.3\\transforms\\4f5eb2e1ae45a07736e2f6ed862ea36a\\transformed\\core-splashscreen-1.2.0\\res\\values-v27\\values-v27.xml",
+                    "source": "C:\\Users\\adits\\.gradle\\caches\\8.14.3\\transforms\\21e54622fb28295cac8d463c4bb9856d\\transformed\\jetified-core-splashscreen-1.0.1\\res\\values-v27\\values-v27.xml",
                     "from": {
                         "startLines": "2,3,4,7",
                         "startColumns": "4,4,4,4",
