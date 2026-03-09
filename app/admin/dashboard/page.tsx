@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Users, AlertTriangle, TrendingUp, Activity, ChevronRight, Search } from "lucide-react";
+import { Users, AlertTriangle, TrendingUp, Activity, ChevronRight, ChevronUp, Search } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell,
@@ -105,6 +105,7 @@ export default function AdminDashboard() {
   const [selected, setSelected] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [filterRisk, setFilterRisk] = useState<FilterOption>("ALL");
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   // Initial load delay
   useEffect(() => {
@@ -294,11 +295,11 @@ export default function AdminDashboard() {
           </div>
         </CardHeader>
 
-        {/* Mobile: map on top, list below. Desktop: side-by-side */}
-        <div className="flex flex-col md:flex-row">
+        {/* ── Mobile: map + bottom sheet ── */}
+        <div className="relative h-[520px] md:hidden overflow-hidden">
 
-          {/* Map — full width on mobile, flex-1 on desktop */}
-          <div className="h-64 sm:h-80 md:h-[520px] md:flex-1 order-1 md:order-2">
+          {/* Map fills the full container */}
+          <div className="absolute inset-0">
             <LeafletMap
               workers={visibleWorkers}
               selected={selected}
@@ -308,18 +309,40 @@ export default function AdminDashboard() {
             />
           </div>
 
-          {/* Sidebar — full width on mobile below map, fixed width on desktop */}
-          <div className="w-full md:w-64 shrink-0 border-t md:border-t-0 md:border-r flex flex-col order-2 md:order-1 md:h-[520px]">
+          {/* Bottom sheet */}
+          <div
+            className="absolute bottom-0 left-0 right-0 bg-card rounded-t-2xl shadow-2xl border-t flex flex-col transition-transform duration-300 ease-out"
+            style={{
+              height: "72%",
+              transform: sheetOpen ? "translateY(0)" : "translateY(calc(100% - 56px))",
+            }}
+          >
+            {/* Handle — tap to toggle */}
+            <button
+              onClick={() => setSheetOpen(!sheetOpen)}
+              className="w-full flex flex-col items-center pt-2.5 pb-2 shrink-0 active:bg-secondary/40 transition-colors"
+            >
+              <div className="w-9 h-1 rounded-full bg-muted-foreground/30 mb-2" />
+              <div className="flex items-center justify-between w-full px-4">
+                <span className="text-sm font-semibold">
+                  Workers
+                  <span className="ml-2 text-xs font-normal text-muted-foreground">
+                    {visibleWorkers.length} shown
+                  </span>
+                </span>
+                <ChevronUp className={`h-4 w-4 text-muted-foreground transition-transform duration-300 ${sheetOpen ? "rotate-180" : ""}`} />
+              </div>
+            </button>
 
             {/* Search + filters */}
-            <div className="p-3 border-b space-y-3">
+            <div className="px-3 pb-3 border-b space-y-2.5 shrink-0">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search workers…"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-9 h-10 text-sm md:h-8 md:text-xs"
+                  className="pl-9 h-10 text-sm"
                 />
               </div>
               <div className="flex flex-wrap gap-1.5">
@@ -329,7 +352,7 @@ export default function AdminDashboard() {
                     variant={filterRisk === r ? "default" : "ghost"}
                     size="sm"
                     onClick={() => setFilterRisk(r)}
-                    className="h-8 text-xs px-3 md:h-6 md:text-[10px] md:px-2 font-medium"
+                    className="h-8 text-xs px-3 font-medium"
                   >
                     {r === "ALL" ? "All" : r[0] + r.slice(1).toLowerCase()}
                   </Button>
@@ -337,8 +360,8 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Worker list — capped height on mobile so page stays scrollable */}
-            <div className="overflow-y-auto max-h-72 md:max-h-none md:flex-1">
+            {/* Scrollable worker list */}
+            <div className="flex-1 overflow-y-auto overscroll-contain">
               {visibleWorkers.length === 0 ? (
                 <div className="p-6 text-center text-xs text-muted-foreground">No workers match</div>
               ) : (
@@ -368,6 +391,79 @@ export default function AdminDashboard() {
                 })
               )}
             </div>
+          </div>
+        </div>
+
+        {/* ── Desktop: side-by-side ── */}
+        <div className="hidden md:flex h-[520px]">
+
+          {/* Sidebar */}
+          <div className="w-64 shrink-0 border-r flex flex-col">
+            <div className="p-3 border-b space-y-2.5">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                <Input
+                  placeholder="Search workers…"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-7 h-8 text-xs"
+                />
+              </div>
+              <div className="flex flex-wrap gap-1">
+                {FILTER_OPTIONS.map((r) => (
+                  <Button
+                    key={r}
+                    variant={filterRisk === r ? "default" : "ghost"}
+                    size="sm"
+                    onClick={() => setFilterRisk(r)}
+                    className="h-6 text-[10px] px-2 font-medium"
+                  >
+                    {r === "ALL" ? "All" : r[0] + r.slice(1).toLowerCase()}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              {visibleWorkers.length === 0 ? (
+                <div className="p-6 text-center text-xs text-muted-foreground">No workers match</div>
+              ) : (
+                visibleWorkers.map((w) => {
+                  const active = selected === w.id;
+                  return (
+                    <button
+                      key={w.id}
+                      onClick={() => setSelected(active ? null : w.id)}
+                      className={`
+                        w-full flex items-center gap-2 px-3 py-2 text-left
+                        border-b border-border/40 last:border-0 transition-colors
+                        ${active ? "bg-secondary" : "hover:bg-secondary/50"}
+                      `}
+                    >
+                      <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: RISK_COLOR[w.risk] }} />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium truncate">{w.name}</div>
+                        <div className="text-xs text-muted-foreground truncate">{w.dept} · {w.zone}</div>
+                      </div>
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        <span className="text-sm font-bold tabular-nums" style={{ color: RISK_COLOR[w.risk] }}>{w.health}</span>
+                        <ChevronRight className="h-3 w-3 text-muted-foreground" />
+                      </div>
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          </div>
+
+          {/* Map */}
+          <div className="flex-1">
+            <LeafletMap
+              workers={visibleWorkers}
+              selected={selected}
+              onSelect={(id) => setSelected((prev) => (prev === id ? null : id))}
+              baseLat={BASE_LAT}
+              baseLng={BASE_LNG}
+            />
           </div>
         </div>
       </Card>
