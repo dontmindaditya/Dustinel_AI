@@ -21,8 +21,10 @@ export const PAGINATION_PAGE_SIZE = 20;
 
 export const ROUTES = {
   HOME: "/",
-  LOGIN: "/auth/login",
-  REGISTER: "/auth/register",
+  WORKER_LOGIN: "/auth/worker/login",
+  WORKER_REGISTER: "/auth/worker/register",
+  ADMIN_LOGIN: "/auth/admin/login",
+  ADMIN_REGISTER: "/auth/admin/register",
   WORKER_CHECKIN: "/worker/checkin",
   WORKER_DASHBOARD: "/worker/dashboard",
   WORKER_HISTORY: "/worker/history",

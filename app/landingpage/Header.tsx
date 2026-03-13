@@ -12,8 +12,11 @@ export function Header() {
           <a href="#how-it-works" className="nav-link">How it works</a>
           <a href="#risk-levels"  className="nav-link">Risk scoring</a>
           <a href="#research"     className="nav-link">Research</a>
-          <a href={ROUTES.LOGIN}  className="nav-link">Log in</a>
-          <a href={ROUTES.LOGIN}  className="btn btn-sm btn-solid" style={{ marginLeft: 8 }}>
+          <a href={ROUTES.WORKER_LOGIN}  className="nav-link">Worker log in</a>
+          <a href={ROUTES.ADMIN_LOGIN}  className="btn btn-sm btn-solid" style={{ marginLeft: 8 }}>
+            Admin log in
+          </a>
+          <a href={ROUTES.WORKER_REGISTER}  className="btn btn-sm btn-solid" style={{ marginLeft: 8 }}>
             Get started
           </a>
         </nav>

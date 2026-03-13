@@ -1,8 +1,10 @@
 import { Cpu, Bell, BarChart3, Eye } from "lucide-react";
 
 export const ROUTES = {
-  LOGIN:           "/auth/login",
-  ADMIN_DASHBOARD: "/admin/dashboard",
+  LOGIN:           "/auth/worker/login",
+  WORKER_LOGIN:    "/auth/worker/login",
+  WORKER_REGISTER: "/auth/worker/register",
+  ADMIN_LOGIN:     "/auth/admin/login",
 };
 
 export const features = [

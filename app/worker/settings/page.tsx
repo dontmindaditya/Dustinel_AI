@@ -15,7 +15,6 @@ import {
 import { ROUTES } from "@/lib/constants";
 import {
   WORKER_ALERTS_EVENT,
-  defaultWorkerSettings,
   defaultMockAlerts,
   loadWorkerSettings,
   saveWorkerAlerts,
@@ -41,7 +40,7 @@ export default function WorkerSettingsPage() {
   const { setTheme } = useTheme();
   const { t, language, setLanguage } = useWorkerI18n();
   const photoInputRef = useRef<HTMLInputElement | null>(null);
-  const [settings, setSettings] = useState<WorkerSettings>(defaultWorkerSettings);
+  const [settings, setSettings] = useState<WorkerSettings>(() => loadWorkerSettings());
   const [profile, setProfile] = useState<WorkerProfile>({
     fullName: "Rajesh Kumar",
     workerId: "WKR-001",
@@ -54,10 +53,6 @@ export default function WorkerSettingsPage() {
   });
   const [saved, setSaved] = useState(false);
   const [profileSaved, setProfileSaved] = useState(false);
-
-  useEffect(() => {
-    setSettings(loadWorkerSettings());
-  }, []);
 
   useEffect(() => {
     setTheme(settings.preferredTheme);
@@ -370,7 +365,7 @@ export default function WorkerSettingsPage() {
           <Button variant="outline" onClick={resetMockAlerts}>
             {t("settings.reloadMockAlerts")}
           </Button>
-          <Button variant="destructive" onClick={() => router.push(ROUTES.LOGIN)}>
+          <Button variant="destructive" onClick={() => router.push(ROUTES.WORKER_LOGIN)}>
             {t("settings.signOut")}
           </Button>
           <Button onClick={handleSave}>{t("settings.saveSettings")}</Button>

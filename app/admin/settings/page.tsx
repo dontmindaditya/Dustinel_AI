@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -16,7 +16,6 @@ import {
 import { ROUTES } from "@/lib/constants";
 import { useAdminI18n, type AdminLanguage } from "@/lib/adminI18n";
 import {
-  defaultAdminSettings,
   loadAdminSettings,
   saveAdminSettings,
   type AdminSettings,
@@ -35,11 +34,10 @@ type AdminProfile = {
 
 export default function AdminSettingsPage() {
   const router = useRouter();
-  const pathname = usePathname();
   const { t, language, setLanguage } = useAdminI18n();
   const { setTheme } = useTheme();
   const photoInputRef = useRef<HTMLInputElement | null>(null);
-  const [settings, setSettings] = useState<AdminSettings>(defaultAdminSettings);
+  const [settings, setSettings] = useState<AdminSettings>(() => loadAdminSettings());
   const [profile, setProfile] = useState<AdminProfile>({
     fullName: "Admin User",
     adminId: "ADM-001",
@@ -52,10 +50,6 @@ export default function AdminSettingsPage() {
   });
   const [saved, setSaved] = useState(false);
   const [profileSaved, setProfileSaved] = useState(false);
-
-  useEffect(() => {
-    setSettings(loadAdminSettings());
-  }, []);
 
   useEffect(() => {
     setTheme(settings.preferredTheme);
@@ -78,7 +72,7 @@ export default function AdminSettingsPage() {
   };
 
   const handleSignOut = () => {
-    router.push(ROUTES.LOGIN);
+    router.push(ROUTES.ADMIN_LOGIN);
   };
 
   const handleProfilePhotoUpload = (file: File) => {

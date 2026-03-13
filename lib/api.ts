@@ -32,7 +32,7 @@ const createApiClient = (token?: string): AxiosInstance => {
       if (error.response?.status === 401) {
         // Redirect to login
         if (typeof window !== "undefined") {
-          window.location.href = "/auth/login";
+          window.location.href = "/auth/worker/login";
         }
       }
       return Promise.reject(error);

@@ -90,7 +90,7 @@ export function Navbar({ role = "worker", workerName, unreadAlerts = 0 }: Navbar
   };
 
   const handleSignOut = () => {
-    router.push(ROUTES.LOGIN);
+    router.push(role === "admin" ? ROUTES.ADMIN_LOGIN : ROUTES.WORKER_LOGIN);
   };
 
   return (

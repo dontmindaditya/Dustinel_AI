@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-const ROOT_PATHS = new Set(["/", "/auth/login", "/worker/dashboard", "/admin/dashboard"]);
+const ROOT_PATHS = new Set(["/", "/auth/worker/login", "/auth/admin/login", "/worker/dashboard", "/admin/dashboard"]);
 
 export default function CapacitorBackHandler() {
   const router = useRouter();

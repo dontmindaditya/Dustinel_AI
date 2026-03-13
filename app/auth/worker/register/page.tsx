@@ -4,14 +4,15 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import Link from "next/link";
+import { ROUTES } from "@/lib/constants";
 
-export default function RegisterPage() {
+export default function WorkerRegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
@@ -27,7 +28,7 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
     await new Promise((res) => setTimeout(res, 1200));
-    router.push("/auth/login?registered=1");
+    router.push(`${ROUTES.WORKER_LOGIN}?registered=1`);
   };
 
   return (
@@ -38,7 +39,7 @@ export default function RegisterPage() {
             <Image src="/logo.png" alt="Dustinel AI logo" width={48} height={48} className="h-12 w-12 object-contain" />
           </div>
           <CardTitle>Worker Registration</CardTitle>
-          <CardDescription>Create your Dustinel AI account</CardDescription>
+          <CardDescription>Create your worker account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
@@ -52,7 +53,6 @@ export default function RegisterPage() {
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                 />
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -63,7 +63,6 @@ export default function RegisterPage() {
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                 />
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone</Label>
                 <Input
@@ -74,13 +73,9 @@ export default function RegisterPage() {
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 />
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="department">Department</Label>
-                <Select
-                  value={form.department}
-                  onValueChange={(v) => setForm({ ...form, department: v })}
-                >
+                <Select value={form.department} onValueChange={(v) => setForm({ ...form, department: v })}>
                   <SelectTrigger id="department">
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
@@ -95,7 +90,6 @@ export default function RegisterPage() {
                   </SelectContent>
                 </Select>
               </div>
-
               <div className="space-y-2">
                 <Label>Shift</Label>
                 <Select onValueChange={(v) => setForm({ ...form, shift: v })}>
@@ -109,19 +103,17 @@ export default function RegisterPage() {
                   </SelectContent>
                 </Select>
               </div>
-
               <div className="space-y-2 col-span-2">
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="********"
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
                 />
               </div>
             </div>
-
             <Button type="submit" className="w-full" disabled={loading}>
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
               {loading ? "Creating account..." : "Create account"}
@@ -129,8 +121,8 @@ export default function RegisterPage() {
           </form>
 
           <div className="mt-4 pt-4 border-t text-center text-sm">
-            <span className="text-muted-foreground">Already have an account? </span>
-            <Link href="/auth/login" className="font-medium hover:underline">
+            <span className="text-muted-foreground">Already have a worker account? </span>
+            <Link href={ROUTES.WORKER_LOGIN} className="font-medium hover:underline">
               Sign in
             </Link>
           </div>

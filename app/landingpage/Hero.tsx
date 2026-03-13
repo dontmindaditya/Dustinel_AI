@@ -32,15 +32,15 @@ export function Hero() {
           </motion.p>
 
           <motion.div className="hero-ctas" variants={fadeUp} transition={{ duration: 0.5, delay: 0.16 }}>
-            <a href={ROUTES.LOGIN} className="btn btn-md btn-solid">
+            <a href={ROUTES.WORKER_LOGIN} className="btn btn-md btn-solid">
               Worker check-in
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </a>
-            <a href={ROUTES.ADMIN_DASHBOARD} className="btn btn-md btn-border">
-              Admin dashboard
+            <a href={ROUTES.ADMIN_LOGIN} className="btn btn-md btn-border">
+              Admin login
             </a>
           </motion.div>
 

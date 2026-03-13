@@ -4,14 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card";
-import { getRedirectByRole } from "@/lib/auth";
-import Link from "next/link";
+import { ROUTES } from "@/lib/constants";
 
-export default function LoginPage() {
+export default function WorkerLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,11 +24,8 @@ export default function LoginPage() {
     setError("");
 
     try {
-      // In real app: call signIn("azure-ad-b2c") via NextAuth
-      // For demo, simulate based on email
       await new Promise((res) => setTimeout(res, 1000));
-      const role = email.includes("admin") ? "admin" : "worker";
-      router.push(getRedirectByRole(role));
+      router.push(ROUTES.WORKER_DASHBOARD);
     } catch {
       setError("Login failed. Please check your credentials.");
     } finally {
@@ -38,13 +35,13 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-muted/30">
-        <Card className="w-full max-w-sm">
+      <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-2">
             <Image src="/logo.png" alt="Dustinel AI logo" width={48} height={48} className="h-12 w-12 object-contain" />
           </div>
-          <CardTitle>Dustinel AI</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
+          <CardTitle>Worker Login</CardTitle>
+          <CardDescription>Sign in as a worker</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4" noValidate>
@@ -64,7 +61,7 @@ export default function LoginPage() {
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder="********"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
@@ -83,14 +80,13 @@ export default function LoginPage() {
 
           <div className="mt-4 text-center">
             <p className="text-xs text-muted-foreground">
-              Secured by{" "}
-              <span className="font-medium text-foreground">Azure AD B2C</span>
+              Secured by <span className="font-medium text-foreground">Azure AD B2C</span>
             </p>
           </div>
 
           <div className="mt-4 pt-4 border-t text-center text-sm">
             <span className="text-muted-foreground">New worker? </span>
-            <Link href="/auth/register" className="font-medium hover:underline">
+            <Link href={ROUTES.WORKER_REGISTER} className="font-medium hover:underline">
               Register here
             </Link>
           </div>
